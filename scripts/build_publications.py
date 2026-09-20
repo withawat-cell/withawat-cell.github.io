@@ -301,19 +301,44 @@ codes_html = '''      <div class="card-grid">
         </div>
       </div>'''
 
-template = """<!DOCTYPE html>
+# ---------- shared page shell ----------
+
+CACHE_V = "20260921l"
+
+SUBPAGES = [
+    ("journal-articles", "Journal Articles"),
+    ("conference-presentations", "Conference Presentations"),
+    ("phd-theses", "PhD Theses"),
+    ("codes", "Codes"),
+]
+
+def nav_html(active_slug):
+    items = []
+    for slug, label in SUBPAGES:
+        current = ' aria-current="page"' if slug == active_slug else ""
+        items.append(f'            <a href="/publications/{slug}.html"{current}>{label}</a>')
+    open_cls = " open" if active_slug else ""
+    return f'''        <li class="has-children{open_cls}">
+          <button class="nav-parent" aria-expanded="false">Publications</button>
+          <div class="submenu">
+{chr(10).join(items)}
+          </div>
+        </li>'''
+
+def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra_scripts=""):
+    return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>Publications — Terahertz Engineering Laboratory</title>
-<meta name="description" content="Journal articles, conference presentations, PhD theses, and research software from the Terahertz Engineering Laboratory, Adelaide University.">
+<title>{title} — Terahertz Engineering Laboratory</title>
+<meta name="description" content="{description}">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260921g">
+<link rel="stylesheet" href="/assets/css/style.css?v={CACHE_V}">{extra_head}
 </head>
 <body>
 
@@ -327,7 +352,7 @@ template = """<!DOCTYPE html>
       <ul>
         <li><a href="/index.html">Home</a></li>
         <li><a href="/research.html">Research</a></li>
-        <li><a href="/publications.html" aria-current="page">Publications</a></li>
+{nav_html(slug)}
         <li class="has-children">
           <button class="nav-parent" aria-expanded="false">People</button>
           <div class="submenu">
@@ -349,58 +374,15 @@ template = """<!DOCTYPE html>
 
   <section class="page-hero">
     <div class="wrap-wide">
-      <p class="hero-eyebrow">Publications</p>
-      <h1>Publications</h1>
-      <p class="lead">Journal articles, conference presentations, PhD theses, and research software from the Terahertz Engineering Laboratory.</p>
-      <div class="filter-tabs" role="tablist" aria-label="Filter publications by type">
-        <button class="filter-tab" data-filter="all" aria-pressed="true">All</button>
-        <button class="filter-tab" data-filter="journal" aria-pressed="false">Journal Articles</button>
-        <button class="filter-tab" data-filter="conference" aria-pressed="false">Conference Presentations</button>
-        <button class="filter-tab" data-filter="theses" aria-pressed="false">PhD Theses</button>
-        <button class="filter-tab" data-filter="codes" aria-pressed="false">Codes</button>
-      </div>
+      <p class="hero-eyebrow">{eyebrow}</p>
+      <h1>{h1}</h1>
+      <p class="lead">{lead}</p>
     </div>
   </section>
 
-  <section class="block pub-section" data-type="journal">
+  <section class="block">
     <div class="wrap-wide">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
-        <div>
-          <h2>Journal articles</h2>
-          <p class="prose small" style="margin-bottom:0;">Most recent first. Excludes journal publications prior to the lab's establishment and those in the microwave and optics domains outside terahertz.</p>
-        </div>
-        <label class="year-filter-label">Year
-          <select id="journal-year-filter" class="year-filter">
-            <option value="all">All years</option>
-{year_options}
-          </select>
-        </label>
-      </div>
-      <div style="margin-top:24px;">
-{journal}
-      </div>
-    </div>
-  </section>
-
-  <section class="block pub-section" data-type="conference">
-    <div class="wrap-wide">
-      <h2>Selected conference presentations</h2>
-      <p class="prose small" style="margin-bottom:24px;">Invited talks, keynotes, and presentations at international conferences and workshops.</p>
-{conference}
-    </div>
-  </section>
-
-  <section class="block pub-section" data-type="theses">
-    <div class="wrap-wide">
-      <h2>PhD theses</h2>
-{theses}
-    </div>
-  </section>
-
-  <section class="block pub-section" data-type="codes">
-    <div class="wrap-wide">
-      <h2>Codes</h2>
-{codes}
+{body}
     </div>
   </section>
 
@@ -415,20 +397,69 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260921g"></script>
-<script src="/assets/js/publications-filter.js?v=20260921g"></script>
+<script src="/assets/js/main.js?v={CACHE_V}"></script>{extra_scripts}
 </body>
 </html>
 """
 
-out = (template
-       .replace("{journal}", journal_html)
-       .replace("{year_options}", year_filter_options)
-       .replace("{conference}", conference_html)
-       .replace("{theses}", theses_html)
-       .replace("{codes}", codes_html))
+pub_dir = os.path.join(ROOT, "publications")
+os.makedirs(pub_dir, exist_ok=True)
 
-with open(os.path.join(ROOT, "publications.html"), "w", encoding="utf-8") as f:
+# Journal articles
+journal_body = f'''      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+        <p class="prose small" style="margin-bottom:0;">Most recent first. Excludes journal publications prior to the lab's establishment and those in the microwave and optics domains outside terahertz.</p>
+        <label class="year-filter-label">Year
+          <select id="journal-year-filter" class="year-filter">
+            <option value="all">All years</option>
+{year_filter_options}
+          </select>
+        </label>
+      </div>
+      <div style="margin-top:24px;">
+{journal_html}
+      </div>'''
+out = page(
+    "journal-articles", "Journal Articles",
+    "Journal articles from the Terahertz Engineering Laboratory, Adelaide University.",
+    "Publications", "Journal articles",
+    "Peer-reviewed journal articles from the Terahertz Engineering Laboratory.",
+    journal_body,
+    extra_scripts=f'\n<script src="/assets/js/publications-filter.js?v={CACHE_V}"></script>',
+)
+with open(os.path.join(pub_dir, "journal-articles.html"), "w", encoding="utf-8") as f:
     f.write(out)
 
-print("Wrote publications.html")
+# Conference presentations
+out = page(
+    "conference-presentations", "Conference Presentations",
+    "Conference presentations from the Terahertz Engineering Laboratory, Adelaide University.",
+    "Publications", "Selected conference presentations",
+    "Invited talks, keynotes, and presentations at international conferences and workshops.",
+    conference_html,
+)
+with open(os.path.join(pub_dir, "conference-presentations.html"), "w", encoding="utf-8") as f:
+    f.write(out)
+
+# PhD theses
+out = page(
+    "phd-theses", "PhD Theses",
+    "PhD theses produced at the Terahertz Engineering Laboratory, Adelaide University.",
+    "Publications", "PhD theses",
+    "Doctoral theses completed at the Terahertz Engineering Laboratory.",
+    theses_html,
+)
+with open(os.path.join(pub_dir, "phd-theses.html"), "w", encoding="utf-8") as f:
+    f.write(out)
+
+# Codes
+out = page(
+    "codes", "Codes",
+    "Research software from the Terahertz Engineering Laboratory, Adelaide University.",
+    "Publications", "Codes",
+    "Research software developed at the Terahertz Engineering Laboratory.",
+    codes_html,
+)
+with open(os.path.join(pub_dir, "codes.html"), "w", encoding="utf-8") as f:
+    f.write(out)
+
+print("Wrote publications/journal-articles.html, conference-presentations.html, phd-theses.html, codes.html")

@@ -7,8 +7,11 @@ Static site for the Terahertz Engineering Laboratory (Adelaide University), rebu
 ```
 index.html                  Home
 research.html                Research clusters + gallery of experiments
-publications.html            Journal articles, conference presentations, PhD theses, codes
-                              (filter tabs; journal articles also have a year filter)
+publications/
+  journal-articles.html       Has a year filter
+  conference-presentations.html
+  phd-theses.html
+  codes.html
 opportunities.html
 contact.html
 people/
@@ -19,17 +22,20 @@ people/
 assets/
   css/style.css               Design system (dark, minimal, academic)
   js/main.js                  Nav toggle/dropdown, active-link highlight, footer year, photo lightbox
-  js/publications-filter.js   Publications page type/year filtering
+  js/publications-filter.js   Journal articles year filter
   img/                        All images, already resized/compressed for the web
-  theses/                     PhD thesis PDFs, linked from publications.html and people/alumni.html
+  theses/                     PhD thesis PDFs (in Git LFS), linked from publications/phd-theses.html
+                              and people/alumni.html
 scripts/
   fetch_images.py             Downloads + resizes images from a JSON manifest (Pillow)
-  build_publications.py       Regenerates publications.html from content-raw/publications-*.md
+  build_publications.py       Regenerates publications/*.html from content-raw/publications-*.md
   build_coursework.py         Regenerates people/coursework.html from content-raw/people-coursework.md
   check_links.py              Crawls every page and checks internal href/src paths resolve
 ```
 
 There are no server-side includes — the header/nav/footer markup is duplicated at the top/bottom of every page. If you change the nav, update it in every `.html` file (a simple find-and-replace across the project works fine).
+
+PDF theses in `assets/theses/` are stored in [Git LFS](https://git-lfs.github.com/) (some are 40&ndash;80MB). Run `git lfs install` once per machine before cloning, or `git lfs pull` afterwards, otherwise those files check out as small text pointers instead of the actual PDFs.
 
 ## Local preview
 

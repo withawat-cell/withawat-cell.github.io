@@ -19,7 +19,7 @@ def md_inline(s):
 # internal cross-reference notes (left over from this project's own research
 # notes) should point at the real page, not at another content-raw filename
 CROSS_REFS = {
-    "publications-codes.md": ("/publications.html#codes", "Codes"),
+    "publications-codes.md": ("/publications/codes.html", "Codes"),
     "people-researchers.md": ("/people/researchers.html", "Researchers"),
     "people-alumni.md": ("/people/alumni.html", "Alumni"),
 }
@@ -91,7 +91,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260921g">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260921l">
 </head>
 <body>
 
@@ -105,7 +105,15 @@ template = """<!DOCTYPE html>
       <ul>
         <li><a href="/index.html">Home</a></li>
         <li><a href="/research.html">Research</a></li>
-        <li><a href="/publications.html">Publications</a></li>
+        <li class="has-children">
+          <button class="nav-parent" aria-expanded="false">Publications</button>
+          <div class="submenu">
+            <a href="/publications/journal-articles.html">Journal Articles</a>
+            <a href="/publications/conference-presentations.html">Conference Presentations</a>
+            <a href="/publications/phd-theses.html">PhD Theses</a>
+            <a href="/publications/codes.html">Codes</a>
+          </div>
+        </li>
         <li class="has-children open">
           <button class="nav-parent" aria-expanded="false">People</button>
           <div class="submenu">
@@ -150,7 +158,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260921g"></script>
+<script src="/assets/js/main.js?v=20260921l"></script>
 </body>
 </html>
 """

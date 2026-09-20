@@ -346,31 +346,12 @@ section.block .section-num {
   border: 1px dashed var(--line);
 }
 .pub-entry .entry-body { flex: 1; min-width: 0; }
-.pub-entry .entry-title { color: var(--text); margin: 0; font-weight: 400; line-height: 1.55; }
+.pub-entry .entry-title { color: var(--text); margin: 0; font-weight: 400; font-size: 0.92rem; line-height: 1.55; }
 .pub-entry .entry-title a { color: var(--text); border-bottom: 1px solid rgba(143, 179, 230, 0.35); }
 .pub-entry .entry-title a:hover { border-bottom-color: var(--link); }
 .pub-entry .entry-meta { color: var(--text-dim); font-size: 0.85rem; margin: 6px 0 0; }
 .pub-entry .entry-meta a { word-break: break-all; }
 
-/* publication filter tabs */
-.filter-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 24px 0 0;
-}
-.filter-tab {
-  font-family: var(--sans);
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  background: none;
-  border: 1px solid var(--line);
-  padding: 8px 16px;
-  cursor: pointer;
-}
-.filter-tab:hover { color: var(--text); border-color: var(--accent-dim); }
-.filter-tab[aria-pressed="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
-.pub-section[hidden] { display: none; }
 
 /* people */
 .people-grid {
@@ -455,7 +436,7 @@ table.data.cols-4 col.c4 { width: 48%; }
   min-width: 0;
   margin: 0;
 }
-.team-photo-row a.lightbox-link {
+a.lightbox-link {
   display: block;
   border-bottom: none;
   cursor: zoom-in;
@@ -651,7 +632,7 @@ table.data.cols-4 col.c4 { width: 48%; }
 }
 .site-footer a { color: var(--text-dim); }
 .acknowledgement {
-  max-width: 68ch;
+  max-width: 42.9rem;
   margin: 0;
   color: var(--text-faint);
   font-size: 0.85rem;
