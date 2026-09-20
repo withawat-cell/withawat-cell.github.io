@@ -29,7 +29,7 @@ def fix_cross_refs(s):
         s = s.replace(f"see {filename}", f'see <a href="{href}">{label}</a>')
     return s
 
-AWARD_KEYWORDS = ["Scholarship", "Fellowship", "Award", "Medal", "Prize", "Commendation", "Grant"]
+AWARD_KEYWORDS = ["Scholarship", "Fellowship", "Award", "Medal", "Prize", "Commendation", "Grant", "Exhibit"]
 
 CROSS_REF_PAREN_RE = re.compile(r"\s*\((also[^()]*?see [\w-]+\.md)\)")
 
@@ -44,12 +44,15 @@ def format_notes(notes):
     out = []
     for c in clauses:
         if any(k in c for k in AWARD_KEYWORDS):
-            out.append(f'<span class="tag tag-award">{md_inline(c)}</span>')
+            out.append(f'<span class="tag tag-note">{md_inline(c)}</span>')
         else:
             out.append(md_inline(c))
     for a in asides:
-        a = a.replace("—", ",")
-        out.append(f"({fix_cross_refs(a)})")
+        a = re.sub(r"^also\s+", "", a, flags=re.I)
+        a = re.sub(r"^an?\s+", "", a, flags=re.I)
+        a = a[:1].upper() + a[1:]
+        a = re.sub(r"\s*—\s*", ", ", a)
+        out.append(fix_cross_refs(a))
     return " ".join(out)
 
 sections = []
@@ -81,13 +84,14 @@ template = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Coursework Students — Terahertz Engineering Laboratory</title>
 <meta name="description" content="Honours, master's, and undergraduate research students at the Terahertz Engineering Laboratory, Adelaide University.">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260920d">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260921g">
 </head>
 <body>
 
@@ -139,15 +143,14 @@ template = """<!DOCTYPE html>
 
 <footer class="site-footer">
   <div class="wrap-wide" style="display:block;">
-    <p class="acknowledgement">We acknowledge and pay our respects to the Kaurna people, the traditional custodians whose ancestral lands we gather on. We acknowledge the deep feelings of attachment and relationship of the Kaurna people to country and we respect and value their past, present and ongoing connection to the land and cultural beliefs.</p>
     <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-      <span>&copy; <span data-year>2026</span> Terahertz Engineering Laboratory, Adelaide University</span>
+      <span>&copy; <span data-copyright-year>2026</span> Terahertz Engineering Laboratory, Adelaide University</span>
       <span><a href="/contact.html">Contact</a> &middot; <a href="https://www.linkedin.com/company/thz-el">LinkedIn</a></span>
     </div>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260920"></script>
+<script src="/assets/js/main.js?v=20260921g"></script>
 </body>
 </html>
 """

@@ -24,4 +24,15 @@
   var initial = location.hash.replace("#", "");
   var valid = Array.prototype.some.call(tabs, function (t) { return t.getAttribute("data-filter") === initial; });
   if (valid) applyFilter(initial);
+
+  var yearFilter = document.getElementById("journal-year-filter");
+  if (yearFilter) {
+    var yearBlocks = document.querySelectorAll('.pub-section[data-type="journal"] .year-block');
+    yearFilter.addEventListener("change", function () {
+      var year = yearFilter.value;
+      yearBlocks.forEach(function (b) {
+        b.hidden = year !== "all" && b.getAttribute("data-year") !== year;
+      });
+    });
+  }
 })();
