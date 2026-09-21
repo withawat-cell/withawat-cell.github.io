@@ -14,6 +14,7 @@ year_blocks = re.findall(r"^## (\d{4})\n\|(.*?)\n\n", text, re.S | re.M)
 def md_inline(s):
     s = s.strip()
     s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
+    s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
     return s
 
 # internal cross-reference notes (left over from this project's own research
@@ -29,7 +30,7 @@ def fix_cross_refs(s):
         s = s.replace(f"see {filename}", f'see <a href="{href}">{label}</a>')
     return s
 
-AWARD_KEYWORDS = ["Scholarship", "Fellowship", "Award", "Medal", "Prize", "Commendation", "Grant", "Exhibit"]
+AWARD_KEYWORDS = ["Scholarship", "Fellowship", "Award", "Medal", "Prize", "Commendation", "Grant", "Exhibit", "First author"]
 
 CROSS_REF_PAREN_RE = re.compile(r"\s*\((also[^()]*?see [\w-]+\.md)\)")
 
@@ -44,7 +45,7 @@ def format_notes(notes):
     out = []
     for c in clauses:
         if any(k in c for k in AWARD_KEYWORDS):
-            out.append(f'<span class="tag tag-note">{md_inline(c)}</span>')
+            out.append(f'<span class="tag-note">{md_inline(c)}</span>')
         else:
             out.append(md_inline(c))
     for a in asides:
@@ -53,7 +54,7 @@ def format_notes(notes):
         a = a[:1].upper() + a[1:]
         a = re.sub(r"\s*—\s*", ", ", a)
         out.append(fix_cross_refs(a))
-    return " ".join(out)
+    return " &middot; ".join(out)
 
 sections = []
 total = 0
@@ -91,7 +92,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260921q">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260921u">
 </head>
 <body>
 
@@ -159,7 +160,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260921q"></script>
+<script src="/assets/js/main.js?v=20260921u"></script>
 </body>
 </html>
 """

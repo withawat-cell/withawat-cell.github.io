@@ -282,6 +282,7 @@ theses_html = '''      <table class="data">
         <tbody>
           <tr><td>2026</td><td>Sakib Quader</td><td><a href="/assets/theses/quader-2026.pdf">Terahertz Metasurfaces for Wave Manipulation, Detection, and Spectral Analysis</a></td></tr>
           <tr><td>2026</td><td>Linxi Chen</td><td><a href="/assets/theses/linxi-chen-2026.pdf">Enabling Polarisation and Frequency Control in Silicon-based Terahertz Integration</a></td></tr>
+          <tr><td>2026</td><td>Bryce Chung</td><td><a href="/assets/theses/bryce-chung-2026.pdf">3D-Printed Quasi-Optical Systems for Terahertz Non-Destructive Testing</a></td></tr>
           <tr><td>2025</td><td>Harrison Lees</td><td><a href="/assets/theses/harrison-lees-2025.pdf">All-dielectric Terahertz Waveguides, Devices, and Techniques</a></td></tr>
           <tr><td>2024</td><td>Stephen Li</td><td><a href="/assets/theses/stephen-li-2024.pdf">Planar Antennas and Lenses for Terahertz Source Integration</a></td></tr>
           <tr><td>2024</td><td>Panisa Dechwechprasit</td><td><a href="/assets/theses/panisa-dechwechprasit-2024.pdf">Tunable Terahertz Components on Substrateless Silicon Platform</a></td></tr>
@@ -313,7 +314,7 @@ codes_html = '''      <div class="card-grid">
 
 # ---------- shared page shell ----------
 
-CACHE_V = "20260921q"
+CACHE_V = "20260921u"
 
 SUBPAGES = [
     ("journal-articles", "Journal Articles"),
