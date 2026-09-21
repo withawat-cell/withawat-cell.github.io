@@ -164,6 +164,15 @@ def load_journal_images():
 
 TITLE_RE = re.compile(r'"([^"]+)"')
 
+TOPIC_LABELS = [
+    ("antennas", "Antennas & Beamforming"),
+    ("metasurfaces", "Metasurfaces & Polarization Control"),
+    ("integration", "Integrated Platforms & Waveguides"),
+    ("comms", "Communications & 6G"),
+    ("detectors", "Detectors"),
+    ("nde", "Non-Destructive Evaluation & Materials"),
+]
+
 def build_journal():
     src = os.path.join(ROOT, "content-raw", "publications-journal-articles.md")
     with open(src, encoding="utf-8") as f:
@@ -180,7 +189,8 @@ def build_journal():
             cells = [c.strip() for c in row.strip().strip("|").split("|")]
             if len(cells) < 4:
                 continue
-            _, citation, doi, notes = cells
+            _, citation, doi, notes = cells[:4]
+            topics = cells[4].strip() if len(cells) > 4 else ""
             doi = doi.strip()
             primary_doi = doi.split(" ")[0] if doi.startswith("http") else ""
             citation_html = md_inline(citation)
@@ -198,7 +208,7 @@ def build_journal():
             if rest:
                 meta_bits.append(rest)
             meta_html = f'<p class="entry-meta">{" &middot; ".join(meta_bits)}</p>' if meta_bits else ""
-            entries.append(f'''      <li class="pub-entry">
+            entries.append(f'''      <li class="pub-entry" data-topics="{topics}">
         {thumb}
         <div class="entry-body">
           <p class="entry-title">{citation_html}</p>
@@ -303,7 +313,7 @@ codes_html = '''      <div class="card-grid">
 
 # ---------- shared page shell ----------
 
-CACHE_V = "20260921l"
+CACHE_V = "20260921q"
 
 SUBPAGES = [
     ("journal-articles", "Journal Articles"),
@@ -405,6 +415,11 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 pub_dir = os.path.join(ROOT, "publications")
 os.makedirs(pub_dir, exist_ok=True)
 
+topic_filter_buttons = "\n".join(
+    f'          <button type="button" class="topic-filter-btn" data-topic="{slug}" aria-pressed="false">{label}</button>'
+    for slug, label in TOPIC_LABELS
+)
+
 # Journal articles
 journal_body = f'''      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
         <p class="prose small" style="margin-bottom:0;">Most recent first. Excludes journal publications prior to the lab's establishment and those in the microwave and optics domains outside terahertz.</p>
@@ -414,6 +429,9 @@ journal_body = f'''      <div style="display:flex; justify-content:space-between
 {year_filter_options}
           </select>
         </label>
+      </div>
+      <div class="topic-filter" role="group" aria-label="Filter by topic" style="margin-top:16px;">
+{topic_filter_buttons}
       </div>
       <div style="margin-top:24px;">
 {journal_html}

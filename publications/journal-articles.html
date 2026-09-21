@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260921l">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260921q">
 </head>
 <body>
 
@@ -79,11 +79,19 @@
           </select>
         </label>
       </div>
+      <div class="topic-filter" role="group" aria-label="Filter by topic" style="margin-top:16px;">
+          <button type="button" class="topic-filter-btn" data-topic="antennas" aria-pressed="false">Antennas & Beamforming</button>
+          <button type="button" class="topic-filter-btn" data-topic="metasurfaces" aria-pressed="false">Metasurfaces & Polarization Control</button>
+          <button type="button" class="topic-filter-btn" data-topic="integration" aria-pressed="false">Integrated Platforms & Waveguides</button>
+          <button type="button" class="topic-filter-btn" data-topic="comms" aria-pressed="false">Communications & 6G</button>
+          <button type="button" class="topic-filter-btn" data-topic="detectors" aria-pressed="false">Detectors</button>
+          <button type="button" class="topic-filter-btn" data-topic="nde" aria-pressed="false">Non-Destructive Evaluation & Materials</button>
+      </div>
       <div style="margin-top:24px;">
     <div class="year-block" data-year="2026">
       <h3 class="year-heading">2026</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j0.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">Y. Zhao, K.-D. Jenkel, M. Sakaki, H. Lees, W. Withayachumnankul, N. Benson, and J. C. Balzer, "<a href="https://doi.org/10.1007/s10762-026-01173-w">3-D printed high-Q ceramic photonic crystal resonators for WR3-band applications,</a>" <em>Journal of Infrared, Millimeter, and Terahertz Waves</em>, vol. 47, art. no. 65, 2026.</p>
@@ -91,7 +99,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,detectors">
         <img class="pub-thumb" src="/assets/img/publications/j1.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">F. Bertot, A. Tomasino, C. Y. Tam, W. Withayachumnankul, and I.-C. Benea-Chelmus, "<a href="https://doi.org/10.1063/5.0335962">Patch-array antennas for narrowband and large-aperture field-resolved detection of terahertz signals in hybrid silicon–organic photonic chips,</a>" <em>APL Photonics</em>, vol. 11, art. no. 096102, 2026.</p>
@@ -99,7 +107,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Editor&#x27;s Picks</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,comms">
         <img class="pub-thumb" src="/assets/img/publications/j2.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, M. Alonso-delPino, Y. Monnai, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2026.3725841">Terahertz antennas: Engineering free-space interfaces for emerging wireless systems,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, 2026. (Accepted)</p>
@@ -107,7 +115,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Invited for Special Issue on Past and Future of THz Science and Technology">Invited for Special Issue on Past and Future…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j3.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Shiiba, W. Withayachumnankul, and T. Fukusako, "<a href="https://doi.org/10.1109/TTHZ.2026.3718777">Direction-of-arrival estimation with 3D-printed rotating lens in sub-terahertz band,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, 2026. (Accepted)</p>
@@ -115,7 +123,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j4.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Abdullah, M. Larsson, M. Li, E. He, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2026.3708770">All‑dielectric frequency‑diverse terahertz antenna for multi‑source direction‑of‑arrival estimation,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, 2026. (Accepted)</p>
@@ -123,7 +131,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms,integration">
         <img class="pub-thumb" src="/assets/img/publications/j5.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">N. H. Ngo, W. Gao, G. Ducournau, H. Khelil, R. Younes, P. Szriftgiser, H. Yamane, Y. Yamada, S. Murakami, W. Withayachumnankul, and M. Fujita, "<a href="https://doi.org/10.1063/5.0322259">Terahertz communications using effective‑medium‑slot waveguides,</a>" <em>APL Engineering Physics</em>, vol. 1, art. no. 026103, 2026.</p>
@@ -131,7 +139,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span><span class="tag tag-award"><a href="https://doi.org/10.1063/10.0043917">Scilight</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j6.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">C. Y. Tam, P. Dechwechprasit, R. T. Ako, M. Bhaskaran, A. Boes, K. Wang, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2026.3685981">Optically controlled terahertz-wave modulator on substrateless silicon waveguide,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 16, no. 7, pp. 836–844, 2026.</p>
@@ -139,7 +147,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Featured</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j7.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">J. Liang, M. Li, K. Jaruwongrungsee, M. Srirak, M. Sun, T. C. Ng, D. Headland, W. Withayachumnankul, "<a href="https://doi.org/10.1109/LAWP.2026.3681952">Steerable terahertz high-gain antenna based on low-temperature co-fired ceramic technology,</a>" <em>IEEE Antennas Wireless Propagation Letters</em>, 2026. (Accepted)</p>
@@ -147,7 +155,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms">
         <img class="pub-thumb" src="/assets/img/publications/j8.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Gao, N. H. Ngo, D. Ichikawa, M. Li, Y. Inose, Y. Morita, H. Yamane, Y. Yamada, S. Murakami, Y. Nishida, T. Nagatsuma, W. Withayachumnankul, and M. Fujita, "<a href="https://doi.org/10.1002/adpr.202500314">Resonant tunneling diode-integrated terahertz transceiver module for wireless communications,</a>" <em>Advanced Photonics Research</em>, vol. 7, no. 4, art. no. e202500314, 2026.</p>
@@ -155,7 +163,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,detectors">
         <img class="pub-thumb" src="/assets/img/publications/j9.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">S. Quader, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0310117">Antenna-coupled terahertz electromechanical bolometer,</a>" <em>APL Engineering Physics</em>, vol. 1, no. 1, art. no. 016104, 2026.</p>
@@ -163,7 +171,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span><span class="tag tag-award">Featured</span><span class="tag tag-award">Front page</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j10.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">B. Chung, H. Lees, J. Hesler, C. Chuengsatiansup, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/JMW.2026.3653411">Non-contact probing of active semiconductor devices using terahertz waves,</a>" <em>IEEE Journal of Microwaves</em>, vol. 6, no. 2, pp. 324–333, 2026.</p>
@@ -171,7 +179,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award"><a href="https://spectrum.ieee.org/sensing-with-terahertz-radiation">IEEE Spectrum</a></span><span class="tag tag-award"><a href="https://www.eurekalert.org/news-releases/1120535">EurekAlert</a></span><span class="tag tag-award"><a href="https://english.news.cn/20260319/c22c4e50d44444c1bcc7f92d5cb724a7/c.html">Xinhua</a></span><span class="tag tag-award">Article Spotlight</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j11.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">L. Chen, W. Gao, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1002/adpr.202500247">Ultra-compact waveguide couplers for all-silicon terahertz platform,</a>" <em>Advanced Photonics Research</em>, vol. 7, no. 1, art. no. e202500247, 2026.</p>
@@ -179,7 +187,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Invited for a special issue on On-chip Terahertz Photonic Manipulation for Future Communications">Invited for a special issue on On-chip…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms,integration">
         <img class="pub-thumb" src="/assets/img/publications/j12.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">L. Chen, W. Gao, M. Abdullah, J. Hesler, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2025.3647725">All-dielectric bandpass filters for IEEE 802.15.3d terahertz communications,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 16, no. 5, pp. 564–573, 2026.</p>
@@ -193,7 +201,7 @@
     <div class="year-block" data-year="2025">
       <h3 class="year-heading">2025</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces,detectors">
         <img class="pub-thumb" src="/assets/img/publications/j13.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">S. Quader, M. Abdullah, E. He, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/LMWT.2025.3628705">3D-printed frequency-diverse metasurface for camera-based terahertz frequency analyzer,</a>" <em>IEEE Microwave and Wireless Technology Letters</em>, vol. 35, no. 12, pp. 2105–2108, 2025.</p>
@@ -201,7 +209,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Selected by the committee for Special Issue on Asia-Pacific Microwave Conference 2025">Selected by the committee for Special Issue…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j14.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, V. Pagay, and W. Withayachumnankul, "<a href="https://doi.org/10.1007/s10762-025-01074-4">Non-contact monitoring of plant leaf water status using terahertz waves,</a>" <em>Journal of Infrared, Millimeter, and Terahertz Waves</em>, vol. 46, no. 8, art. no. 53, 2025.</p>
@@ -209,7 +217,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j15.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, H. Lees, W. Withayachumnankul, G. Carpintero, "<a href="https://doi.org/10.1109/LAWP.2025.3592920">Broadband point source for terahertz silicon guides,</a>" <em>IEEE Antennas and Wireless Propagation Letters</em>, vol. 24, no. 11, pp. 4393–4397, 2025.</p>
@@ -217,7 +225,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j16.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Sun, H. Lees, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/LAWP.2025.3580752">All-dielectric tapered rod antenna with sub-wavelength grating for terahertz waves,</a>" <em>IEEE Antennas and Wireless Propagation Letters</em>, vol. 24, no. 11, pp. 4368–4372, 2025.</p>
@@ -225,7 +233,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j17.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">L. Chen, W. Gao, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2024.3518083">Terahertz integrated polarization filter based on slotted Bragg grating,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 15, no. 3, pp. 473–480, 2025.</p>
@@ -233,7 +241,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces,nde">
         <img class="pub-thumb" src="/assets/img/publications/j18.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, R. T. Ako, S. Sriram, and W. Withayachumnankul, "<a href="https://doi.org/10.1002/lpor.202401011">3D terahertz confocal imaging with chromatic metasurface,</a>" <em>Laser & Photonics Reviews</em>, vol. 19, no. 7, art. no. 2401011, 2025.</p>
@@ -241,7 +249,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Most cited paper published by the Journal in 2025">Most cited paper published by the Journal in…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j19.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">B. Chung, H. Lees, M. Ibrahim, D. Headland, and W. Withayachumnankul, "<a href="https://doi.org/10.1088/2515-7647/adb81e">Highly efficient terahertz dark-field imaging system with 3D-printed components,</a>" <em>Journal of Physics: Photonics</em>, vol. 7, no. 2, art. no. 025012, 2025.</p>
@@ -249,7 +257,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms">
         <img class="pub-thumb" src="/assets/img/publications/j20.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Abdullah, E. He, M. Shehata, K. Wang, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OE.541925">Nonlinearity compensation for terahertz communications through neural networks,</a>" <em>Optics Express</em>, vol. 33, no. 5, pp. 11178–11191, 2025.</p>
@@ -257,7 +265,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j21.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Gao, M. Fujita, S. Murakami, T. Nagatsuma, C. Fumeaux, and W. Withayachumnankul, "<a href="https://onlinelibrary.wiley.com/doi/10.1002/lpor.202400270">Ultra-wideband terahertz integrated polarization multiplexer,</a>" <em>Laser & Photonics Reviews</em>, vol. 19, no. 1, art. no. 2400270, 2025.</p>
@@ -265,7 +273,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award"><a href="https://spectrum.ieee.org/terahertz-6g-multiplexer">IEEE Spectrum</a></span><span class="tag tag-award"><a href="https://www.eurekalert.org/news-releases/1056076">EurekAlert</a></span><span class="tag tag-award">Top 10% of most-viewed papers in 2024</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j22.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Lees, M. Sakaki, D. Headland, N. Benson, J. C. Balzer, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TMTT.2024.3503517">Terahertz stepped-height waveguide with 3D-printing,</a>" <em>IEEE Transactions on Microwave Theory and Techniques</em>, vol. 73, no. 9, pp. 5876–5884, 2025.</p>
@@ -279,7 +287,7 @@
     <div class="year-block" data-year="2024">
       <h3 class="year-heading">2024</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j23.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, P. Dechwechprasit, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0218694">Monolithically integrated mode converter from terahertz substrateless silicon guide to conductive slotline,</a>" <em>Applied Physics Letters</em>, vol. 125, art. no. 071101, 2024.</p>
@@ -287,7 +295,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j24.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Lees, D. Headland, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2024.3417234">Terahertz extreme skin-depth waveguides,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 14, no. 5, pp. 758–767, 2024.</p>
@@ -295,7 +303,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j25.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">B. Chung, D. Headland, W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2024.3404642">Terahertz imaging with 3D-printed Risley-prism and telecentric objective,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 14, no. 4, pp. 446–454, 2024.</p>
@@ -303,7 +311,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j26.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">S. Quader, R.-T. Ako, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2024.3387654">Mechanically reconfigurable polarization converter for terahertz waves,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 14, no. 4, pp. 502–509, 2024.</p>
@@ -311,7 +319,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j27.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Lees, D. Headland, S. Murakami, M. Fujita, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0180941">Terahertz radar with all-dielectric leaky-wave antenna,</a>" <em>APL Photonics</em>, vol. 9, no. 3, art. no. 036107, 2024.</p>
@@ -319,7 +327,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,integration">
         <img class="pub-thumb" src="/assets/img/publications/j28.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, A. Kumar, H. Lees, W. Withayachumnankul, G. Carpintero, "<a href="https://doi.org/10.1364/OL.516561">Matched dielectric slot waveguide as all-dielectric terahertz magnetic dipole,</a>" <em>Optics Letters</em>, vol. 49, no. 5, pp. 1361–1364, 2024.</p>
@@ -327,7 +335,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Editor&#x27;s pick</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,comms">
         <img class="pub-thumb" src="/assets/img/publications/j29.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Li, M. Abdullah, J. He, K. Wang, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2024.3358735">Frequency-diverse antenna with convolutional neural networks for direction of arrival estimation in terahertz communications,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 14, no. 3, pp. 354–363, 2024.</p>
@@ -335,7 +343,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Featured article</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,comms">
         <img class="pub-thumb" src="/assets/img/publications/j30.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Li, R.-T. Ako, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2023.3338463">Terahertz planar cavity antenna based on effective medium for wireless communications,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 14, no. 2, pp. 248–257, 2024.</p>
@@ -349,7 +357,7 @@
     <div class="year-block" data-year="2023">
       <h3 class="year-heading">2023</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration,antennas">
         <img class="pub-thumb" src="/assets/img/publications/j31.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">P. Dechwechprasit, H. Lees, D. Headland, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OPTICA.502034">1-to-N terahertz integrated switches enabling multi-beam antennas,</a>" <em>Optica</em>, vol. 10, no. 11, pp. 1551–1558, 2023.</p>
@@ -357,7 +365,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j32.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">J. Carter, H. Lees, Q. Wang, S. Chen, S. Atakaramians, and W. Withayachumnankul, "<a href="https://doi.org/10.1007/s10762-023-00940-3">Terahertz properties of common microwave dielectric materials,</a>" <em>Journal of Infrared, Millimeter, and Terahertz Waves</em>, vol. 44, pp. 873–884, 2023.</p>
@@ -365,7 +373,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms">
         <img class="pub-thumb" src="/assets/img/publications/j33.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Shehata, K. Wang, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/JSTQE.2023.3316886">Carrierless amplitude and phase modulation for terahertz communications,</a>" <em>IEEE Journal of Selected Topics in Quantum Electronics</em>, vol. 29, no. 5, art. no. 8600714, 2023.</p>
@@ -373,7 +381,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j34.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, M. Fujita, G. Carpintero, T. Nagatsuma, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0158350">Tutorial: Terahertz integration platforms using substrateless all-silicon microstructures,</a>" <em>APL Photonics</em>, vol. 8, art. no. 091101, 2023.</p>
@@ -381,7 +389,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span><span class="tag tag-award">Featured article</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j35.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">P. Dechwechprasit, R. T. Ako, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OL.499957">Terahertz disk resonator on substrateless dielectric waveguide platform,</a>" <em>Optics Letters</em>, vol. 48, no. 17, pp. 4685–4688, 2023.</p>
@@ -389,7 +397,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j36.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Lees, C. Hayes, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/JSTQE.2023.3294875">Terahertz coherence tomography for in-container liquid characterization,</a>" <em>IEEE Journal of Selected Topics in Quantum Electronics</em>, vol. 29, no. 5, art. no. 8600408, 2023.</p>
@@ -397,7 +405,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award"><a href="https://ieeephotonics.org/announcements/from-the-terahertz-hub-down-under-terahertz-scanning/">Featured by IEEE Photonics Society</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j37.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Li, R.-T. Ako, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OL.487468">Terahertz metasurface for near-field beam conversion,</a>" <em>Optics Letters</em>, vol. 48, no. 8, pp. 2202–2205, 2023.</p>
@@ -405,7 +413,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Editor&#x27;s pick</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,comms">
         <img class="pub-thumb" src="/assets/img/publications/j38.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Li, T. V. Mai, C. Fumeaux, S. Suzuki, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2023.3239809">Terahertz resonant-tunneling diode with series-fed patch array antenna,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 13, no. 2, pp. 178–187, 2023.</p>
@@ -413,7 +421,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Among top 5 popular articles March 2023</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j39.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, R. T. Ako, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1002/lpor.202200305">Mechanically tunable terahertz circular polarizer with versatile functions,</a>" <em>Laser & Photonics Reviews</em>, art. no. 2200305, 2023.</p>
@@ -421,7 +429,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms">
         <img class="pub-thumb" src="/assets/img/publications/j40.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">J. C. Balzer, C. J. Saraceno, M. Koch, P. Kaurav, U. R. Pfeiffer, W. Withayachumnankul, T. Kürner, A. Stöhr, M. El-absi, A. Al-haj Abbas, T. Kaiser, and A. Czylwik, "<a href="https://doi.org/10.1109/JMW.2022.3228118">THz systems exploiting photonics and communications technologies,</a>" <em>IEEE Journal of Microwaves</em>, vol. 3, no. 1, pp. 268–288, 2023.</p>
@@ -435,7 +443,7 @@
     <div class="year-block" data-year="2022">
       <h3 class="year-heading">2022</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j41.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland and W. Withayachumnankul, "<a href="https://doi.org/10.1038/s41377-022-00845-1">News and Views—In the shadow of the laser phantom needle cross: Dynamic air-plasma aperture sheds light on terahertz microscopy,</a>" <em>Light: Science & Applications</em>, vol. 11, art. no. 147, 2022.</p>
@@ -443,7 +451,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j42.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0077652">Tutorial on broadband transmissive metasurfaces for wavefront and polarization control of terahertz waves,</a>" <em>Journal of Applied Physics</em>, vol. 131, art. no. 061101, 2022.</p>
@@ -451,7 +459,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Invited for Special Topic Collection &quot;Metasurfaces for Photonic Devices&quot;, guest edited by I. Staude, H.-T. Chen, A. Miroshnichenko, J. Takahara, and W. J. Padilla. Editor&#x27;s pick">Invited for Special Topic Collection…</span><span class="tag tag-award">Among most-read editor&#x27;s picks</span><span class="tag tag-award"><a href="https://pubs.aip.org/jap/collection/428696/2022-Early-Career-Investigator-Selection">2022 Early Career Investigator Selection</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces,integration">
         <img class="pub-thumb" src="/assets/img/publications/j43.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. Lv, R. T. Ako, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2022.3148816">Frequency-selective surface based mechanically reconfigurable terahertz bandpass filter,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 12, no. 3, pp. 257–266, 2022.</p>
@@ -459,7 +467,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Highlighted in IEEE MTT-S Newsletter, March 2022"><a href="https://myemail.constantcontact.com/IEEE-MTT-S-Monthly-Newsletter---March-2022-Issue.html?soid=1138323635164&amp;aid=FhKakJCeCKc">Highlighted in IEEE MTT-S Newsletter, March…</a></span><span class="tag tag-award" title="One of the top 6 most popular papers of the transactions in 2022">Top 6 most popular papers of the transactions…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms">
         <img class="pub-thumb" src="/assets/img/publications/j44.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Shehata, K. Wang, J. Webber, M. Fujita, T. Nagatsuma, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/JLT.2021.3121814">Timing-jitter tolerant Nyquist pulse for terahertz communications,</a>" <em>Journal of Lightwave Technology</em>, vol. 40, no. 2, pp. 557–564, 2022.</p>
@@ -473,7 +481,7 @@
     <div class="year-block" data-year="2021">
       <h3 class="year-heading">2021</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j45.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Lees, W. Gao, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OL.436039">All-silicon, low-crosstalk terahertz waveguide crossing based on effective medium,</a>" <em>Optics Letters</em>, vol. 46, no. 21, pp. 5469–5472, 2021.</p>
@@ -481,7 +489,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="comms">
         <img class="pub-thumb" src="/assets/img/publications/j46.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. Shehata, K. Wang, J. Webber, M. Fujita, T. Nagatsuma, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/JLT.2021.3113310">IEEE 802.15.3d-compliant waveforms for terahertz wireless communications,</a>" <em>Journal of Lightwave Technology</em>, vol. 39, no. 24, pp. 7748–7760, 2021.</p>
@@ -489,7 +497,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j47.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, R. T. Ako, W. S.-L. Lees, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OL.431285">Terahertz transmissive half-wave metasurface with enhanced bandwidth,</a>" <em>Optics Letters</em>, vol. 46, no. 17, pp. 4164–4167, 2021.</p>
@@ -497,7 +505,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j48.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Gao, W. S.-L. Lees, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0051310">Effective-medium-clad Bragg grating filters,</a>" <em>APL Photonics</em>, vol. 6, no. 7, art. no. 076105, 2021.</p>
@@ -505,7 +513,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j49.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">J. Liang, W. Gao, H. Lees, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/LAWP.2021.3094310">All-silicon terahertz planar horn antenna,</a>" <em>IEEE Antennas and Wireless Propagation Letters</em>, vol. 20, no. 11, pp. 2181–2185, 2021.</p>
@@ -513,7 +521,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration,comms">
         <img class="pub-thumb" src="/assets/img/publications/j50.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, W. Withayachumnankul, M. Fujita, and T. Nagatsuma, "<a href="https://doi.org/10.1364/OPTICA.420715">Gratingless integrated tunneling multiplexer for terahertz waves,</a>" <em>Optica</em>, vol. 8, no. 5, pp. 621–629, 2021.</p>
@@ -521,7 +529,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award"><a href="https://www.arc.gov.au/news-publications/media/research-highlights/silicon-multiplexer-chips-drive-next-generation-communications">ARC</a></span><span class="tag tag-award"><a href="https://www.osa-opn.org/home/newsroom/2021/may/small_silicon_device_splits_terahertz_data_stream/">OSA Optics &amp; Photonics News</a></span><span class="tag tag-award"><a href="https://phys.org/news/2021-04-silicon-multiplexer-chip.html">Phys.org</a></span><span class="tag tag-award" title="Special collection of standout research in integrated photonics">Special collection of standout research in…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j51.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">M. E. Ibrahim, D. Headland, W. Withayachumnankul, and C. H. Wang, "<a href="https://doi.org/10.1007/s10921-021-00767-9">Nondestructive testing of defects in polymer-matrix composite materials for marine applications using terahertz waves,</a>" <em>Journal of Nondestructive Evaluation</em>, vol. 40, art. no. 37, 2021.</p>
@@ -529,7 +537,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j52.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Gao, W. S.-L. Lee, X. Yu, M. Fujita, T. Nagatsuma, C. Fumeaux, and W. Withayachumnankul, "<a href="https://ieeexplore.ieee.org/document/9195766">Characteristics of effective-medium-clad dielectric waveguides,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 11, no. 1, pp. 28–41, 2021.</p>
@@ -543,7 +551,7 @@
     <div class="year-block" data-year="2020">
       <h3 class="year-heading">2020</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="nde">
         <img class="pub-thumb" src="/assets/img/publications/j53.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. S.-L. Lee, A. Ferrante, W. Withayachumnankul, and J. A. Able, "<a href="https://doi.org/10.1364/OE.404618">Assessing frost damage in barley using terahertz imaging,</a>" <em>Optics Express</em>, vol. 28, no. 21, pp. 30644–30655, 2020.</p>
@@ -551,7 +559,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award"><a href="https://www.osa-opn.org/home/newsroom/2020/october/keeping_a_closer_eye_on_crops/">Optics &amp; Photonics News</a></span><span class="tag tag-award"><a href="https://phys.org/news/2020-10-potential-tool-frost-screening-crops.html">Phys.org</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j54.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, W. Withayachumnankul, X. Yu, M. Fujita, and T. Nagatsuma, "<a href="https://doi.org/10.1109/JLT.2020.3021681">Unclad microphotonics for terahertz waveguides and systems,</a>" <em>Journal of Lightwave Technology</em>, vol. 38, no. 24, pp. 6853–6862, 2020.</p>
@@ -559,7 +567,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j55.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, R. T. Ako, W. S.-L. Lee, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/5.0017830">Broadband terahertz transmissive quarter-wave metasurface,</a>" <em>APL Photonics</em>, vol. 5, no. 9, art. no. 096108, 2020.</p>
@@ -567,7 +575,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award"><a href="https://sci.scientific-direct.net/view_online.asp?1691118&amp;34746b07a777d667&amp;18">2020 Future Luminary Award Finalists</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j56.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">H. Li, M. X. Low, R. T. Ako, M. Bhaskaran, S. Sriram, W. Withayachumnankul, B. T. Kuhlmey, and S. Atakaramians, "<a href="https://doi.org/10.1002/admt.202000117">Broadband single-mode hybrid photonic crystal waveguides for terahertz integration on a chip,</a>" <em>Advanced Materials Technologies</em>, vol. 5, no. 7, art. no. 2000117, 2020.</p>
@@ -575,7 +583,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Inside front cover</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j57.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">R. T. Ako, W. S. L. Lee, S. Atakaramians, M. Bhaskaran, S. Sriram, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/1.5144115">Ultra-wideband tri-layer transmissive linear polarization converter for terahertz waves,</a>" <em>APL Photonics</em>, vol. 5, no. 4, art. no. 046101, 2020.</p>
@@ -583,7 +591,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Editor&#x27;s pick</span><span class="tag tag-award"><a href="https://sci.scientific-direct.net/view_online.asp?1691118&amp;34746b07a777d667&amp;18">2020 Future Luminary Award Finalists</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j58.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, A. Upadhyay, Y. Cheng, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OL.382458">Ultra-wideband far-infrared absorber based on anisotropically-etched doped silicon,</a>" <em>Optics Letters</em>, vol. 45, no. 5, pp. 1196–1199, 2020.</p>
@@ -591,7 +599,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j59.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">A. Ebrahimi, R. T. Ako, W. S. L. Lee, M. Bhaskaran, S. Sriram, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2020.2964812">High-Q terahertz absorber with stable angular response,</a>" <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 10, no. 2, pp. 204–211, 2020.</p>
@@ -599,7 +607,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces,nde">
         <img class="pub-thumb" src="/assets/img/publications/j60.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">R. T. Ako, A. Upadhyay, W. Withayachumnankul, M. Bhaskaran, and S. Sriram, "<a href="https://doi.org/10.1002/adom.201900750">Dielectrics for terahertz metasurfaces: Material selection and fabrication techniques,</a>" <em>Advanced Optical Materials</em>, vol. 8, no. 3, art. no. 1900750, 2020.</p>
@@ -613,7 +621,7 @@
     <div class="year-block" data-year="2019">
       <h3 class="year-heading">2019</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration">
         <img class="pub-thumb" src="/assets/img/publications/j61.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Gao, X. Yu, M. Fujita, T. Nagatsuma, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OE.382181">Effective-medium-cladded dielectric waveguides for terahertz waves,</a>" <em>Optics Express</em>, vol. 27, no. 26, pp. 38721–38734, 2019.</p>
@@ -621,7 +629,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Among top downloads in terahertz optics and imaging"><a href="http://echo7.bluehornet.com/p/v6J4fv-bAN">Among top downloads in terahertz optics and…</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j62.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">R. T. Ako, W. S.-L. Lee, M. Bhaskaran, S. Sriram, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/1.5116149">Broadband and wide-angle reflective linear polarization converter for terahertz waves,</a>" <em>APL Photonics</em>, vol. 4, no. 9, art. no. 096104, 2019.</p>
@@ -629,7 +637,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Editor&#x27;s pick</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j63.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">X. You, R. T. Ako, W. S.-L. Lee, M. X. Low, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1002/adom.201900791">Terahertz reflectarray with enhanced bandwidth,</a>" <em>Advanced Optical Materials</em>, vol. 7, no. 20, art. no. 1900791, 2019.</p>
@@ -643,7 +651,7 @@
     <div class="year-block" data-year="2018">
       <h3 class="year-heading">2018</h3>
       <ul class="pub-list">
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j64.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, W. Withayachumnankul, R. Yamada, M. Fujita, and T. Nagatsuma, "<a href="https://doi.org/10.1063/1.5060631">Terahertz multi-beam antenna using photonic crystal waveguide and Luneburg lens,</a>" <em>APL Photonics</em>, vol. 3, art. no. 126105, 2018.</p>
@@ -651,7 +659,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Featured article</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="integration,comms">
         <img class="pub-thumb" src="/assets/img/publications/j65.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Withayachumnankul, M. Fujita, and T. Nagatsuma, "<a href="https://doi.org/10.1002/adom.201800401">Integrated silicon photonic crystals towards terahertz communications,</a>" <em>Advanced Optical Materials</em>, vol. 6, art. no. 1800401, 2018.</p>
@@ -659,7 +667,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Invited</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j66.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. S.-L. Lee, R. T. Ako, M. X. Low, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OE.26.014392">Dielectric-resonator metasurfaces for broadband terahertz quarter- and half-wave mirrors,</a>" <em>Optics Express</em>, vol. 26, no. 11, pp. 14392–14406, 2018.</p>
@@ -667,7 +675,7 @@
           
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas,comms">
         <img class="pub-thumb" src="/assets/img/publications/j67.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. Withayachumnankul, R. Yamada, M. Fujita, and T. Nagatsuma, "<a href="https://doi.org/10.1063/1.5023787">All-dielectric rod antenna array for terahertz communications,</a>" <em>APL Photonics</em>, vol. 3, no. 5, art. no. 051707, 2018.</p>
@@ -675,7 +683,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award">Featured article</span><span class="tag tag-award" title="Mentioned in &#x27;News &amp; Views: Terahertz surprises&#x27;, Nature Photonics, 12, 128–130, 2018"><a href="http://rdcu.be/HQrO">Mentioned in &#x27;News &amp; Views: Terahertz…</a></span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="antennas">
         <img class="pub-thumb" src="/assets/img/publications/j68.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">D. Headland, Y. Monnai, D. Abbott, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1063/1.5011063">Tutorial: Terahertz beamforming, from concepts to realizations,</a>" <em>APL Photonics</em>, vol. 3, art. no. 051101, 2018.</p>
@@ -683,7 +691,7 @@
           <span class="tag-row" style="margin-top:6px;"><span class="tag tag-award" title="Invited for special issue on Frontiers on THz Photonic Devices">Invited for special issue on Frontiers on THz…</span></span>
         </div>
       </li>
-      <li class="pub-entry">
+      <li class="pub-entry" data-topics="metasurfaces">
         <img class="pub-thumb" src="/assets/img/publications/j69.jpg" alt="" loading="lazy">
         <div class="entry-body">
           <p class="entry-title">W. S.-L. Lee, S. Nirantar, D. Headland, M. Bhaskaran, S. Sriram, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1002/adom.201700852">Broadband terahertz circular-polarization beam splitter,</a>" <em>Advanced Optical Materials</em>, vol. 6, no. 3, art. no. 1700852, 2018.</p>
@@ -708,7 +716,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260921l"></script>
-<script src="/assets/js/publications-filter.js?v=20260921l"></script>
+<script src="/assets/js/main.js?v=20260921q"></script>
+<script src="/assets/js/publications-filter.js?v=20260921q"></script>
 </body>
 </html>

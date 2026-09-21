@@ -315,11 +315,16 @@ section.block .section-num {
   color: var(--accent);
   font-size: 1.3rem;
   font-weight: 500;
-  margin: 48px 0 8px;
+  margin: 72px 0 8px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--accent-dim);
 }
 .year-heading:first-child { margin-top: 0; }
+
+/* year-heading sits first inside its own .year-block wrapper (for the year
+   filter), so :first-child above always zeroes its margin -- space between
+   years comes from the block gap instead */
+.year-block + .year-block { margin-top: 72px; }
 
 .pub-list { list-style: none; margin: 0; padding: 0; }
 .pub-entry {
@@ -331,6 +336,7 @@ section.block .section-num {
 }
 .pub-entry:first-child { padding-top: 0; }
 .pub-entry:last-child { border-bottom: none; }
+.pub-entry[hidden] { display: none; }
 .pub-entry .pub-thumb {
   flex: 0 0 120px;
   width: 120px;
@@ -569,6 +575,25 @@ a.lightbox-link {
   cursor: pointer;
 }
 .year-filter:hover { border-color: var(--text-faint); }
+
+.topic-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+.topic-filter-btn {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  background: none;
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.topic-filter-btn:hover { border-color: var(--text-faint); color: var(--text); }
+.topic-filter-btn[aria-pressed="true"] {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
 
 /* research / topic cards */
 .cluster-group { margin-bottom: 44px; }
