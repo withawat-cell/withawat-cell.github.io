@@ -54,7 +54,7 @@ def format_notes(notes):
         a = a[:1].upper() + a[1:]
         a = re.sub(r"\s*—\s*", ", ", a)
         out.append(fix_cross_refs(a))
-    return " &middot; ".join(out)
+    return '<span class="note-sep">|</span>'.join(out)
 
 sections = []
 total = 0
@@ -92,7 +92,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260921u">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260921w">
 </head>
 <body>
 
@@ -160,7 +160,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260921u"></script>
+<script src="/assets/js/main.js?v=20260921w"></script>
 </body>
 </html>
 """

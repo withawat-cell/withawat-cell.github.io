@@ -562,6 +562,7 @@ a.lightbox-link {
   line-height: 1.4;
 }
 .tag-note a { color: inherit; border-bottom: 1px dotted currentColor; }
+.note-sep { color: var(--text-faint); margin: 0 8px; }
 
 .year-filter-label {
   font-family: var(--mono);
