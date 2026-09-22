@@ -87,9 +87,14 @@ ieee_grant_count = len(ieee_grants)
 
 # ---------- write into index.html ----------
 
+# Journal articles published by lab members before the lab's own 2018
+# establishment aren't listed on the Journal Articles page, so the stat
+# needs an asterisk pointing to that caveat.
+PRE_LAB_JOURNAL_COUNT = 69
+
 stats_html = f"""      <div class="stats-row">
         <a class="stat" href="/publications/journal-articles.html">
-          <span class="stat-num">{journal_total}</span>
+          <span class="stat-num">{journal_total}<sup>*</sup></span>
           <span class="stat-label">Journal Articles</span>
           <span class="stat-sub">{journal_recognitions} Recognitions</span>
         </a>
@@ -103,9 +108,10 @@ stats_html = f"""      <div class="stats-row">
         </a>
         <div class="stat">
           <span class="stat-num">{ieee_grant_count}</span>
-          <span class="stat-label">IEEE Student Grants</span>
+          <span class="stat-label">IEEE AP/MTT Student Grants</span>
         </div>
-      </div>"""
+      </div>
+      <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
 index_path = os.path.join(ROOT, "index.html")
 with open(index_path, encoding="utf-8") as f:
