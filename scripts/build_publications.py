@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260922o"
+CACHE_V = "20260922p"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -353,6 +353,13 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <title>{title} — Terahertz Engineering Laboratory</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="https://thz-el.org/publications/{slug}.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Terahertz Engineering Laboratory">
+<meta property="og:title" content="{title} — Terahertz Engineering Laboratory">
+<meta property="og:description" content="{description}">
+<meta property="og:url" content="https://thz-el.org/publications/{slug}.html">
+<meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
