@@ -301,15 +301,6 @@ a.stat:hover .stat-num { color: var(--link); }
 
 /* ---------- grids / cards (flat, no shadows) ---------- */
 
-.grid {
-  display: grid;
-  gap: 20px;
-}
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid > * { background: var(--bg); border: 1px solid var(--line); padding: 22px; }
-.grid p { font-size: 0.92rem; }
-
 .card {
   border: 1px solid var(--line);
   padding: 24px;
@@ -353,14 +344,14 @@ a.stat:hover .stat-num { color: var(--link); }
 }
 .copy-btn:hover { border-color: var(--text-faint); color: var(--text); }
 .copy-btn:disabled { color: var(--accent); border-color: var(--accent-dim); cursor: default; }
-.entry-copy-btn {
+.copy-btn-sm {
   border: none;
   padding: 2px;
   margin: 0 0 0 2px;
   vertical-align: middle;
   color: var(--text-faint);
 }
-.entry-copy-btn:hover { border-color: transparent; color: var(--text); }
+.copy-btn-sm:hover { border-color: transparent; color: var(--text); }
 
 .year-heading {
   font-family: var(--mono);
@@ -750,7 +741,6 @@ a.lightbox-link {
   }
 }
 @media (max-width: 860px) {
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .entry { grid-template-columns: 1fr; gap: 4px; }
   .card-grid { grid-template-columns: 1fr; }
   .pub-entry .pub-thumb, .pub-entry .pub-thumb-empty { width: 96px; flex: 0 0 96px; }
