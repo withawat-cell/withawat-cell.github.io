@@ -314,7 +314,7 @@ codes_html = '''      <div class="card-grid">
 
 # ---------- shared page shell ----------
 
-CACHE_V = "20260921x"
+CACHE_V = "20260922e"
 
 SUBPAGES = [
     ("journal-articles", "Journal Articles"),

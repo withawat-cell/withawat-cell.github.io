@@ -106,6 +106,7 @@ main { display: block; padding-bottom: 96px; }
   display: block;
   height: 34px;
   width: auto;
+  transition: filter 0.2s ease;
 }
 .brand-name {
   font-family: Arial, Helvetica, sans-serif;
@@ -114,8 +115,14 @@ main { display: block; padding-bottom: 96px; }
   color: var(--text);
   letter-spacing: 0.01em;
   white-space: nowrap;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
-.brand:hover .brand-name { color: var(--link); }
+.brand:hover .brand-mark {
+  filter: drop-shadow(0 0 6px var(--accent)) drop-shadow(0 0 16px var(--accent)) drop-shadow(0 0 28px var(--accent));
+}
+.brand:hover .brand-name {
+  text-shadow: 0 0 10px var(--accent), 0 0 22px var(--accent), 0 0 36px var(--accent);
+}
 
 nav.primary-nav {
   display: flex;
@@ -280,6 +287,7 @@ section.block .section-num {
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid > * { background: var(--bg); border: 1px solid var(--line); padding: 22px; }
+.grid p { font-size: 0.92rem; }
 
 .card {
   border: 1px solid var(--line);
@@ -310,6 +318,20 @@ section.block .section-num {
 .entry-meta { color: var(--text-dim); font-size: 0.92rem; }
 .entry-links { margin-top: 6px; display: flex; gap: 14px; font-size: 0.85rem; }
 .entry-links a { border-bottom: 1px dotted rgba(143,179,230,0.4); }
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  background: none;
+  border: 1px solid var(--line);
+  padding: 5px;
+  margin: 2px 0 16px;
+  cursor: pointer;
+}
+.copy-btn:hover { border-color: var(--text-faint); color: var(--text); }
+.copy-btn:disabled { color: var(--accent); border-color: var(--accent-dim); cursor: default; }
 
 .year-heading {
   font-family: var(--mono);
