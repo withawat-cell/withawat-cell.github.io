@@ -88,11 +88,12 @@ template = """<!DOCTYPE html>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Coursework Students — Terahertz Engineering Laboratory</title>
 <meta name="description" content="Honours, master's, and undergraduate research students at the Terahertz Engineering Laboratory, Adelaide University.">
+<link rel="canonical" href="https://thz-el.org/people/coursework.html">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260922n">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260922o">
 </head>
 <body>
 
@@ -166,7 +167,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260922n"></script>
+<script src="/assets/js/main.js?v=20260922o"></script>
 </body>
 </html>
 """
