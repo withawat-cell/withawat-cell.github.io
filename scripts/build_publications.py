@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260922p"
+CACHE_V = "20260922q"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)

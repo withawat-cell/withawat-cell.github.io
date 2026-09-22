@@ -85,6 +85,24 @@ for html_path, extractor in [
 
 ieee_grant_count = len(ieee_grants)
 
+# ---------- University Doctoral Research Medal ----------
+
+MEDAL_RE = re.compile(r"\bUniversity Doctoral Research Medal\b", re.I)
+
+medals = set()
+for html_path, extractor in [
+    ("people/researchers.html", person_awards),
+    ("people/alumni.html", person_awards),
+    ("people/coursework.html", coursework_awards),
+]:
+    for name, award in extractor(read(html_path)):
+        if MEDAL_RE.search(award):
+            year_match = re.search(r"\b(19|20)\d{2}\b", award)
+            key = (normalize_name(name), year_match.group(0) if year_match else award)
+            medals.add(key)
+
+medal_count = len(medals)
+
 # ---------- write into index.html ----------
 
 # Journal articles published by lab members before the lab's own 2018
@@ -110,6 +128,10 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-num">{ieee_grant_count}</span>
           <span class="stat-label">IEEE AP/MTT Student Grants</span>
         </div>
+        <a class="stat" href="/people/alumni.html">
+          <span class="stat-num">{medal_count}</span>
+          <span class="stat-label">University Doctoral Research Medals</span>
+        </a>
       </div>
       <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
@@ -132,5 +154,6 @@ with open(index_path, "w", encoding="utf-8") as f:
 print(
     f"Wrote stats to index.html: {journal_total} journal articles "
     f"({journal_recognitions} recognitions), {conf_invited} invited conferences, "
-    f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants"
+    f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
+    f"{medal_count} University Doctoral Research Medals"
 )
