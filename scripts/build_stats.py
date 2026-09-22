@@ -103,6 +103,48 @@ for html_path, extractor in [
 
 medal_count = len(medals)
 
+# ---------- ARC research grants ----------
+# Counted directly from the ARC grant codes (e.g. LE180100003, DP170101922)
+# named in the "Lab history" prose paragraph on this same page.
+
+ARC_GRANT_RE = re.compile(r"\b(?:LE|DP|DE|FT|CE)\d{9}\b")
+
+def read_index():
+    with open(os.path.join(ROOT, "index.html"), encoding="utf-8") as f:
+        return f.read()
+
+lab_history_html = read_index()
+lab_history_match = re.search(r"<h2>Lab history</h2>.*?<!-- STATS:START -->", lab_history_html, re.S)
+arc_grant_count = len(set(ARC_GRANT_RE.findall(lab_history_match.group(0))))
+
+# ---------- ARC fellows ----------
+# "ARC Future Fellow" / "ARC DECRA" mentions anywhere in a person's card --
+# unlike the tag-note-only awards above, this also has to catch Withawat's
+# own "ARC Future Fellow" line, which isn't a .tag-note (it's a senior/
+# permanent designation shown as plain text), so this scans every
+# person-meta paragraph rather than just .tag-note spans.
+
+ARC_FELLOW_RE = re.compile(r"\bARC\b.{0,20}?\b(Future Fellow|DECRA)\b", re.I)
+
+def person_full_text(html):
+    """Yield (person_name, all person-meta text) for every .person card."""
+    soup = BeautifulSoup(html, "html.parser")
+    for person in soup.select("div.person"):
+        name_el = person.select_one(".person-name")
+        if not name_el:
+            continue
+        name = name_el.get_text(strip=True)
+        text = " ".join(p.get_text(" ", strip=True) for p in person.select("p.person-meta"))
+        yield name, text
+
+arc_fellows = set()
+for html_path in ["people/researchers.html", "people/alumni.html"]:
+    for name, text in person_full_text(read(html_path)):
+        if ARC_FELLOW_RE.search(text):
+            arc_fellows.add(normalize_name(name))
+
+arc_fellow_count = len(arc_fellows)
+
 # ---------- write into index.html ----------
 
 # Journal articles published by lab members before the lab's own 2018
@@ -132,6 +174,14 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-num">{medal_count}</span>
           <span class="stat-label">University Doctoral Research Medals</span>
         </a>
+        <div class="stat">
+          <span class="stat-num">{arc_grant_count}</span>
+          <span class="stat-label">ARC Research Grants</span>
+        </div>
+        <a class="stat" href="/people/researchers.html">
+          <span class="stat-num">{arc_fellow_count}</span>
+          <span class="stat-label">ARC Fellows</span>
+        </a>
       </div>
       <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
@@ -155,5 +205,6 @@ print(
     f"Wrote stats to index.html: {journal_total} journal articles "
     f"({journal_recognitions} recognitions), {conf_invited} invited conferences, "
     f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
-    f"{medal_count} University Doctoral Research Medals"
+    f"{medal_count} University Doctoral Research Medals, "
+    f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows"
 )

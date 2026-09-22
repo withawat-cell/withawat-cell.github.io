@@ -280,7 +280,7 @@ section.block .section-num {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 12px;
   margin-top: 28px;
   max-width: 68ch;
@@ -298,9 +298,6 @@ a.stat:hover .stat-num { color: var(--link); }
 }
 .stat-label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
 .stat-sub { display: block; font-size: 0.72rem; color: var(--gold); margin-top: 3px; }
-@media (max-width: 860px) {
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-}
 
 /* ---------- grids / cards (flat, no shadows) ---------- */
 
