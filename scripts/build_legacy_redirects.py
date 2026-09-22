@@ -2,11 +2,12 @@
 
 thz-el.org used to be mapped to a Google Site (sites.google.com/view/thzel),
 whose pages live at extension-less paths like /home, /research,
-/publications/journal-articles, /people/researchers, etc. Search engines and
-old bookmarks/links may still point at those paths, so each one gets a small
-static page here that immediately redirects to its equivalent on the new
-site, at the same path but as a directory (so it doesn't collide with the
-real static/generated file of the same name plus ".html").
+/publications/journal-articles, /people/researchers, etc. GitHub Pages
+already serves a clean path like /research directly from research.html with
+no redirect (confirmed for every legacy path except one), so a stub is only
+needed where no equivalently-named .html file exists at the new site's
+root -- which is just the landing page (home.html has no equivalent; the
+new site's landing page is index.html).
 """
 import os
 
@@ -15,17 +16,6 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # (legacy path under sites.google.com/view/thzel/, target path on the new site)
 MAPPING = [
     ("home", "/index.html"),
-    ("research", "/research.html"),
-    ("opportunities", "/opportunities.html"),
-    ("contact", "/contact.html"),
-    ("publications/journal-articles", "/publications/journal-articles.html"),
-    ("publications/conference-presentations", "/publications/conference-presentations.html"),
-    ("publications/phd-theses", "/publications/phd-theses.html"),
-    ("publications/codes", "/publications/codes.html"),
-    ("people/researchers", "/people/researchers.html"),
-    ("people/alumni", "/people/alumni.html"),
-    ("people/coursework", "/people/coursework.html"),
-    ("people/visitors", "/people/visitors.html"),
 ]
 
 TEMPLATE = """<!DOCTYPE html>
