@@ -745,3 +745,8 @@ a.lightbox-link {
   .card-grid { grid-template-columns: 1fr; }
   .pub-entry .pub-thumb, .pub-entry .pub-thumb-empty { width: 96px; flex: 0 0 96px; }
 }
+@media (max-width: 520px) {
+  /* .people-grid drops to a single column below this width, which would
+     otherwise stretch .person-photo (width: 100%) to the full card width */
+  .person-photo { width: 160px; align-self: center; }
+}

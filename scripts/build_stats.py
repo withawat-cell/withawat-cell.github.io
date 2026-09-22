@@ -168,7 +168,7 @@ stats_html = f"""      <div class="stats-row">
         </a>
         <div class="stat">
           <span class="stat-num">{ieee_grant_count}</span>
-          <span class="stat-label">IEEE AP/MTT Student Grants</span>
+          <span class="stat-label">IEEE AP/MTT Students/Postdocs Grants</span>
         </div>
         <a class="stat" href="/people/alumni.html">
           <span class="stat-num">{medal_count}</span>
