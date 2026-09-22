@@ -171,6 +171,7 @@ TOPIC_LABELS = [
     ("comms", "Communications & 6G"),
     ("detectors", "Detectors"),
     ("nde", "Non-Destructive Evaluation & Materials"),
+    ("reviews", "Reviews & Tutorials"),
 ]
 
 def build_journal():
@@ -314,7 +315,7 @@ codes_html = '''      <div class="card-grid">
 
 # ---------- shared page shell ----------
 
-CACHE_V = "20260922e"
+CACHE_V = "20260922i"
 
 SUBPAGES = [
     ("journal-articles", "Journal Articles"),

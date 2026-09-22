@@ -45,7 +45,7 @@
     var href = link.getAttribute("href");
     if (!href || href === "/") return;
     var normalized = href.replace(/\/index\.html$/, "/");
-    if (here === normalized || here.indexOf(normalized) === 0) {
+    if (here === normalized) {
       link.setAttribute("aria-current", "page");
       var parentLi = link.closest("li.has-children");
       if (parentLi) {

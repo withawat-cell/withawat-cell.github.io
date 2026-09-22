@@ -92,7 +92,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260922e">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260922i">
 </head>
 <body>
 
@@ -140,6 +140,12 @@ template = """<!DOCTYPE html>
       <h1>Coursework students</h1>
       <p class="lead">Honours, master's, and undergraduate research students who have contributed to the laboratory's projects, grouped by year.</p>
       <p class="small">Photos are not included here &mdash; see the <a href="https://sites.google.com/view/thzel/people/coursework">previous website</a> for those.</p>
+      <div class="stats-row" style="grid-template-columns: max-content;">
+        <div class="stat">
+          <span class="stat-num">{total}</span>
+          <span class="stat-label">Coursework Students</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -160,12 +166,12 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260922e"></script>
+<script src="/assets/js/main.js?v=20260922i"></script>
 </body>
 </html>
 """
 
 with open(OUT, "w", encoding="utf-8") as f:
-    f.write(template.replace("{body}", body))
+    f.write(template.replace("{body}", body).replace("{total}", str(total)))
 
 print("Wrote", OUT, "-", len(year_blocks), "year sections,", total, "students")
