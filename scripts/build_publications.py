@@ -4,6 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CACHE_V = "20260922l"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -204,7 +205,7 @@ def build_journal():
                 pills = [p for p in pills if p["short"] != "Accepted"]
                 citation_html += " (Accepted)"
             img = images.get(global_idx)
-            thumb = f'<img class="pub-thumb" src="{img}" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
+            thumb = f'<img class="pub-thumb" src="{img}?v={CACHE_V}" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
             meta_bits = []
             if rest:
                 meta_bits.append(rest)
@@ -314,8 +315,6 @@ codes_html = '''      <div class="card-grid">
       </div>'''
 
 # ---------- shared page shell ----------
-
-CACHE_V = "20260922i"
 
 SUBPAGES = [
     ("journal-articles", "Journal Articles"),

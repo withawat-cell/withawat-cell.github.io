@@ -291,13 +291,13 @@ a.stat:hover .stat-num { color: var(--link); }
 .stat-num {
   display: block;
   font-family: var(--mono);
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: var(--accent);
   line-height: 1.1;
 }
-.stat-label { display: block; font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; }
-.stat-sub { display: block; font-size: 0.62rem; color: var(--gold); margin-top: 3px; }
+.stat-label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+.stat-sub { display: block; font-size: 0.72rem; color: var(--gold); margin-top: 3px; }
 @media (max-width: 860px) {
   .stats-row { grid-template-columns: repeat(2, 1fr); }
 }
