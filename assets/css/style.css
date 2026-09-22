@@ -356,6 +356,14 @@ a.stat:hover .stat-num { color: var(--link); }
 }
 .copy-btn:hover { border-color: var(--text-faint); color: var(--text); }
 .copy-btn:disabled { color: var(--accent); border-color: var(--accent-dim); cursor: default; }
+.entry-copy-btn {
+  border: none;
+  padding: 2px;
+  margin: 0 0 0 2px;
+  vertical-align: middle;
+  color: var(--text-faint);
+}
+.entry-copy-btn:hover { border-color: transparent; color: var(--text); }
 
 .year-heading {
   font-family: var(--mono);

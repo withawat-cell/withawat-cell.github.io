@@ -103,17 +103,22 @@
   // Copy-to-clipboard buttons for addresses.
   document.querySelectorAll(".copy-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      var address = btn.previousElementSibling;
-      if (!address) return;
-      var text = Array.from(address.childNodes).map(function (node) {
-        if (node.nodeType === Node.TEXT_NODE) return node.textContent;
-        if (node.nodeName === "BR") return "\n";
-        return "";
-      }).join("").split("\n").map(function (line) {
-        return line.replace(/\s+/g, " ").trim();
-      }).filter(function (line) {
-        return line.length > 0;
-      }).join("\n");
+      var text;
+      if (btn.hasAttribute("data-copy")) {
+        text = btn.getAttribute("data-copy");
+      } else {
+        var address = btn.previousElementSibling;
+        if (!address) return;
+        text = Array.from(address.childNodes).map(function (node) {
+          if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+          if (node.nodeName === "BR") return "\n";
+          return "";
+        }).join("").split("\n").map(function (line) {
+          return line.replace(/\s+/g, " ").trim();
+        }).filter(function (line) {
+          return line.length > 0;
+        }).join("\n");
+      }
       navigator.clipboard.writeText(text).then(function () {
         var original = btn.innerHTML;
         btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';

@@ -35,6 +35,9 @@ scripts/
                                people/alumni.html) -- writes into index.html between the
                                <!-- STATS:START/END --> markers; requires BeautifulSoup (bs4)
   check_links.py              Crawls every page and checks internal href/src paths resolve
+  build_legacy_redirects.py   Writes redirect stubs (e.g. /home/index.html) for every page
+                               path from the old Google Sites version of this site, so old
+                               bookmarks/search results land on the new equivalent page
 ```
 
 There are no server-side includes — the header/nav/footer markup is duplicated at the top/bottom of every page. If you change the nav, update it in every `.html` file (a simple find-and-replace across the project works fine).

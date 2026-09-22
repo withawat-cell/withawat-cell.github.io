@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260922l"
+CACHE_V = "20260922n"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -201,19 +201,26 @@ def build_journal():
                 title_linked = f'<a href="{html.escape(primary_doi)}">{m.group(1)}</a>'
                 citation_html = citation_html[:m.start()] + '"' + title_linked + '"' + citation_html[m.end():]
             pills, rest = split_notes(notes)
-            if any(p["short"] == "Accepted" for p in pills):
+            accepted = any(p["short"] == "Accepted" for p in pills)
+            if accepted:
                 pills = [p for p in pills if p["short"] != "Accepted"]
                 citation_html += " (Accepted)"
+            plain_citation = citation.replace("*", "")
+            if accepted:
+                plain_citation += " (Accepted)"
+            if primary_doi:
+                plain_citation += " " + primary_doi
             img = images.get(global_idx)
             thumb = f'<img class="pub-thumb" src="{img}?v={CACHE_V}" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
             meta_bits = []
             if rest:
                 meta_bits.append(rest)
             meta_html = f'<p class="entry-meta">{" &middot; ".join(meta_bits)}</p>' if meta_bits else ""
+            copy_btn = f'<button type="button" class="copy-btn entry-copy-btn" aria-label="Copy citation" data-copy="{html.escape(plain_citation, quote=True)}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>'
             entries.append(f'''      <li class="pub-entry" data-topics="{topics}">
         {thumb}
         <div class="entry-body">
-          <p class="entry-title">{citation_html}</p>
+          <p class="entry-title">{citation_html} {copy_btn}</p>
           {meta_html}
           {pills_html(pills)}
         </div>
