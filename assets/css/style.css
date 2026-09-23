@@ -574,8 +574,8 @@ a.lightbox-link {
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: var(--accent);
-  border: 1px solid var(--accent-dim);
+  color: var(--text);
+  border: 1px solid var(--accent);
   padding: 2px 8px;
   border-radius: 999px;
   white-space: nowrap;
