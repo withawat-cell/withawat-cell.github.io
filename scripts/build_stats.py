@@ -165,8 +165,8 @@ INTL_COLLAB_COUNTRIES = [
     ("th", "Thailand"),
 ]
 intl_collab_flags = "".join(
-    f'<img src="https://flagcdn.com/20x15/{code}.png" srcset="https://flagcdn.com/40x30/{code}.png 2x" '
-    f'width="20" height="15" alt="{name}" loading="lazy">'
+    f'<img src="https://flagcdn.com/12x9/{code}.png" srcset="https://flagcdn.com/24x18/{code}.png 2x" '
+    f'width="12" height="9" alt="{name}" title="{name}" loading="lazy">'
     for code, name in INTL_COLLAB_COUNTRIES
 )
 
@@ -209,7 +209,7 @@ stats_html = f"""      <div class="stats-row">
         </a>
         <div class="stat">
           <span class="stat-num">{len(INTL_COLLAB_COUNTRIES)}</span>
-          <span class="stat-label">International Collaborator Countries</span>
+          <span class="stat-label">Collaborator Countries</span>
           <span class="stat-flags">{intl_collab_flags}</span>
         </div>
       </div>
