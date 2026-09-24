@@ -165,7 +165,7 @@ INTL_COLLAB_COUNTRIES = [
     ("th", "Thailand"),
 ]
 intl_collab_flags = "".join(
-    f'<img src="https://flagcdn.com/12x9/{code}.png" srcset="https://flagcdn.com/24x18/{code}.png 2x" '
+    f'<img src="https://flagcdn.com/16x12/{code}.png" srcset="https://flagcdn.com/32x24/{code}.png 2x" '
     f'width="12" height="9" alt="{name}" title="{name}" loading="lazy">'
     for code, name in INTL_COLLAB_COUNTRIES
 )
