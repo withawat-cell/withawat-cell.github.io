@@ -207,11 +207,11 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-num">{arc_fellow_count}</span>
           <span class="stat-label">ARC Fellows</span>
         </a>
-        <div class="stat">
+        <a class="stat" href="/publications/journal-articles.html">
           <span class="stat-num">{len(INTL_COLLAB_COUNTRIES)}</span>
           <span class="stat-label">Collaborator Countries</span>
           <span class="stat-flags">{intl_collab_flags}</span>
-        </div>
+        </a>
       </div>
       <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
