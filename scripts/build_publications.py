@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260923c"
+CACHE_V = "20260923e"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -67,9 +67,9 @@ def shorten(original):
 LINK_RE = re.compile(r'<a href="([^"]+)">([^<]+)</a>')
 SPECIAL_ISSUE_RE = re.compile(r"\bSpecial Issue\b", re.I)
 SPECIAL_COLLECTION_RE = re.compile(r"\bSpecial (Collection|Cluster)\b", re.I)
-INVITED_RE = re.compile(r"\binvited\b|\bselected by the committee\b", re.I)
 SPECIAL_KEEP_AS_CHIP = {
     "Special collection of standout research in integrated photonics",
+    "Selected by the committee for Special Issue on Asia-Pacific Microwave Conference 2025",
 }
 ALWAYS_PLAIN = {
     "Supplementary video",
@@ -85,12 +85,11 @@ def cap_first(s):
 def split_notes(notes):
     """Split a Notes cell into (pills, remainder_html).
     Each pill is a dict: {short, full (title tooltip or None), href (or None)}.
-    Special Collection/Cluster mentions are always demoted to plain text (not
-    chips); Special Issue mentions are demoted too, unless the paper was
-    specifically invited for it or selected by the committee."""
+    Special Issue/Collection/Cluster mentions are always demoted to plain
+    text (not chips) -- they're a themed sub-grouping, not a recognition, so
+    they read as prose rather than an award-style tag."""
     if not notes or not notes.strip():
         return [], ""
-    invited = bool(INVITED_RE.search(notes))
     notes = linkify_known(notes)
     parts = [p.strip() for p in notes.split(";") if p.strip()]
     pills, rest = [], []
@@ -101,7 +100,7 @@ def split_notes(notes):
         # a themed special-issue/collection name, so it stays a chip
         demote = plain.strip() in ALWAYS_PLAIN or (
             plain.strip() not in SPECIAL_KEEP_AS_CHIP and (
-                SPECIAL_COLLECTION_RE.search(plain) or (not invited and SPECIAL_ISSUE_RE.search(plain))
+                SPECIAL_COLLECTION_RE.search(plain) or SPECIAL_ISSUE_RE.search(plain)
             )
         )
         if demote:
@@ -165,6 +164,115 @@ def load_journal_images():
 
 TITLE_RE = re.compile(r'"([^"]+)"')
 
+# ---------- BibTeX generation ----------
+# Best-effort @article entry parsed from the same raw citation string used
+# for the on-page text -- regex-based, so it won't perfectly handle every
+# citation's punctuation quirks, but gets close enough that a researcher
+# pasting it in only needs to spot-check a field or two, not retype it.
+
+BIBTEX_TAIL_RE = re.compile(
+    r"^(?:,\s*vol\.\s*(?P<volume>[\w.]+))?"
+    r"(?:,\s*no\.\s*(?P<number>\d+))?"
+    r"(?:,\s*art\.\s*no\.\s*(?P<artno>[\w.]+))?"
+    r"(?:,\s*pp\.\s*(?P<pages>\d+[–\-]\d+))?"
+    r",\s*(?P<year>(?:19|20)\d{2})\.?\s*$"
+)
+CITATION_RE = re.compile(r'^(?P<authors>.*?),\s*"(?P<title>[^"]+)"\s*\*(?P<journal>[^*]+)\*(?P<tail>.*)$')
+
+# Accented Latin letters -> LaTeX escape codes, so names/titles with
+# diacritics (e.g. "Kürner", "Stöhr") render correctly once pasted into a
+# BibTeX-consuming tool, instead of raw UTF-8 bytes that break under plain
+# BibTeX's ASCII-only .bib parsing.
+ACCENT_MAP = {
+    "à": r"{\`a}", "á": r"{\'a}", "â": r"{\^a}", "ã": r"{\~a}", "ä": r'{\"a}', "å": r"{\aa}",
+    "À": r"{\`A}", "Á": r"{\'A}", "Â": r"{\^A}", "Ã": r"{\~A}", "Ä": r'{\"A}', "Å": r"{\AA}",
+    "ç": r"{\c c}", "Ç": r"{\c C}",
+    "è": r"{\`e}", "é": r"{\'e}", "ê": r"{\^e}", "ë": r'{\"e}',
+    "È": r"{\`E}", "É": r"{\'E}", "Ê": r"{\^E}", "Ë": r'{\"E}',
+    "ì": r"{\`i}", "í": r"{\'i}", "î": r"{\^i}", "ï": r'{\"i}',
+    "Ì": r"{\`I}", "Í": r"{\'I}", "Î": r"{\^I}", "Ï": r'{\"I}',
+    "ñ": r"{\~n}", "Ñ": r"{\~N}",
+    "ò": r"{\`o}", "ó": r"{\'o}", "ô": r"{\^o}", "õ": r"{\~o}", "ö": r'{\"o}', "ø": r"{\o}",
+    "Ò": r"{\`O}", "Ó": r"{\'O}", "Ô": r"{\^O}", "Õ": r"{\~O}", "Ö": r'{\"O}', "Ø": r"{\O}",
+    "ù": r"{\`u}", "ú": r"{\'u}", "û": r"{\^u}", "ü": r'{\"u}',
+    "Ù": r"{\`U}", "Ú": r"{\'U}", "Û": r"{\^U}", "Ü": r'{\"U}',
+    "ý": r"{\'y}", "ÿ": r'{\"y}', "Ý": r"{\'Y}",
+    "ß": r"{\ss}",
+}
+ACCENT_RE = re.compile("|".join(re.escape(ch) for ch in ACCENT_MAP))
+
+def bibtex_escape(s):
+    s = s.replace("&", r"\&").replace("%", r"\%")
+    s = s.replace("‐", "-").replace("‑", "-")  # hyphen / non-breaking hyphen
+    s = s.replace("–", "--").replace("—", "---")  # en dash / em dash
+    return ACCENT_RE.sub(lambda m: ACCENT_MAP[m.group(0)], s)
+
+# Any word carrying a capital letter (acronyms like IEEE, mid-title proper
+# nouns like "Bragg", single letters like "Q") is deliberately capitalised
+# in the source, not just capitalised-because-first-word text, so it's
+# wrapped in braces to survive a BibTeX style's title-case folding.
+ACRONYM_RE = re.compile(r"\b[A-Za-z0-9]+\b")
+
+def protect_acronyms(s):
+    def wrap(m):
+        word = m.group(0)
+        return "{" + word + "}" if any(c.isupper() for c in word) else word
+    return ACRONYM_RE.sub(wrap, s)
+
+def split_author_name(name):
+    """'H. Lees' -> 'Lees, H.' (BibTeX author convention). Splits on the
+    last whitespace, so the final token is treated as the surname."""
+    parts = name.strip().split()
+    if len(parts) <= 1:
+        return name.strip()
+    return f"{parts[-1]}, {' '.join(parts[:-1])}"
+
+def make_bibtex_key(first_author, year, used_keys):
+    tokens = re.sub(r"[^A-Za-z ]", "", first_author).split()
+    surname = tokens[-1] if tokens else "ref"
+    base = f"{surname}{year}"
+    key, suffix = base, ord("a")
+    while key in used_keys:
+        key = f"{base}{chr(suffix)}"
+        suffix += 1
+    used_keys.add(key)
+    return key
+
+def citation_to_bibtex(citation, used_keys):
+    m = CITATION_RE.match(citation.strip())
+    if not m:
+        return None
+    authors_raw = [a.strip() for a in re.split(r",\s*(?:and\s+)?|\s+and\s+", m.group("authors")) if a.strip()]
+    if not authors_raw:
+        return None
+    tail_m = BIBTEX_TAIL_RE.match(m.group("tail").strip())
+    if not tail_m:
+        return None
+    title = m.group("title").strip().rstrip(",").strip()
+    journal = m.group("journal").strip()
+    year = tail_m.group("year")
+    pages = tail_m.group("pages")
+    if pages:
+        pages = re.sub(r"[–\-]+", "--", pages)
+
+    key = make_bibtex_key(authors_raw[0], year, used_keys)
+    fields = [
+        ("author", " and ".join(split_author_name(bibtex_escape(a)) for a in authors_raw)),
+        ("title", bibtex_escape(protect_acronyms(title))),
+        ("journal", bibtex_escape(journal)),
+        ("year", year),
+    ]
+    if tail_m.group("volume"):
+        fields.append(("volume", tail_m.group("volume")))
+    if tail_m.group("number"):
+        fields.append(("number", tail_m.group("number")))
+    if tail_m.group("artno"):
+        fields.append(("eid", tail_m.group("artno")))
+    if pages:
+        fields.append(("pages", pages))
+    body = ",\n".join(f"  {k} = {{{v}}}" for k, v in fields)
+    return f"@article{{{key},\n{body}\n}}"
+
 TOPIC_LABELS = [
     ("antennas", "Antennas & Beamforming"),
     ("metasurfaces", "Metasurfaces & Polarization Control"),
@@ -181,6 +289,7 @@ def build_journal():
         text = f.read()
     year_blocks = re.findall(r"^## (\d{4})\n\n(.*?)(?=\n## |\n---)", text, re.S | re.M)
     images = load_journal_images()
+    used_bibtex_keys = set()
 
     sections = []
     global_idx = 0
@@ -208,19 +317,22 @@ def build_journal():
             plain_citation = citation.replace("*", "")
             if accepted:
                 plain_citation += " (Accepted)"
-            if primary_doi:
-                plain_citation += " " + primary_doi
             img = images.get(global_idx)
             thumb = f'<img class="pub-thumb" src="{img}?v={CACHE_V}" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
             meta_bits = []
             if rest:
                 meta_bits.append(rest)
             meta_html = f'<p class="entry-meta">{" &middot; ".join(meta_bits)}</p>' if meta_bits else ""
-            copy_btn = f'<button type="button" class="copy-btn copy-btn-sm" aria-label="Copy citation" data-copy="{html.escape(plain_citation, quote=True)}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>'
+            copy_btn = f'<button type="button" class="copy-btn copy-btn-sm" aria-label="Copy citation" title="Copy citation" data-copy="{html.escape(plain_citation, quote=True)}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>'
+            bibtex = citation_to_bibtex(citation, used_bibtex_keys)
+            bibtex_btn = (
+                f'<button type="button" class="copy-btn copy-btn-sm bibtex-btn" aria-label="Copy BibTeX" '
+                f'title="Copy BibTeX" data-copy="{html.escape(bibtex, quote=True)}">{{}}</button>'
+            ) if bibtex else ""
             entries.append(f'''      <li class="pub-entry" data-topics="{topics}">
         {thumb}
         <div class="entry-body">
-          <p class="entry-title">{citation_html} {copy_btn}</p>
+          <p class="entry-title">{citation_html} {copy_btn}{bibtex_btn}</p>
           {meta_html}
           {pills_html(pills)}
         </div>

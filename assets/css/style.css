@@ -354,6 +354,7 @@ a.stat:hover .stat-num { color: var(--link); }
   color: var(--text-faint);
 }
 .copy-btn-sm:hover { border-color: transparent; color: var(--text); }
+.bibtex-btn { font-family: var(--mono); font-size: 11px; font-weight: 500; line-height: 1; letter-spacing: 1px; }
 
 .year-heading {
   font-family: var(--mono);
