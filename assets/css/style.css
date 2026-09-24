@@ -298,6 +298,8 @@ a.stat:hover .stat-num { color: var(--link); }
 }
 .stat-label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
 .stat-sub { display: block; font-size: 0.72rem; color: var(--gold); margin-top: 3px; }
+.stat-flags { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; margin-top: 6px; }
+.stat-flags img { display: block; border-radius: 2px; }
 
 /* ---------- grids / cards (flat, no shadows) ---------- */
 

@@ -145,6 +145,31 @@ for html_path in ["people/researchers.html", "people/alumni.html"]:
 
 arc_fellow_count = len(arc_fellows)
 
+# ---------- international collaborator countries ----------
+# Unlike the stats above, country-of-affiliation for journal co-authors
+# isn't data that lives anywhere on the site -- it only exists in DOI/
+# publisher metadata, which isn't something worth fetching at build time
+# (adds a network dependency that could break the build). So this one is
+# a hand-maintained list: update it on the rare occasion a paper is
+# published with a collaborator country not already listed here.
+# (ISO 3166-1 alpha-2 code, country name) -- flag images from flagcdn.com.
+INTL_COLLAB_COUNTRIES = [
+    ("jp", "Japan"),
+    ("de", "Germany"),
+    ("cn", "China"),
+    ("es", "Spain"),
+    ("us", "United States"),
+    ("ch", "Switzerland"),
+    ("fr", "France"),
+    ("nl", "Netherlands"),
+    ("th", "Thailand"),
+]
+intl_collab_flags = "".join(
+    f'<img src="https://flagcdn.com/20x15/{code}.png" srcset="https://flagcdn.com/40x30/{code}.png 2x" '
+    f'width="20" height="15" alt="{name}" loading="lazy">'
+    for code, name in INTL_COLLAB_COUNTRIES
+)
+
 # ---------- write into index.html ----------
 
 # Journal articles published by lab members before the lab's own 2018
@@ -182,6 +207,11 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-num">{arc_fellow_count}</span>
           <span class="stat-label">ARC Fellows</span>
         </a>
+        <div class="stat">
+          <span class="stat-num">{len(INTL_COLLAB_COUNTRIES)}</span>
+          <span class="stat-label">International Collaborator Countries</span>
+          <span class="stat-flags">{intl_collab_flags}</span>
+        </div>
       </div>
       <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
@@ -206,5 +236,6 @@ print(
     f"({journal_recognitions} recognitions), {conf_invited} invited conferences, "
     f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
     f"{medal_count} University Doctoral Research Medals, "
-    f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows"
+    f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "
+    f"{len(INTL_COLLAB_COUNTRIES)} international collaborator countries"
 )
