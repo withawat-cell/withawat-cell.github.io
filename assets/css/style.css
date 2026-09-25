@@ -432,7 +432,15 @@ a.stat:hover .stat-num { color: var(--link); }
 .person-role { font-size: 0.85rem; color: var(--accent); margin: 2px 0 8px; }
 .person-meta { font-size: 0.85rem; color: var(--text-dim); margin: 0 0 4px; }
 .person-meta:last-of-type { margin-bottom: 8px; }
-.person-links { font-size: 0.82rem; display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 8px; }
+.person-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 8px; }
+.person-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  border-bottom: none;
+}
+.person-links a:hover { color: var(--text); }
 
 /* simple data table (codes, theses, etc.) */
 table.data {
