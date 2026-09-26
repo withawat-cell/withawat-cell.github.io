@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260923u"
+CACHE_V = "20260926d"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -293,6 +293,9 @@ def build_journal():
 
     sections = []
     global_idx = 0
+    total_count = 0
+    recognitions_count = 0
+    invited_count = 0
     for year, block in year_blocks:
         rows = [l for l in block.strip().split("\n") if l.startswith("|")][2:]
         entries = []
@@ -314,6 +317,11 @@ def build_journal():
             if accepted:
                 pills = [p for p in pills if p["short"] != "Accepted"]
                 citation_html += " (Accepted)"
+            total_count += 1
+            if pills:
+                recognitions_count += 1
+            if any(p["short"] == "Invited" for p in pills):
+                invited_count += 1
             plain_citation = citation.replace("*", "")
             if accepted:
                 plain_citation += " (Accepted)"
@@ -340,7 +348,7 @@ def build_journal():
             global_idx += 1
         sections.append(f'    <div class="year-block" data-year="{year}">\n      <h3 class="year-heading">{year}</h3>\n      <ul class="pub-list">\n' + "\n".join(entries) + "\n      </ul>\n    </div>")
     years = [y for y, _ in year_blocks]
-    return "\n\n".join(sections), years
+    return "\n\n".join(sections), years, total_count, recognitions_count, invited_count
 
 # ---------- Conference presentations ----------
 
@@ -389,7 +397,7 @@ def build_conference():
         sections.append(f'    <h3 class="year-heading">{year}</h3>\n    <ul class="pub-list">\n' + "\n".join(entries) + "\n    </ul>")
     return "\n\n".join(sections)
 
-journal_html, journal_years = build_journal()
+journal_html, journal_years, journal_total, journal_recognitions, journal_invited = build_journal()
 conference_html = build_conference()
 
 year_filter_options = "\n".join(
@@ -455,7 +463,7 @@ def nav_html(active_slug):
           </div>
         </li>'''
 
-def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra_scripts=""):
+def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra_scripts="", extra_hero=""):
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -514,7 +522,7 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
     <div class="wrap-wide">
       <p class="hero-eyebrow">{eyebrow}</p>
       <h1>{h1}</h1>
-      <p class="lead">{lead}</p>
+      <p class="lead">{lead}</p>{extra_hero}
     </div>
   </section>
 
@@ -549,6 +557,18 @@ topic_filter_buttons = "\n".join(
 )
 
 # Journal articles
+journal_hero_stats = f'''
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">{journal_total}</span>
+          <span class="stat-label">Journal Articles</span>
+          <span class="stat-sub">{journal_recognitions} Recognitions</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">{journal_invited}</span>
+          <span class="stat-label">Invited Papers</span>
+        </div>
+      </div>'''
 journal_body = f'''      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
         <p class="prose small" style="margin-bottom:0;">Most recent first. Excludes journal publications prior to the lab's establishment and those in the microwave and optics domains outside terahertz.</p>
         <label class="year-filter-label">Year
@@ -571,6 +591,7 @@ out = page(
     "Peer-reviewed journal articles from the Terahertz Engineering Laboratory.",
     journal_body,
     extra_scripts=f'\n<script src="/assets/js/publications-filter.js?v={CACHE_V}"></script>',
+    extra_hero=journal_hero_stats,
 )
 with open(os.path.join(pub_dir, "journal-articles.html"), "w", encoding="utf-8") as f:
     f.write(out)
@@ -608,4 +629,4 @@ out = page(
 with open(os.path.join(pub_dir, "codes.html"), "w", encoding="utf-8") as f:
     f.write(out)
 
-print("Wrote publications/journal-articles.html, conference-presentations.html, phd-theses.html, codes.html")
+print(f"Wrote publications/journal-articles.html ({journal_total} articles, {journal_recognitions} recognitions, {journal_invited} invited), conference-presentations.html, phd-theses.html, codes.html")

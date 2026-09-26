@@ -56,8 +56,12 @@ def format_notes(notes):
         out.append(fix_cross_refs(a))
     return ' <span class="note-sep">&bull;</span> '.join(out)
 
+DOI_RE = re.compile(r"https://doi\.org/\S+?(?=[\s)\]]|$)")
+
 sections = []
 total = 0
+ieee_award_count = 0
+doi_set = set()
 for year, block in year_blocks:
     rows = [l for l in ("|" + block).strip().split("\n") if l.startswith("|")]
     rows = rows[2:]
@@ -68,6 +72,14 @@ for year, block in year_blocks:
             continue
         name, yrs, area, notes = cells
         total += 1
+        # "First author" clauses are journal-paper mentions (styled the same
+        # as awards), not actual IEEE awards, so they're excluded here even
+        # though the journal's own name happens to contain "IEEE"
+        for clause in notes.split(";"):
+            clause = clause.strip()
+            if "IEEE" in clause and "First author" not in clause and any(k in clause for k in AWARD_KEYWORDS):
+                ieee_award_count += 1
+        doi_set.update(DOI_RE.findall(notes))
         trs.append(f"          <tr><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
     sections.append(f'''      <h3 class="year-heading">{year}</h3>
       <table class="data cols-4">
@@ -100,7 +112,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260923u">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260926d">
 </head>
 <body>
 
@@ -148,10 +160,18 @@ template = """<!DOCTYPE html>
       <h1>Coursework students</h1>
       <p class="lead">Honours, master's, and undergraduate research students who have contributed to the laboratory's projects, grouped by year.</p>
       <p class="small">Photos are not included here &mdash; see the <a href="https://sites.google.com/view/thzel/people/coursework">previous website</a> for those.</p>
-      <div class="stats-row" style="grid-template-columns: max-content;">
+      <div class="stats-row">
         <div class="stat">
           <span class="stat-num">{total}</span>
           <span class="stat-label">Coursework Students</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">{ieee_awards}</span>
+          <span class="stat-label">IEEE AP/MTT Grants</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">{first_author_papers}</span>
+          <span class="stat-label">First-Author<br>Journal Articles</span>
         </div>
       </div>
     </div>
@@ -174,12 +194,18 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260923u"></script>
+<script src="/assets/js/main.js?v=20260926d"></script>
 </body>
 </html>
 """
 
 with open(OUT, "w", encoding="utf-8") as f:
-    f.write(template.replace("{body}", body).replace("{total}", str(total)))
+    f.write(
+        template.replace("{body}", body)
+        .replace("{total}", str(total))
+        .replace("{ieee_awards}", str(ieee_award_count))
+        .replace("{first_author_papers}", str(len(doi_set)))
+    )
 
-print("Wrote", OUT, "-", len(year_blocks), "year sections,", total, "students")
+print("Wrote", OUT, "-", len(year_blocks), "year sections,", total, "students,",
+      ieee_award_count, "IEEE awards,", len(doi_set), "first-author journal articles")

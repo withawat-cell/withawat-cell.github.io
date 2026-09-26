@@ -280,7 +280,8 @@ section.block .section-num {
 
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 128px));
+  justify-content: start;
   gap: 12px;
   margin-top: 28px;
   max-width: 68ch;
