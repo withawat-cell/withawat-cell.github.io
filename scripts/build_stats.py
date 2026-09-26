@@ -103,6 +103,26 @@ for html_path, extractor in [
 
 medal_count = len(medals)
 
+# ---------- Commendation for Doctoral Thesis Excellence ----------
+# Dedupe by person alone (not person+year, unlike the awards above): this is
+# a one-time thesis honour, and the exact wording varies by who signed off
+# ("PVC Commendation..." vs "Dean's Commendation...") so a text-based key
+# would risk double-counting someone tagged with both phrasings.
+
+COMMENDATION_RE = re.compile(r"\bCommendation for Doctoral Thesis Excellence\b", re.I)
+
+commendations = set()
+for html_path, extractor in [
+    ("people/researchers.html", person_awards),
+    ("people/alumni.html", person_awards),
+    ("people/coursework.html", coursework_awards),
+]:
+    for name, award in extractor(read(html_path)):
+        if COMMENDATION_RE.search(award):
+            commendations.add(normalize_name(name))
+
+commendation_count = len(commendations)
+
 # ---------- ARC research grants ----------
 # Counted directly from the ARC grant codes (e.g. LE180100003, DP170101922)
 # named in the "Lab history" prose paragraph on this same page.
@@ -164,11 +184,73 @@ INTL_COLLAB_COUNTRIES = [
     ("nl", "Netherlands"),
     ("th", "Thailand"),
 ]
-intl_collab_flags = "".join(
-    f'<img src="https://flagcdn.com/16x12/{code}.png" srcset="https://flagcdn.com/32x24/{code}.png 2x" '
-    f'width="12" height="9" alt="{name}" title="{name}" loading="lazy">'
-    for code, name in INTL_COLLAB_COUNTRIES
-)
+
+def flags_html(countries):
+    return "".join(
+        f'<img src="https://flagcdn.com/16x12/{code}.png" srcset="https://flagcdn.com/32x24/{code}.png 2x" '
+        f'width="12" height="9" alt="{name}" title="{name}" loading="lazy">'
+        for code, name in countries
+    )
+
+intl_collab_flags = flags_html(INTL_COLLAB_COUNTRIES)
+
+# ---------- visitor countries ----------
+# Unlike the collaborator countries above (which come from off-site DOI/
+# publisher metadata this site doesn't have), each visitor's country is
+# already on the page -- it's reliably the last comma-separated segment of
+# their affiliation line (e.g. "Zhejiang University, China"). So this is
+# parsed straight from people/visitors.html rather than hand-maintained;
+# only the name -> ISO code mapping (needed for the flag icon) is a small
+# static table, extended whenever a visitor from an uncovered country is
+# added.
+COUNTRY_ISO = {
+    "New Zealand": "nz",
+    "China": "cn",
+    "Japan": "jp",
+    "Germany": "de",
+    "Australia": "au",
+    "Thailand": "th",
+    "Taiwan": "tw",
+}
+
+def visitor_country_names(html):
+    """Yield each distinct country in first-appearance order, one per
+    visitor -- taken from the last comma-separated part of the first
+    non-"Now:" .person-meta paragraph in each visitor's card."""
+    soup = BeautifulSoup(html, "html.parser")
+    seen = set()
+    for person in soup.select("div.person"):
+        metas = [p.get_text(" ", strip=True) for p in person.select("p.person-meta")]
+        affil = next((m for m in metas if not m.startswith("Now")), None)
+        if not affil:
+            continue
+        country = affil.rsplit(",", 1)[-1].strip()
+        if country not in seen:
+            seen.add(country)
+            yield country
+
+VISITOR_COUNTRIES = []
+for name in visitor_country_names(read("people/visitors.html")):
+    code = COUNTRY_ISO.get(name)
+    if not code:
+        raise SystemExit(f"No ISO code mapped for visitor country {name!r} -- add it to COUNTRY_ISO in build_stats.py")
+    VISITOR_COUNTRIES.append((code, name))
+visitor_flags = flags_html(VISITOR_COUNTRIES)
+
+# ---------- per-page person categories (Visitors, Researchers) ----------
+# Each category is its own "section.block" on the page, labelled by a
+# ".section-num" span (e.g. "PhD Candidates") -- counted directly so a new
+# section or person added there is picked up automatically.
+
+def page_categories(html):
+    soup = BeautifulSoup(html, "html.parser")
+    for section in soup.select("section.block"):
+        label_el = section.select_one(".section-num")
+        if not label_el:
+            continue
+        yield label_el.get_text(strip=True), len(section.select(".person"))
+
+VISITOR_CATEGORIES = list(page_categories(read("people/visitors.html")))
 
 # ---------- write into index.html ----------
 
@@ -215,21 +297,61 @@ stats_html = f"""      <div class="stats-row">
       </div>
       <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
-index_path = os.path.join(ROOT, "index.html")
-with open(index_path, encoding="utf-8") as f:
-    index_html = f.read()
+def write_stats_block(rel_path, block_html):
+    """Replace the content between STATS:START/STATS:END markers in a
+    hand-authored page with freshly computed stats. Every page below is
+    static HTML edited directly (not generated from content-raw), so this
+    marker-replace is the only thing that ever touches their stat chips."""
+    path = os.path.join(ROOT, rel_path)
+    with open(path, encoding="utf-8") as f:
+        page_html = f.read()
+    new_html, n = re.subn(
+        r"<!-- STATS:START -->.*?<!-- STATS:END -->",
+        "<!-- STATS:START -->\n" + block_html + "\n      <!-- STATS:END -->",
+        page_html,
+        flags=re.S,
+    )
+    if n != 1:
+        raise SystemExit(f"STATS:START/STATS:END markers not found (or found more than once) in {rel_path}")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(new_html)
 
-new_index_html, n = re.subn(
-    r"<!-- STATS:START -->.*?<!-- STATS:END -->",
-    "<!-- STATS:START -->\n" + stats_html + "\n      <!-- STATS:END -->",
-    index_html,
-    flags=re.S,
-)
-if n != 1:
-    raise SystemExit("STATS:START/STATS:END markers not found (or found more than once) in index.html")
+write_stats_block("index.html", stats_html)
 
-with open(index_path, "w", encoding="utf-8") as f:
-    f.write(new_index_html)
+# ---------- write into publications/phd-theses.html ----------
+
+theses_stats_html = f"""      <div class="stats-row">
+        <a class="stat" href="/people/alumni.html">
+          <span class="stat-num">{commendation_count}</span>
+          <span class="stat-label">Commendations for Doctoral<br>Thesis Excellence</span>
+        </a>
+        <a class="stat" href="/people/alumni.html">
+          <span class="stat-num">{medal_count}</span>
+          <span class="stat-label">University Doctoral<br>Research Medals</span>
+        </a>
+      </div>"""
+write_stats_block("publications/phd-theses.html", theses_stats_html)
+
+def category_chips_html(categories):
+    return "\n".join(
+        f'''        <div class="stat">
+          <span class="stat-num">{count}</span>
+          <span class="stat-label">{label}</span>
+        </div>'''
+        for label, count in categories
+    )
+
+# ---------- write into people/visitors.html ----------
+
+visitors_stats_html = f"""      <div class="stats-row">
+{category_chips_html(VISITOR_CATEGORIES)}
+        <div class="stat">
+          <span class="stat-num">{len(VISITOR_COUNTRIES)}</span>
+          <span class="stat-label">Visitor Countries</span>
+          <span class="stat-flags">{visitor_flags}</span>
+        </div>
+      </div>"""
+write_stats_block("people/visitors.html", visitors_stats_html)
 
 print(
     f"Wrote stats to index.html: {journal_total} journal articles "
@@ -239,3 +361,11 @@ print(
     f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "
     f"{len(INTL_COLLAB_COUNTRIES)} international collaborator countries"
 )
+print(
+    f"Wrote stats to publications/phd-theses.html: {commendation_count} commendations, "
+    f"{medal_count} medals"
+)
+def summarize(categories):
+    return ", ".join(f"{count} {label}" for label, count in categories)
+
+print(f"Wrote stats to people/visitors.html: {summarize(VISITOR_CATEGORIES)}, {len(VISITOR_COUNTRIES)} visitor countries")
