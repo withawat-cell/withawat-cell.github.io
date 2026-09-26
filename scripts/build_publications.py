@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260926d"
+CACHE_V = "20260926e"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -608,12 +608,28 @@ with open(os.path.join(pub_dir, "conference-presentations.html"), "w", encoding=
     f.write(out)
 
 # PhD theses
+# Hand-maintained, like the homepage's other award counts -- these aren't
+# derived from the theses table above since it doesn't carry award data.
+THESIS_COMMENDATION_COUNT = 6
+THESIS_MEDAL_COUNT = 3
+theses_hero_stats = f'''
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">{THESIS_COMMENDATION_COUNT}</span>
+          <span class="stat-label">Commendations for Doctoral<br>Thesis Excellence</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">{THESIS_MEDAL_COUNT}</span>
+          <span class="stat-label">University Doctoral<br>Research Medals</span>
+        </div>
+      </div>'''
 out = page(
     "phd-theses", "PhD Theses",
     "PhD theses produced at the Terahertz Engineering Laboratory, Adelaide University.",
     "Publications", "PhD theses",
     "Doctoral theses completed at the Terahertz Engineering Laboratory.",
     theses_html,
+    extra_hero=theses_hero_stats,
 )
 with open(os.path.join(pub_dir, "phd-theses.html"), "w", encoding="utf-8") as f:
     f.write(out)
