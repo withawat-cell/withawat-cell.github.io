@@ -469,7 +469,7 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Cache-Control" content="no-cache">
 <title>{title} — Terahertz Engineering Laboratory</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="https://thz-el.org/publications/{slug}.html">
