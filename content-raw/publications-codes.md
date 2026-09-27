@@ -18,12 +18,4 @@ Python automation script for CST Studio Suite, compatible with Python 3.12.10 an
 
 Repository/Gist: https://gist.github.com/withawat-cell/5f3192e66faae0e291e63ef4a68d6c75
 
----
-## Images
-Only the standard site logo and two hero/background-style graphics found — no code-specific screenshots or diagrams.
-1. Site logo (nav icon) — https://lh7-us.googleusercontent.com/sitesv-images-rt/AMxu72s2h1bcheclA_JSRGNXj9pGYsJ_GlLY_qc92DutWBMlhlflZ6ZygehsJY87mKGREhhQlsKFcnAhQ3GdzdHO6XXjyKhXfoRPKuVvrluSpZ2b0pdrlmN6ZD_DX_AE7Q76y3hWYEpYftzvBvzZGfBKHRMdPWLTX9C0_cLGt-PA85vjnZ7HBgSXp7SKKPueyzk=w16383
-2. Page hero/background graphic — https://lh7-us.googleusercontent.com/sitesv-images-rt/AMxu72v0IGMF0ok5zOiZzJ1uBneVW49vbc2H02oP6qhzuk7icOEKrEWpPxX3fmOVRnSkretMnvFZn4NVtxM28rNYnhrnYjkmJ8IOsoNkx71ttaW0aN7v2j_ATHflSgbo3TmVPFE4B_0Pb6SmZSEh3_MXmpL7x6KXjrNBfOvDkHQsjc3Tm2StfVMcyrwvXB0zBAg=w16383
-3. Photo (likely illustrating "End-to-End Wireless Communication Chain Simulator" — possibly a screenshot of the MATLAB app UI) — https://lh7-us.googleusercontent.com/sitesv-images-rt/AMxu72vJBndyhk4q8KzaDPXf9WnL7Cim2BsTVbZF6ka5IxRTqk0zS1uKMwQazzPA6kmghJBDMdGLYnn0TnumcdQOcjMnYlYQ1IwbCV5m5kAr6SHhjOYhw3cE8_lSRGA9NdVSD9JOX2vXRTSUQK3lhh6ivzaF43sfCMc5geldmPmCh1m0f2grqMAOL0BeN3VQ4UsKc0Vg0InPfDuXP4Xhtnqh-XMjuYab4R0HMr0u0JcBMKY=w1280
-4. Photo (likely illustrating "CST Simulation of Substrateless Terahertz Waveguide" — possibly a CST model/simulation screenshot) — https://lh7-us.googleusercontent.com/sitesv-images-rt/AMxu72uU3mkFwodStvwRdZnoEGsBmGZgqyHoZ-WAA3Ap0HsAht6RCeuC4Y2LcImyKCZIlY9ynSFbe2kbzaBJr7xktSHpMf5rjEosI8uH1K-psE73WqLO8gniteZfh6QMcgrbRWgT-SIJS1TAFCLHbUYAJyHkYN8VoYAvKlrb9rpiWrlC2cdbRTM9yrpUG8qN3kwAJc9vZnoqmNPRsd-FwrZvYxN_EegXFGSF_rs5e75lomM=w1280
-
 FLAG: The DOI mismatch noted above for the "Characteristics of effective-medium-clad dielectric waveguides" citation should be checked against the actual published DOI before use.
