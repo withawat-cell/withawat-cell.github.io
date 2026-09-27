@@ -237,21 +237,6 @@ for name in visitor_country_names(read("people/visitors.html")):
     VISITOR_COUNTRIES.append((code, name))
 visitor_flags = flags_html(VISITOR_COUNTRIES)
 
-# ---------- per-page person categories (Visitors, Researchers) ----------
-# Each category is its own "section.block" on the page, labelled by a
-# ".section-num" span (e.g. "PhD Candidates") -- counted directly so a new
-# section or person added there is picked up automatically.
-
-def page_categories(html):
-    soup = BeautifulSoup(html, "html.parser")
-    for section in soup.select("section.block"):
-        label_el = section.select_one(".section-num")
-        if not label_el:
-            continue
-        yield label_el.get_text(strip=True), len(section.select(".person"))
-
-VISITOR_CATEGORIES = list(page_categories(read("people/visitors.html")))
-
 # ---------- write into index.html ----------
 
 # Journal articles published by lab members before the lab's own 2018
@@ -332,19 +317,9 @@ theses_stats_html = f"""      <div class="stats-row">
       </div>"""
 write_stats_block("publications/phd-theses.html", theses_stats_html)
 
-def category_chips_html(categories):
-    return "\n".join(
-        f'''        <div class="stat">
-          <span class="stat-num">{count}</span>
-          <span class="stat-label">{label}</span>
-        </div>'''
-        for label, count in categories
-    )
-
 # ---------- write into people/visitors.html ----------
 
 visitors_stats_html = f"""      <div class="stats-row">
-{category_chips_html(VISITOR_CATEGORIES)}
         <div class="stat">
           <span class="stat-num">{len(VISITOR_COUNTRIES)}</span>
           <span class="stat-label">Visitor Countries</span>
@@ -365,7 +340,4 @@ print(
     f"Wrote stats to publications/phd-theses.html: {commendation_count} commendations, "
     f"{medal_count} medals"
 )
-def summarize(categories):
-    return ", ".join(f"{count} {label}" for label, count in categories)
-
-print(f"Wrote stats to people/visitors.html: {summarize(VISITOR_CATEGORIES)}, {len(VISITOR_COUNTRIES)} visitor countries")
+print(f"Wrote stats to people/visitors.html: {len(VISITOR_COUNTRIES)} visitor countries")
