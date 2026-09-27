@@ -291,7 +291,7 @@ stats_html = f"""      <div class="stats-row">
         </a>
         <a class="stat" href="/publications/journal-articles.html">
           <span class="stat-num">{len(INTL_COLLAB_COUNTRIES)}</span>
-          <span class="stat-label">Collaborator Countries</span>
+          <span class="stat-label">Coauthor Countries</span>
           <span class="stat-flags">{intl_collab_flags}</span>
         </a>
       </div>
