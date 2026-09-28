@@ -593,7 +593,7 @@ a.lightbox-link {
 .year-filter option { color: #000; }
 .year-filter:hover, .topic-filter-btn:hover { border-color: var(--text-faint); }
 .topic-filter-btn:hover { color: var(--text); }
-.topic-filter-btn[aria-pressed="true"] {
+.topic-filter-btn[aria-pressed="true"], .year-filter.active {
   color: var(--bg);
   background: var(--accent);
   border-color: var(--accent);
