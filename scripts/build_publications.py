@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260927d"
+CACHE_V = "20260928b"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -559,6 +559,7 @@ topic_filter_buttons = "\n".join(
 
 # Journal articles
 journal_hero_stats = f'''
+      <p class="small">Most recent first. Excludes journal publications prior to the lab's establishment and those in the microwave and optics domains outside terahertz.</p>
       <div class="stats-row">
         <div class="stat">
           <span class="stat-num">{journal_total}</span>
@@ -570,17 +571,12 @@ journal_hero_stats = f'''
           <span class="stat-label">Invited Papers</span>
         </div>
       </div>'''
-journal_body = f'''      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
-        <p class="prose small" style="margin-bottom:0;">Most recent first. Excludes journal publications prior to the lab's establishment and those in the microwave and optics domains outside terahertz.</p>
-        <label class="year-filter-label">Year
-          <select id="journal-year-filter" class="year-filter">
-            <option value="all">All years</option>
-{year_filter_options}
-          </select>
-        </label>
-      </div>
-      <div class="topic-filter" role="group" aria-label="Filter by topic" style="margin-top:16px;">
+journal_body = f'''      <div class="topic-filter" role="group" aria-label="Filter by topic" style="align-items:center;">
 {topic_filter_buttons}
+        <select id="journal-year-filter" class="year-filter" aria-label="Year">
+          <option value="all">All years</option>
+{year_filter_options}
+        </select>
       </div>
       <div style="margin-top:24px;">
 {journal_html}

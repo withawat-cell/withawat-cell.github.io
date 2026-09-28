@@ -578,25 +578,8 @@ a.lightbox-link {
 .tag-note a { color: inherit; border-bottom: 1px dotted currentColor; }
 .note-sep { color: var(--text-faint); margin: 0 8px; }
 
-.year-filter-label {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  color: var(--text-faint);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.year-filter {
-  font-family: var(--sans);
-  font-size: 0.88rem;
-  color: var(--text);
-  background: var(--bg-raised);
-  border: 1px solid var(--line);
-  padding: 6px 10px;
-  cursor: pointer;
-}
 .topic-filter { display: flex; flex-wrap: wrap; gap: 8px; }
-.topic-filter-btn {
+.topic-filter-btn, .year-filter {
   font-family: var(--sans);
   font-size: 0.78rem;
   color: var(--text-dim);
@@ -607,6 +590,7 @@ a.lightbox-link {
   cursor: pointer;
   line-height: 1.4;
 }
+.year-filter option { color: #000; }
 .year-filter:hover, .topic-filter-btn:hover { border-color: var(--text-faint); }
 .topic-filter-btn:hover { color: var(--text); }
 .topic-filter-btn[aria-pressed="true"] {
