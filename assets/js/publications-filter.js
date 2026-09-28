@@ -8,6 +8,7 @@
 
   function applyFilters() {
     var year = yearFilter.value;
+    yearFilter.classList.toggle("active", year !== "all");
     yearBlocks.forEach(function (block) {
       var yearMatches = year === "all" || block.getAttribute("data-year") === year;
       var visibleEntries = 0;
