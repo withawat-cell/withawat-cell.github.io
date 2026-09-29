@@ -94,7 +94,7 @@ for year, block in year_blocks:
         trs.append(f"          <tr><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
         photo_slug = slug(name)
         if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.jpg")):
-            photos.append(f'          <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.jpg?v=20260929a" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">')
+            photos.append(f'          <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.jpg?v=20260929b" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">')
     photos_html = ""
     if photos:
         photos_html = f'''
@@ -133,7 +133,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="/assets/img/brand/header-bg.jpg?v=20260921g">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260929a">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260929b">
 </head>
 <body>
 
@@ -214,7 +214,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260929a"></script>
+<script src="/assets/js/main.js?v=20260929b"></script>
 </body>
 </html>
 """
