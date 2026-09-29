@@ -425,14 +425,14 @@ theses_html = '''      <table class="data">
 
 codes_html = '''      <div class="card-grid">
         <div class="card">
-          <img src="/assets/img/research/code-comm-chain.jpg?v=20260921g" alt="End-to-end wireless communication chain simulator interface" loading="lazy">
+          <img src="/assets/img/research/code-comm-chain.webp?v=20260921g" alt="End-to-end wireless communication chain simulator interface" loading="lazy">
           <h3>End-to-End Wireless Communication Chain Simulator</h3>
           <p>A MATLAB application for modelling, testing, and demonstrating complete wireless communication chains, built to align with the laboratory's transmission hardware. It supports sinusoidal and complex waveform transmission, with built-in digital compensation modules, including IQ-imbalance correction and coarse time-synchronisation, for evaluating system robustness and isolating hardware-induced impairments. Designed as a standalone interface for rapid experimentation, algorithm development, and hardware-in-the-loop testing.</p>
           <p class="small">Developed by <a href="https://www.linkedin.com/in/marlon-kha-208141293/">Marlon Kha</a></p>
           <div class="entry-links"><a href="https://github.com/withawat-cell/comm_chain.git">Repository &rarr;</a></div>
         </div>
         <div class="card">
-          <img src="/assets/img/research/code-cst-sim.jpg?v=20260921g" alt="CST simulation of a substrateless terahertz waveguide" loading="lazy">
+          <img src="/assets/img/research/code-cst-sim.webp?v=20260921g" alt="CST simulation of a substrateless terahertz waveguide" loading="lazy">
           <h3>CST Simulation of Substrateless Terahertz Waveguide</h3>
           <p>A Python automation script for CST Studio Suite (Python 3.12, CST Microwave Studio 2025) that builds, configures, and runs full-wave transient simulations for substrateless (effective-medium-clad) dielectric terahertz waveguides, based on the design principles below.</p>
           <p class="small">W. Gao, X. Yu, M. Fujita, T. Nagatsuma, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OE.382181">Effective-medium-cladded dielectric waveguides for terahertz waves</a>," <em>Optics Express</em>, vol. 27, no. 26, pp. 38721&ndash;38734, 2019.<br>
@@ -478,13 +478,13 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <meta property="og:title" content="{title} — Terahertz Engineering Laboratory">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="https://thz-el.org/publications/{slug}.html">
-<meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.jpg">
+<meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.jpg?v=20260921g">
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20260921g">
 <link rel="stylesheet" href="/assets/css/style.css?v={CACHE_V}">{extra_head}
 </head>
 <body>
@@ -492,7 +492,7 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <header class="site-header">
   <div class="site-header-inner">
     <a class="brand plain" href="/index.html">
-      <img class="brand-mark" src="/assets/img/brand/mark-white.png" alt="THz">
+      <img class="brand-mark" src="/assets/img/brand/mark-white.webp" alt="THz">
       <span class="brand-name">Terahertz Engineering Laboratory</span>
     </a>
     <nav class="primary-nav" aria-label="Primary">

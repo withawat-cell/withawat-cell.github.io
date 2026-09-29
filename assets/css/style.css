@@ -214,7 +214,7 @@ li.has-children.open .submenu { display: block; }
 .hero {
   padding: 88px 0 64px;
   border-bottom: 1px solid var(--line);
-  background-image: linear-gradient(180deg, rgba(8,14,26,0.08) 0%, rgba(8,12,18,0.55) 80%, var(--bg) 100%), url("/assets/img/brand/header-bg.jpg?v=20260921g");
+  background-image: linear-gradient(180deg, rgba(8,14,26,0.08) 0%, rgba(8,12,18,0.55) 80%, var(--bg) 100%), url("/assets/img/brand/header-bg.webp?v=20260921g");
   background-size: cover;
   background-position: center;
 }
@@ -248,7 +248,7 @@ li.has-children.open .submenu { display: block; }
 .page-hero {
   padding: 56px 0 40px;
   border-bottom: 1px solid var(--line);
-  background-image: linear-gradient(180deg, rgba(8,14,26,0.1) 0%, rgba(8,12,18,0.6) 84%, var(--bg) 100%), url("/assets/img/brand/header-bg.jpg?v=20260921g");
+  background-image: linear-gradient(180deg, rgba(8,14,26,0.1) 0%, rgba(8,12,18,0.6) 84%, var(--bg) 100%), url("/assets/img/brand/header-bg.webp?v=20260921g");
   background-size: cover;
   background-position: center;
 }

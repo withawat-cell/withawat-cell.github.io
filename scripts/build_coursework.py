@@ -93,8 +93,8 @@ for year, block in year_blocks:
         doi_set.update(DOI_RE.findall(notes))
         trs.append(f"          <tr><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
         photo_slug = slug(name)
-        if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.jpg")):
-            photos.append(f'          <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.jpg?v=20260929b" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">')
+        if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.webp")):
+            photos.append(f'          <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20260929b" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">')
     photos_html = ""
     if photos:
         photos_html = f'''
@@ -126,13 +126,13 @@ template = """<!DOCTYPE html>
 <meta property="og:title" content="Coursework Students — Terahertz Engineering Laboratory">
 <meta property="og:description" content="Honours, master's, and undergraduate research students at the Terahertz Engineering Laboratory, Adelaide University.">
 <meta property="og:url" content="https://thz-el.org/people/coursework.html">
-<meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.jpg">
+<meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.jpg?v=20260921g">
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20260921g">
 <link rel="stylesheet" href="/assets/css/style.css?v=20260929b">
 </head>
 <body>
@@ -140,7 +140,7 @@ template = """<!DOCTYPE html>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="brand plain" href="/index.html">
-      <img class="brand-mark" src="/assets/img/brand/mark-white.png" alt="THz">
+      <img class="brand-mark" src="/assets/img/brand/mark-white.webp" alt="THz">
       <span class="brand-name">Terahertz Engineering Laboratory</span>
     </a>
     <nav class="primary-nav" aria-label="Primary">
