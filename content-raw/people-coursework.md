@@ -13,7 +13,7 @@ Format per entry on the live page: Name, Year(s), Research area, (optional) awar
 | Peter Jackson | 2026– | Radar | |
 | Ashleigh Preiss | 2026– | Radar | IEEE Microwave Theory and Technology Society Undergraduate/Pre-graduate Scholarship – 2026 |
 | Dimmy Martincic | 2026 | Electronics | |
-| Chongkai Huang | 2026– | Biomed application | |
+| Chongkai Huang | 2026– | Biomedical | |
 
 ## 2025
 | Name | Year(s) | Area | Notes |

@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260929a"
+CACHE_V = "20260929b"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -159,7 +159,7 @@ def load_journal_images():
                 continue
             idx, url = line.split("|", 1)
             if url != "MISSING":
-                imgs[int(idx)] = f"/assets/img/publications/j{idx}.jpg"
+                imgs[int(idx)] = f"/assets/img/publications/j{idx}.webp"
     return imgs
 
 TITLE_RE = re.compile(r'"([^"]+)"')
