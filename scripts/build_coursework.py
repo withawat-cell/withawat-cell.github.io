@@ -58,6 +58,16 @@ def format_notes(notes):
 
 DOI_RE = re.compile(r"https://doi\.org/\S+?(?=[\s)\]]|$)")
 
+PHOTO_DIR = os.path.join(ROOT, "assets", "img", "people", "coursework")
+
+def slug(name):
+    s = name.lower()
+    s = re.sub(r"\([^)]*\)", "", s)
+    s = re.sub(r"[^a-z0-9\s-]", "", s)
+    s = s.strip()
+    s = re.sub(r"\s+", "-", s)
+    return s
+
 sections = []
 total = 0
 ieee_award_count = 0
@@ -66,6 +76,7 @@ for year, block in year_blocks:
     rows = [l for l in ("|" + block).strip().split("\n") if l.startswith("|")]
     rows = rows[2:]
     trs = []
+    photos = []
     for row in rows:
         cells = [c.strip() for c in row.strip().strip("|").split("|")]
         if len(cells) < 4:
@@ -81,6 +92,15 @@ for year, block in year_blocks:
                 ieee_award_count += 1
         doi_set.update(DOI_RE.findall(notes))
         trs.append(f"          <tr><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
+        photo_slug = slug(name)
+        if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.jpg")):
+            photos.append(f'          <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.jpg?v=20260929a" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">')
+    photos_html = ""
+    if photos:
+        photos_html = f'''
+      <div class="coursework-photos">
+{chr(10).join(photos)}
+      </div>'''
     sections.append(f'''      <h3 class="year-heading">{year}</h3>
       <table class="data cols-4">
         <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
@@ -88,7 +108,7 @@ for year, block in year_blocks:
         <tbody>
 {chr(10).join(trs)}
         </tbody>
-      </table>''')
+      </table>{photos_html}''')
 
 body = "\n\n".join(sections)
 
@@ -160,7 +180,6 @@ template = """<!DOCTYPE html>
       <p class="hero-eyebrow">People</p>
       <h1>Coursework students</h1>
       <p class="lead">Honours, master's, and undergraduate research students who have contributed to the laboratory's projects, grouped by year.</p>
-      <p class="small">Photos are not included here &mdash; see the <a href="https://sites.google.com/view/thzel/people/coursework">previous website</a> for those.</p>
       <div class="stats-row">
         <div class="stat">
           <span class="stat-num">{total}</span>
