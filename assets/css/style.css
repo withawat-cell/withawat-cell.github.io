@@ -355,7 +355,7 @@ a.stat:hover .stat-num { color: var(--link); }
 /* year-heading sits first inside its own .year-block wrapper (for the year
    filter), so :first-child above always zeroes its margin -- space between
    years comes from the block gap instead */
-.year-block + .year-block { margin-top: 72px; }
+.year-block:not([hidden]) + .year-block:not([hidden]) { margin-top: 72px; }
 
 .pub-list { list-style: none; margin: 0; padding: 0; }
 .pub-entry {
@@ -590,7 +590,8 @@ a.lightbox-link {
   cursor: pointer;
   line-height: 1.4;
 }
-.year-filter option { color: #000; }
+.year-filter option { color: #000; background: #fff; }
+.year-filter option:checked { background: var(--accent); color: var(--bg); }
 .year-filter:hover, .topic-filter-btn:hover { border-color: var(--text-faint); }
 .topic-filter-btn:hover { color: var(--text); }
 .topic-filter-btn[aria-pressed="true"], .year-filter.active {
