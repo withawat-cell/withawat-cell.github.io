@@ -94,7 +94,10 @@ for year, block in year_blocks:
         trs.append(f"          <tr><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
         photo_slug = slug(name)
         if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.webp")):
-            photos.append(f'          <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20260929b" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">')
+            photos.append(f'''          <div class="coursework-photo-wrap">
+            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20260929b" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
+            <span class="coursework-photo-name">{html.escape(name)}</span>
+          </div>''')
     photos_html = ""
     if photos:
         photos_html = f'''
@@ -102,13 +105,15 @@ for year, block in year_blocks:
 {chr(10).join(photos)}
       </div>'''
     sections.append(f'''      <h3 class="year-heading">{year}</h3>
+      <div class="table-scroll">
       <table class="data cols-4">
         <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
         <thead><tr><th>Name</th><th>Year(s)</th><th>Area</th><th>Notes</th></tr></thead>
         <tbody>
 {chr(10).join(trs)}
         </tbody>
-      </table>{photos_html}''')
+      </table>
+      </div>{photos_html}''')
 
 body = "\n\n".join(sections)
 

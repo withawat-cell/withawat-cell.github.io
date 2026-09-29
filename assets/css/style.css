@@ -455,17 +455,42 @@ table.data.cols-4 col.c2 { width: 12%; }
 table.data.cols-4 col.c3 { width: 20%; }
 table.data.cols-4 col.c4 { width: 48%; }
 
+/* below this width the fixed/percentage columns squeeze text into an
+   unreadable wrap; let the table scroll sideways at a readable size instead */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 700px) {
+  .table-scroll table.data { min-width: 640px; }
+}
+
 .coursework-photos {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   gap: 8px;
   margin-top: 16px;
 }
+.coursework-photo-wrap { position: relative; }
 .coursework-photo {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: 4px;
+  display: block;
+}
+.coursework-photo-name {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  max-width: 100%;
+  padding: 1px 5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 0.6rem;
+  line-height: 1.4;
+  border-radius: 4px 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 /* logos row */

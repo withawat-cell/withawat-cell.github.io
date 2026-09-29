@@ -404,7 +404,8 @@ year_filter_options = "\n".join(
     f'          <option value="{y}">{y}</option>' for y in journal_years
 )
 
-theses_html = '''      <table class="data">
+theses_html = '''      <div class="table-scroll">
+      <table class="data">
         <thead>
           <tr><th>Year</th><th>Author</th><th>Thesis title</th></tr>
         </thead>
@@ -421,7 +422,8 @@ theses_html = '''      <table class="data">
           <tr><td>2018</td><td>Wendy S.-L. Lee</td><td><a href="/assets/theses/wendy-lee-2018.pdf">Terahertz Metasurfaces for Wideband Polarisation Control</a></td></tr>
           <tr><td>2017</td><td>Daniel Headland</td><td><a href="/assets/theses/daniel-headland-2017.pdf">Efficient Terahertz-Range Beam Control Using Flat Optics</a></td></tr>
         </tbody>
-      </table>'''
+      </table>
+      </div>'''
 
 codes_html = '''      <div class="card-grid">
         <div class="card">
