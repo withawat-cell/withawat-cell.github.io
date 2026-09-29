@@ -455,6 +455,19 @@ table.data.cols-4 col.c2 { width: 12%; }
 table.data.cols-4 col.c3 { width: 20%; }
 table.data.cols-4 col.c4 { width: 48%; }
 
+.coursework-photos {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+.coursework-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
 /* logos row */
 .photo-row, .team-photo-row { display: flex; flex-wrap: wrap; gap: 16px; }
 .photo-row { margin: 24px 0 10px; }
