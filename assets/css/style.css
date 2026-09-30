@@ -387,7 +387,8 @@ a.stat:hover .stat-num { color: var(--link); }
 .pub-entry .entry-title a { color: var(--text); border-bottom: 1px solid var(--link-underline); }
 .pub-entry .entry-title a:hover { border-bottom-color: var(--link); }
 .pub-entry .entry-meta { color: var(--text-dim); font-size: 0.85rem; margin: 6px 0 0; }
-.pub-entry .entry-meta a { word-break: break-all; }
+.pub-entry .entry-meta a { color: inherit; border-bottom-color: rgba(163, 161, 155, 0.4); word-break: break-all; }
+.pub-entry .entry-meta a:hover { color: var(--link); border-bottom-color: var(--link); }
 
 
 /* people */
