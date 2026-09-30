@@ -10,7 +10,7 @@
   --line-soft: #1b1c1f;
   --text: #e7e5e0;
   --text-dim: #a3a19b;
-  --text-faint: #6f6d68;
+  --text-faint: #85837d;
   --accent: #5c8ad1;
   --accent-dim: #3a537d;
   --link: #8fb3e6;
@@ -101,6 +101,7 @@ main { display: block; padding-bottom: 96px; }
   align-items: center;
   gap: 10px;
   border-bottom: none;
+  min-width: 0;
 }
 .brand-mark {
   display: block;
@@ -115,6 +116,8 @@ main { display: block; padding-bottom: 96px; }
   color: var(--text);
   letter-spacing: 0.01em;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 .brand:hover .brand-mark {
@@ -741,7 +744,8 @@ a.lightbox-link {
 
 @media (max-width: 980px) {
   nav.primary-nav { display: none; }
-  .nav-toggle { display: block; }
+  .nav-toggle { display: block; flex: 0 0 auto; }
+  .site-header-inner { padding: 14px 16px; gap: 12px; }
   .site-header.open nav.primary-nav {
     display: block;
     position: absolute;
@@ -776,4 +780,5 @@ a.lightbox-link {
   .person-photo { width: 160px; align-self: center; }
   .coursework-photos { grid-template-columns: repeat(4, 1fr); }
   .wrap, .wrap-wide { padding: 0 16px; }
+  .brand-name { font-size: 0.88rem; }
 }

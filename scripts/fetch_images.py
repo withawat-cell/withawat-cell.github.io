@@ -5,8 +5,9 @@ static site, so nothing ships at the original (often huge) source resolution.
 Usage: python scripts/fetch_images.py manifest.json
 manifest.json: list of {"url": ..., "out": "assets/img/....", "max_w": 800, "quality": 82}
 "out" is relative to the project root (parent of scripts/).
-Logos (out path contains "/logos/") are kept as PNG with transparency preserved
-and just downscaled; everything else is saved as JPEG/WEBP depending on extension.
+The save format follows the "out" extension: .png keeps transparency losslessly,
+.webp keeps transparency (if present) in WEBP, and anything else (e.g. .jpg) is
+flattened onto a dark background and saved as JPEG.
 """
 import json
 import sys
@@ -41,6 +42,12 @@ def process(entry):
         if im.mode not in ("RGBA", "LA"):
             im = im.convert("RGBA")
         im.save(out_path, "PNG", optimize=True)
+    elif ext == ".webp":
+        if im.mode in ("RGBA", "LA", "P"):
+            im = im.convert("RGBA")
+        else:
+            im = im.convert("RGB")
+        im.save(out_path, "WEBP", quality=entry.get("quality", 82), method=6)
     else:
         if im.mode in ("RGBA", "LA", "P"):
             bg = Image.new("RGB", im.size, (11, 12, 14))
