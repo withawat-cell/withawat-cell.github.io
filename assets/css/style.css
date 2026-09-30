@@ -775,4 +775,5 @@ a.lightbox-link {
      otherwise stretch .person-photo (width: 100%) to the full card width */
   .person-photo { width: 160px; align-self: center; }
   .coursework-photos { grid-template-columns: repeat(4, 1fr); }
+  .wrap, .wrap-wide { padding: 0 16px; }
 }
