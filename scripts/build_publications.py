@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20260929b"
+CACHE_V = "20260930a"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -305,6 +305,7 @@ def build_journal():
                 continue
             _, citation, doi, notes = cells[:4]
             topics = cells[4].strip() if len(cells) > 4 else ""
+            abstract = cells[5].strip().replace("\\|", "|") if len(cells) > 5 else ""
             doi = doi.strip()
             primary_doi = doi.split(" ")[0] if doi.startswith("http") else ""
             citation_html = md_inline(citation)
@@ -337,12 +338,23 @@ def build_journal():
                 f'<button type="button" class="copy-btn copy-btn-sm bibtex-btn" aria-label="Copy BibTeX" '
                 f'title="Copy BibTeX" data-copy="{html.escape(bibtex, quote=True)}">{{}}</button>'
             ) if bibtex else ""
+            abs_id = f"abs-{global_idx}"
+            abs_btn = (
+                f'<button type="button" class="abstract-toggle-btn" aria-expanded="false" '
+                f'aria-controls="{abs_id}" aria-label="Show abstract" title="Show abstract">ABS'
+                f'<svg viewBox="0 0 24 24" width="8" height="8" fill="none" stroke="currentColor" stroke-width="3" '
+                f'stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>'
+            ) if abstract else ""
+            abstract_html = (
+                f'<p class="pub-abstract" id="{abs_id}" hidden>{html.escape(abstract)}</p>'
+            ) if abstract else ""
             entries.append(f'''      <li class="pub-entry" data-topics="{topics}">
         {thumb}
         <div class="entry-body">
-          <p class="entry-title">{citation_html} {copy_btn}{bibtex_btn}</p>
+          <p class="entry-title">{citation_html} {copy_btn}{bibtex_btn}{abs_btn}</p>
           {meta_html}
           {pills_html(pills)}
+          {abstract_html}
         </div>
       </li>''')
             global_idx += 1

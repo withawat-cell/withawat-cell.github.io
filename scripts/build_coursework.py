@@ -95,7 +95,7 @@ for year, block in year_blocks:
         photo_slug = slug(name)
         if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.webp")):
             photos.append(f'''          <div class="coursework-photo-wrap">
-            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20260929b" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
+            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20260930a" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
             <span class="coursework-photo-name">{html.escape(name)}</span>
           </div>''')
     photos_html = ""
@@ -138,7 +138,7 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20260921g">
-<link rel="stylesheet" href="/assets/css/style.css?v=20260929b">
+<link rel="stylesheet" href="/assets/css/style.css?v=20260930a">
 </head>
 <body>
 
@@ -219,7 +219,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20260929b"></script>
+<script src="/assets/js/main.js?v=20260930a"></script>
 </body>
 </html>
 """

@@ -340,6 +340,36 @@ a.stat:hover .stat-num { color: var(--link); }
 }
 .copy-btn-sm:hover { border-color: transparent; color: var(--text); }
 .bibtex-btn { font-family: var(--mono); font-size: 11px; font-weight: 500; line-height: 1; letter-spacing: 1px; }
+.abstract-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  gap: 3px;
+  padding: 2px 3px;
+  margin: 0 0 0 2px;
+}
+.abstract-toggle-btn:hover { color: var(--text); }
+.abstract-toggle-btn svg { transition: transform 0.15s ease; }
+.abstract-toggle-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.abstract-toggle-btn[aria-expanded="true"] { color: var(--accent); }
+.pub-abstract {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-soft);
+}
+.pub-abstract[hidden] { display: none; }
 
 .year-heading {
   font-family: var(--mono);
