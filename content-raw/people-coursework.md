@@ -19,13 +19,13 @@ Format per entry on the live page: Name, Year(s), Research area, (optional) awar
 | Name | Year(s) | Area | Notes |
 |---|---|---|---|
 | Oliver Moors | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
+| Joshua Vidale | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
+| Jonathan Miteff | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
+| Jacob Maegraith | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
 | Sam Heathershaw | 2025 | Imaging | |
 | Penglin Xiong | 2025 | Devices | |
 | Zhijian Zhang | 2025 | Devices | |
-| Joshua Vidale | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
-| Jonathan Miteff | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
 | Blake Philip Hore | 2025 | Sensing | |
-| Jacob Maegraith | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |
 | Sean Priestley | 2025 | Imaging | |
 | Ryan Rutherford | 2025 | Imaging | |
 | Vy Huynh | 2025 | Sensing | |
