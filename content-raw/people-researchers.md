@@ -115,7 +115,7 @@
 ### Tin Chu Ng
 - No email listed on this page.
 - MPhil student (2026–)
-- Supervisors: Withawat, Xiaolong [You]
+- Supervisors: Withawat, Xiaolong You
 - Research area: Nondestructive evaluation
 - Scholarships & awards: University of Adelaide Research Scholarship
 

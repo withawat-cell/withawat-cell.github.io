@@ -55,6 +55,12 @@
     }
   });
 
+  // Sync aria-expanded for any submenu pre-opened in the static markup
+  // (the current section's "has-children open" li).
+  document.querySelectorAll("li.has-children.open > button.nav-parent").forEach(function (btn) {
+    btn.setAttribute("aria-expanded", "true");
+  });
+
   var year = document.querySelector("footer [data-copyright-year]");
   if (year) year.textContent = new Date().getFullYear();
 

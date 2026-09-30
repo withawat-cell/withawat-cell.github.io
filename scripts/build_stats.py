@@ -26,7 +26,7 @@ journal_recognitions = sum(1 for e in journal_entries if e.select_one(".tag-awar
 
 conf_soup = BeautifulSoup(read("publications/conference-presentations.html"), "html.parser")
 conf_entries = conf_soup.select("li.pub-entry")
-conf_invited = sum(1 for e in conf_entries if e.select_one(".tag-award"))
+conf_total = len(conf_entries)
 
 # ---------- PhD theses ----------
 
@@ -251,8 +251,8 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-sub">{journal_recognitions} Recognitions</span>
         </a>
         <a class="stat" href="/publications/conference-presentations.html">
-          <span class="stat-num">{conf_invited}</span>
-          <span class="stat-label">Invited Conferences</span>
+          <span class="stat-num">{conf_total}</span>
+          <span class="stat-label">Conference Recognitions</span>
         </a>
         <a class="stat" href="/publications/phd-theses.html">
           <span class="stat-num">{theses_total}</span>
@@ -330,7 +330,7 @@ write_stats_block("people/visitors.html", visitors_stats_html)
 
 print(
     f"Wrote stats to index.html: {journal_total} journal articles "
-    f"({journal_recognitions} recognitions), {conf_invited} invited conferences, "
+    f"({journal_recognitions} recognitions), {conf_total} conference recognitions, "
     f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
     f"{medal_count} University Doctoral Research Medals, "
     f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "
