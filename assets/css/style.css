@@ -389,13 +389,13 @@ a.stat:hover .stat-num { color: var(--link); }
 
 .pub-list { list-style: none; margin: 0; padding: 0; }
 .pub-entry {
-  padding: 20px 0;
+  padding: 0 0 20px;
   border-bottom: 1px solid var(--line-soft);
   display: flex;
   gap: 20px;
   align-items: flex-start;
 }
-.pub-entry:first-child { padding-top: 0; }
+.pub-entry:not([hidden]) ~ .pub-entry:not([hidden]) { padding-top: 20px; }
 .pub-entry:last-child { border-bottom: none; }
 .pub-entry[hidden] { display: none; }
 .pub-entry .pub-thumb {
