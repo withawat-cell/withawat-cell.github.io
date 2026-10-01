@@ -292,7 +292,7 @@ section.block h2 {
 .stat { display: block; min-height: 120px; border: 1px solid var(--line); padding: 12px 8px; text-align: center; transition: border-color 0.15s ease; }
 a.stat:hover { border-color: var(--accent); }
 a.stat:hover .stat-num { color: var(--link); }
-.stat-num sup { font-size: 0.6em; line-height: 0; position: relative; top: -0.15em; vertical-align: baseline; }
+.stat-num sup { font-size: 0.65em; line-height: 0; vertical-align: super; }
 .stat-num {
   display: block;
   font-family: var(--mono);
