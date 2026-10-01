@@ -91,11 +91,13 @@ for year, block in year_blocks:
             if "IEEE" in clause and "First author" not in clause and any(k in clause for k in AWARD_KEYWORDS):
                 ieee_award_count += 1
         doi_set.update(DOI_RE.findall(notes))
-        trs.append(f"          <tr><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
+        prize = "First Prize" in notes or "1st Prize" in notes
+        tr_cls = ' class="prize-row"' if prize else ""
+        trs.append(f"          <tr{tr_cls}><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
         photo_slug = slug(name)
         if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.webp")):
             photos.append(f'''          <div class="coursework-photo-wrap">
-            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20261001a" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
+            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20261002n" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
             <span class="coursework-photo-name">{html.escape(name)}</span>
           </div>''')
     photos_html = ""
@@ -106,7 +108,7 @@ for year, block in year_blocks:
       </div>'''
     sections.append(f'''      <h3 class="year-heading">{year}</h3>
       <div class="table-scroll">
-      <table class="data cols-4">
+      <table class="data cols-4 stack-sm">
         <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
         <thead><tr><th>Name</th><th>Year(s)</th><th>Area</th><th>Notes</th></tr></thead>
         <tbody>
@@ -137,8 +139,8 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20260921g">
-<link rel="stylesheet" href="/assets/css/style.css?v=20261001a">
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20261002n">
+<link rel="stylesheet" href="/assets/css/style.css?v=20261002n">
 </head>
 <body>
 
@@ -161,7 +163,7 @@ template = """<!DOCTYPE html>
             <a href="/publications/codes.html">Codes</a>
           </div>
         </li>
-        <li class="has-children open">
+        <li class="has-children">
           <button class="nav-parent" aria-expanded="false">People</button>
           <div class="submenu">
             <a href="/people/researchers.html">Researchers</a>
@@ -219,7 +221,7 @@ template = """<!DOCTYPE html>
   </div>
 </footer>
 
-<script src="/assets/js/main.js?v=20261001a"></script>
+<script src="/assets/js/main.js?v=20261002n"></script>
 </body>
 </html>
 """

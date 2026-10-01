@@ -55,12 +55,6 @@
     }
   });
 
-  // Sync aria-expanded for any submenu pre-opened in the static markup
-  // (the current section's "has-children open" li).
-  document.querySelectorAll("li.has-children.open > button.nav-parent").forEach(function (btn) {
-    btn.setAttribute("aria-expanded", "true");
-  });
-
   var year = document.querySelector("footer [data-copyright-year]");
   if (year) year.textContent = new Date().getFullYear();
 
@@ -127,11 +121,19 @@
       }
       navigator.clipboard.writeText(text).then(function () {
         var original = btn.innerHTML;
-        btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        var box = btn.getBoundingClientRect();
+        var icon = btn.querySelector("svg");
+        var size = icon ? icon.getAttribute("width") : "14";
+        // keep the button the same size while the check shows, so neighbours don't shift
+        btn.style.width = box.width + "px";
+        btn.style.height = box.height + "px";
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         btn.disabled = true;
         setTimeout(function () {
           btn.innerHTML = original;
           btn.disabled = false;
+          btn.style.width = "";
+          btn.style.height = "";
         }, 1500);
       });
     });

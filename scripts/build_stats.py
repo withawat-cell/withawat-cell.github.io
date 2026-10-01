@@ -188,7 +188,7 @@ INTL_COLLAB_COUNTRIES = [
 def flags_html(countries):
     return "".join(
         f'<img src="https://flagcdn.com/16x12/{code}.png" srcset="https://flagcdn.com/32x24/{code}.png 2x" '
-        f'width="12" height="9" alt="{name}" title="{name}" loading="lazy">'
+        f'width="16" height="12" alt="{name}" title="{name}" loading="lazy">'
         for code, name in countries
     )
 
@@ -260,7 +260,7 @@ stats_html = f"""      <div class="stats-row">
         </a>
         <div class="stat">
           <span class="stat-num">{ieee_grant_count}</span>
-          <span class="stat-label">IEEE AP/MTT Students/Postdocs Grants</span>
+          <span class="stat-label">IEEE AP/MTT Students/<wbr>Postdocs Grants</span>
         </div>
         <a class="stat" href="/people/alumni.html">
           <span class="stat-num">{medal_count}</span>
@@ -308,11 +308,11 @@ write_stats_block("index.html", stats_html)
 theses_stats_html = f"""      <div class="stats-row">
         <a class="stat" href="/people/alumni.html">
           <span class="stat-num">{commendation_count}</span>
-          <span class="stat-label">Commendations for Doctoral<br>Thesis Excellence</span>
+          <span class="stat-label">Commendations for Doctoral Thesis Excellence</span>
         </a>
         <a class="stat" href="/people/alumni.html">
           <span class="stat-num">{medal_count}</span>
-          <span class="stat-label">University Doctoral<br>Research Medals</span>
+          <span class="stat-label">University Doctoral Research Medals</span>
         </a>
       </div>"""
 write_stats_block("publications/phd-theses.html", theses_stats_html)

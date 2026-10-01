@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20261001a"
+CACHE_V = "20261002n"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -52,7 +52,7 @@ def md_inline(s):
     return s
 
 TRIM_PREFIXES = ["One of the "]
-MAX_PILL_LEN = 46
+MAX_PILL_LEN = 200
 
 def shorten(original):
     p = original
@@ -163,6 +163,18 @@ def load_journal_images():
     return imgs
 
 TITLE_RE = re.compile(r'"([^"]+)"')
+
+INITIALS_RE = re.compile(r"(\b[A-Z]\.(?:-?[A-Z]\.)*) (?=[A-Z\u00C0-\u024F])")
+
+def nbsp_authors(citation_html):
+    """Glue each author's initials to their surname so a wrapped line never
+    ends on a lone 'W.'. Only the author list (before the quoted title) is
+    touched, and only in the displayed HTML, never in the copied text."""
+    idx = citation_html.find('"')
+    if idx == -1:
+        return citation_html
+    head, tail = citation_html[:idx], citation_html[idx:]
+    return INITIALS_RE.sub(lambda m: m.group(1).replace("-", "\u2011") + "\u00a0", head) + tail
 
 # ---------- BibTeX generation ----------
 # Best-effort @article entry parsed from the same raw citation string used
@@ -308,7 +320,7 @@ def build_journal():
             abstract = cells[5].strip().replace("\\|", "|") if len(cells) > 5 else ""
             doi = doi.strip()
             primary_doi = doi.split(" ")[0] if doi.startswith("http") else ""
-            citation_html = md_inline(citation)
+            citation_html = nbsp_authors(md_inline(citation))
             m = TITLE_RE.search(citation_html)
             if m and primary_doi:
                 title_linked = f'<a href="{html.escape(primary_doi)}">{m.group(1)}</a>'
@@ -351,11 +363,11 @@ def build_journal():
             entries.append(f'''      <li class="pub-entry" data-topics="{topics}">
         {thumb}
         <div class="entry-body">
-          <p class="entry-title">{citation_html} {copy_btn}{bibtex_btn}{abs_btn}</p>
+          <p class="entry-title">{citation_html} <span class="entry-tools">{copy_btn}{bibtex_btn}{abs_btn}</span></p>
           {meta_html}
           {pills_html(pills)}
-          {abstract_html}
         </div>
+        {abstract_html}
       </li>''')
             global_idx += 1
         sections.append(f'    <div class="year-block" data-year="{year}">\n      <h3 class="year-heading">{year}</h3>\n      <ul class="pub-list">\n' + "\n".join(entries) + "\n      </ul>\n    </div>")
@@ -397,7 +409,7 @@ def build_conference():
             else:
                 raw_wo = raw
                 online_suffix = ""
-            citation_html = md_inline(raw_wo) + online_suffix
+            citation_html = nbsp_authors(md_inline(raw_wo)) + online_suffix
             meta_html = f'<p class="entry-meta">{rest_note}</p>' if rest_note else ""
             inline_pills = pills_html(pills).replace('<span class="tag-row" style="margin-top:6px;">', '<span class="tag-row tag-row-inline">')
             entries.append(f'''      <li class="pub-entry">
@@ -406,7 +418,7 @@ def build_conference():
           {meta_html}
         </div>
       </li>''')
-        sections.append(f'    <h3 class="year-heading">{year}</h3>\n    <ul class="pub-list">\n' + "\n".join(entries) + "\n    </ul>")
+        sections.append(f'    <h3 class="year-heading">{year}</h3>\n    <ul class="pub-list pub-list-text">\n' + "\n".join(entries) + "\n    </ul>")
     return "\n\n".join(sections)
 
 journal_html, journal_years, journal_total, journal_recognitions, journal_invited = build_journal()
@@ -417,7 +429,7 @@ year_filter_options = "\n".join(
 )
 
 theses_html = '''      <div class="table-scroll">
-      <table class="data">
+      <table class="data theses stack-sm">
         <thead>
           <tr><th>Year</th><th>Author</th><th>Thesis title</th></tr>
         </thead>
@@ -449,8 +461,7 @@ codes_html = '''      <div class="card-grid">
           <img src="/assets/img/research/code-cst-sim.webp?v=20260921g" alt="CST simulation of a substrateless terahertz waveguide" loading="lazy">
           <h3>CST Simulation of Substrateless Terahertz Waveguide</h3>
           <p>A Python automation script for CST Studio Suite (Python 3.12, CST Microwave Studio 2025) that builds, configures, and runs full-wave transient simulations for substrateless (effective-medium-clad) dielectric terahertz waveguides, based on the design principles below.</p>
-          <p class="small">W. Gao, X. Yu, M. Fujita, T. Nagatsuma, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1364/OE.382181">Effective-medium-cladded dielectric waveguides for terahertz waves</a>," <em>Optics Express</em>, vol. 27, no. 26, pp. 38721&ndash;38734, 2019.<br>
-          W. Gao, W. S.-L. Lee, X. Yu, M. Fujita, T. Nagatsuma, C. Fumeaux, and W. Withayachumnankul, "<a href="https://doi.org/10.1109/TTHZ.2020.3023917">Characteristics of effective-medium-clad dielectric waveguides</a>," <em>IEEE Transactions on Terahertz Science and Technology</em>, vol. 11, no. 1, pp. 28&ndash;41, 2021.</p>
+          <p class="small"><span class="cite">W.&nbsp;Gao, X.&nbsp;Yu, M.&nbsp;Fujita, T.&nbsp;Nagatsuma, C.&nbsp;Fumeaux, and W.&nbsp;Withayachumnankul, &ldquo;<a href="https://doi.org/10.1364/OE.382181">Effective-medium-cladded dielectric waveguides for terahertz waves</a>,&rdquo; <em>Optics Express</em>, vol.&nbsp;27, no.&nbsp;26, pp.&nbsp;38721&ndash;38734, 2019.</span><span class="cite">W.&nbsp;Gao, W.&nbsp;S.-L.&nbsp;Lee, X.&nbsp;Yu, M.&nbsp;Fujita, T.&nbsp;Nagatsuma, C.&nbsp;Fumeaux, and W.&nbsp;Withayachumnankul, &ldquo;<a href="https://doi.org/10.1109/TTHZ.2020.3023917">Characteristics of effective-medium-clad dielectric waveguides</a>,&rdquo; <em>IEEE Transactions on Terahertz Science and Technology</em>, vol.&nbsp;11, no.&nbsp;1, pp.&nbsp;28&ndash;41, 2021.</span></p>
           <div class="entry-links"><a href="https://gist.github.com/withawat-cell/5f3192e66faae0e291e63ef4a68d6c75">Gist &rarr;</a></div>
         </div>
       </div>'''
@@ -469,8 +480,7 @@ def nav_html(active_slug):
     for slug, label in SUBPAGES:
         current = ' aria-current="page"' if slug == active_slug else ""
         items.append(f'            <a href="/publications/{slug}.html"{current}>{label}</a>')
-    open_cls = " open" if active_slug else ""
-    return f'''        <li class="has-children{open_cls}">
+    return f'''        <li class="has-children">
           <button class="nav-parent" aria-expanded="false">Publications</button>
           <div class="submenu">
 {chr(10).join(items)}
@@ -498,7 +508,7 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20260921g">
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20261002n">
 <link rel="stylesheet" href="/assets/css/style.css?v={CACHE_V}">{extra_head}
 </head>
 <body>
@@ -627,11 +637,11 @@ theses_hero_stats = '''
       <div class="stats-row">
         <div class="stat">
           <span class="stat-num">0</span>
-          <span class="stat-label">Commendations for Doctoral<br>Thesis Excellence</span>
+          <span class="stat-label">Commendations for Doctoral Thesis Excellence</span>
         </div>
         <div class="stat">
           <span class="stat-num">0</span>
-          <span class="stat-label">University Doctoral<br>Research Medals</span>
+          <span class="stat-label">University Doctoral Research Medals</span>
         </div>
       </div>
       <!-- STATS:END -->'''
