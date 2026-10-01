@@ -861,7 +861,7 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   .brand-name { font-size: 0.88rem; }
   .coursework-photos { grid-template-columns: repeat(4, 1fr); }
   .card-grid .card { padding: 14px; }
-  .stats-row { grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); max-width: none; gap: 8px; }
+  .stats-row { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); max-width: none; gap: 8px; }
   .stat { padding: 10px 4px; }
   .stat-label { font-size: 0.72rem; }
   .lightbox-overlay { padding: 64px 8px 24px; }
@@ -879,7 +879,7 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   .person-photo { grid-column: 1; grid-row: 1 / span 8; width: 96px; margin: 0; align-self: start; }
   .person > :not(.person-photo) { grid-column: 2; min-width: 0; }
 
-  .logo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .logo-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 10px; }
   .logo-row img { max-width: 100%; max-height: none; width: 100%; height: auto; }
 
   /* journal entries: small thumbnail beside the citation, abstract across the full width */
