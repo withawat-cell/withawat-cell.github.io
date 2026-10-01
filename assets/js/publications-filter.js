@@ -23,6 +23,34 @@
       });
       block.hidden = visibleEntries === 0;
     });
+    syncUrl();
+  }
+
+  // Mirror the active filters into the query string (?topic=a,b&year=2023)
+  // so a filtered view can be shared as a link.
+  function syncUrl() {
+    var params = new URLSearchParams();
+    if (activeTopics.length) params.set("topic", activeTopics.join(","));
+    if (yearFilter.value !== "all") params.set("year", yearFilter.value);
+    var query = params.toString().replace(/%2C/g, ",");
+    var url = window.location.pathname + (query ? "?" + query : "") + window.location.hash;
+    try { history.replaceState(null, "", url); } catch (e) {}
+  }
+
+  function restoreFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var topics = (params.get("topic") || "").split(",");
+    topicButtons.forEach(function (btn) {
+      var topic = btn.getAttribute("data-topic");
+      if (topics.indexOf(topic) !== -1) {
+        btn.setAttribute("aria-pressed", "true");
+        activeTopics.push(topic);
+      }
+    });
+    var year = params.get("year");
+    if (year && Array.prototype.some.call(yearFilter.options, function (o) { return o.value === year; })) {
+      yearFilter.value = year;
+    }
   }
 
   yearFilter.addEventListener("change", applyFilters);
@@ -39,4 +67,7 @@
       applyFilters();
     });
   });
+
+  restoreFromUrl();
+  if (activeTopics.length || yearFilter.value !== "all") applyFilters();
 })();
