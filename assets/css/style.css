@@ -740,6 +740,10 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
 .card-grid-compact {
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
+/* contact cards are wide enough that every address line stays on one line */
+.card-grid-compact.contact-grid {
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+}
 .card-grid .card {
   background: var(--bg);
   border: 1px solid var(--line);
