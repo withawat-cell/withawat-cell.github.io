@@ -408,12 +408,15 @@ a.stat:hover .stat-num { color: var(--link); }
 .pub-entry {
   padding: 0 0 20px;
   border-bottom: 1px solid var(--line-soft);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 20px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: start;
 }
-.pub-entry > .pub-abstract { flex: 0 0 calc(100% - 140px); margin-left: 140px; }
+/* conference entries have no thumbnail, so their text spans both columns;
+   a journal abstract always sits under the text column */
+.pub-entry > .entry-body:only-child { grid-column: 1 / -1; }
+.pub-entry > .pub-abstract { grid-column: 2; }
 .pub-entry:not([hidden]) ~ .pub-entry:not([hidden]) { padding-top: 20px; }
 .pub-entry:last-child { border-bottom: none; padding-bottom: 0; }
 .pub-entry[hidden] { display: none; }
@@ -850,8 +853,8 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
 }
 @media (max-width: 860px) {
   .card-grid:not(.card-grid-compact) { grid-template-columns: 1fr; }
+  .pub-entry { grid-template-columns: 96px minmax(0, 1fr); }
   .pub-entry .pub-thumb, .pub-entry .pub-thumb-empty { width: 96px; flex: 0 0 96px; }
-  .pub-entry > .pub-abstract { flex-basis: calc(100% - 116px); margin-left: 116px; }
   .coursework-photos { grid-template-columns: repeat(6, 1fr); }
 }
 @media (max-width: 520px) {
@@ -883,9 +886,9 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   .logo-row img { max-width: 100%; max-height: none; width: 100%; height: auto; }
 
   /* journal entries: small thumbnail beside the citation, abstract across the full width */
-  .pub-entry { column-gap: 12px; }
+  .pub-entry { grid-template-columns: 72px minmax(0, 1fr); column-gap: 12px; }
   .pub-entry .pub-thumb, .pub-entry .pub-thumb-empty { width: 72px; flex: 0 0 72px; }
-  .pub-entry > .pub-abstract { flex-basis: 100%; margin-left: 0; }
+  .pub-entry > .pub-abstract { grid-column: 1 / -1; }
 }
 @media (max-width: 360px) {
   .brand-name { white-space: normal; line-height: 1.15; font-size: 0.8rem; }
