@@ -744,6 +744,10 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
 .card-grid-compact.contact-grid {
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 }
+/* phone number and map link sit at the bottom of the card, so they line up
+   across cards whose addresses have different numbers of lines */
+.contact-grid .card .address + .small { margin-top: auto; }
+.card-grid.contact-grid .card .entry-links { margin-top: 0; }
 .card-grid .card {
   background: var(--bg);
   border: 1px solid var(--line);
