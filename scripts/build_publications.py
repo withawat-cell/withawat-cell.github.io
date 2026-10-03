@@ -4,7 +4,7 @@ import json
 import html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20261002w"
+CACHE_V = "20261002y"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -508,7 +508,7 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20261002w">
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20261002y">
 <link rel="stylesheet" href="/assets/css/style.css?v={CACHE_V}">{extra_head}
 </head>
 <body>
