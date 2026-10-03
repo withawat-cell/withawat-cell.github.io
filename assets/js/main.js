@@ -32,11 +32,27 @@
     });
   });
 
+  function closeMobileMenu() {
+    if (!header || !header.classList.contains("open")) return;
+    header.classList.remove("open");
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
+  }
+
   document.addEventListener("click", function (e) {
     if (!e.target.closest("nav.primary-nav")) closeAllSubmenus();
   });
+  // pointerdown (not click) so a tap on empty page area closes the mobile menu on iOS too
+  document.addEventListener("pointerdown", function (e) {
+    if (!e.target.closest("nav.primary-nav") && !e.target.closest(".nav-toggle")) {
+      closeMobileMenu();
+      closeAllSubmenus();
+    }
+  });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeAllSubmenus();
+    if (e.key === "Escape") {
+      closeAllSubmenus();
+      closeMobileMenu();
+    }
   });
 
   // Mark the current page's nav link.

@@ -488,6 +488,22 @@ a.stat:hover .stat-num { color: var(--link); }
   border-bottom: none;
 }
 .person-links a:hover { color: var(--link); }
+/* researcher cards: portrait to the left of the text, two cards across on desktop */
+.people-grid-wide { grid-template-columns: 1fr; }
+@media (min-width: 521px) {
+  .people-grid-wide .person {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    column-gap: 20px;
+    align-content: start;
+    min-height: 0;
+  }
+  .people-grid-wide .person-photo { grid-column: 1; grid-row: 1 / span 8; width: 150px; margin: 0; align-self: start; }
+  .people-grid-wide .person > :not(.person-photo) { grid-column: 2; min-width: 0; }
+}
+@media (min-width: 61.3125em) {
+  .people-grid-wide { grid-template-columns: repeat(2, 1fr); }
+}
 
 /* simple data table (codes, theses, etc.) */
 table.data {
