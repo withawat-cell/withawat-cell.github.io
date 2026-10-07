@@ -15,7 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # (legacy path under sites.google.com/view/thzel/, target path on the new site)
 MAPPING = [
-    ("home", "/index.html"),
+    ("home", "/"),
 ]
 
 TEMPLATE = """<!DOCTYPE html>
