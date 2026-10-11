@@ -494,12 +494,12 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>{title} — Terahertz Engineering Laboratory</title>
+<title>{title} | Terahertz Engineering Laboratory</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="https://thz-el.org/publications/{slug}.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Terahertz Engineering Laboratory">
-<meta property="og:title" content="{title} — Terahertz Engineering Laboratory">
+<meta property="og:title" content="{title} | Terahertz Engineering Laboratory">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="https://thz-el.org/publications/{slug}.html">
 <meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.webp">
