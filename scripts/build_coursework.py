@@ -125,12 +125,12 @@ template = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>Coursework Students — Terahertz Engineering Laboratory</title>
+<title>Coursework Students | Terahertz Engineering Laboratory</title>
 <meta name="description" content="Honours, master's, and undergraduate research students at the Terahertz Engineering Laboratory, Adelaide University.">
 <link rel="canonical" href="https://thz-el.org/people/coursework.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Terahertz Engineering Laboratory">
-<meta property="og:title" content="Coursework Students — Terahertz Engineering Laboratory">
+<meta property="og:title" content="Coursework Students | Terahertz Engineering Laboratory">
 <meta property="og:description" content="Honours, master's, and undergraduate research students at the Terahertz Engineering Laboratory, Adelaide University.">
 <meta property="og:url" content="https://thz-el.org/people/coursework.html">
 <meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.webp">
