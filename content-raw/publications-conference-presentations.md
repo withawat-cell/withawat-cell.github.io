@@ -7,10 +7,11 @@ Most entries are plain text (no hyperlink). Where a hyperlink was found on the c
 ## 2026
 1. E. E. Yildiz, T. Kubiczek, H. Lees, L. Häring, J. C. Balzer, and W. Withayachumnankul, "Computational 3D terahertz imaging: Eliminating optics and coherence requirements," *13th International Symposium on Terahertz-Related Devices and Technologies (TeraTech)*, Tokyo, 2026. (Invited)
 2. L. Chen, D. Headland, Y. Kawamoto, T. Nagatsuma, W. Gao, C. Fumeaux, and W. Withayachumnankul, "Terahertz Dielectric Filter with Tunable Passband," *Asia-Pacific Microwave Conference (APMC)*, 2026. (Invited)
-3. B. Chung, N. Amnuayphol, H. N. Lees, and W. Withayachumnankul, "High‑sensitivity terahertz sensing with quadrature self‑homodyne detection," *IEEE MTT‑S International Microwave Workshop Series on Advanced Materials and Processes for RF and THz Applications*, Cairns, 2026. (Semi-plenary)
-4. B. Chung, D. Headland, and W. Withayachumnankul, "General‑purpose terahertz quasi‑optics and mechanical beamformers enabled by 3D‑printing," *IEEE MTT‑S International Microwave Workshop Series on Advanced Materials and Processes for RF and THz Applications*, Cairns, 2026. (Invited)
-5. H. Lees, "Homodyne systems for terahertz non-destructive testing," *12th International Workshop on Terahertz Technology and Applications*, Kaiserslautern, 2026. (Invited)
-6. W. Withayachumnankul, "Terahertz all-silicon integrated platform," *Workshop for Planning an Excellent Cluster on Groundbreaking THz-UV Technologies*, Gothenburg, 2026. (Invited)
+3. T. Noh, B. Chung, W. Withayachumnankul, and D. Headland, "Terahertz 3D-printed mechanical azimuth beamsteering using a contoured dielectric disk as a variable-deflection prism," *2026 International Symposium on Antennas and Propagation (ISAP)*, Chengdu, 2026. (Invited)
+4. B. Chung, N. Amnuayphol, H. N. Lees, and W. Withayachumnankul, "High‑sensitivity terahertz sensing with quadrature self‑homodyne detection," *IEEE MTT‑S International Microwave Workshop Series on Advanced Materials and Processes for RF and THz Applications*, Cairns, 2026. (Semi-plenary)
+5. B. Chung, D. Headland, and W. Withayachumnankul, "General‑purpose terahertz quasi‑optics and mechanical beamformers enabled by 3D‑printing," *IEEE MTT‑S International Microwave Workshop Series on Advanced Materials and Processes for RF and THz Applications*, Cairns, 2026. (Invited)
+6. H. Lees, "Homodyne systems for terahertz non-destructive testing," *12th International Workshop on Terahertz Technology and Applications*, Kaiserslautern, 2026. (Invited)
+7. W. Withayachumnankul, "Terahertz all-silicon integrated platform," *Workshop for Planning an Excellent Cluster on Groundbreaking THz-UV Technologies*, Gothenburg, 2026. (Invited)
 
 ## 2025
 1. M. Abdullah, M. Larsson, M. S. Li, and W. Withayachumnankul, "Multi-source direction of arrival estimation in terahertz communications using convolutional neural networks," *50th International Conference on Infrared, Millimeter, and Terahertz Waves (IRMMW-THz)*, Espoo, Finland, 2025. (Keynote)
