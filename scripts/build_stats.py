@@ -1,13 +1,16 @@
-"""Recompute the home page's "Lab history" stat strip from the already-built
-publications pages and the People pages, and write the numbers into
-index.html between the STATS:START/STATS:END markers.
+"""Recompute the home page's "Lab history" stat strip and write the numbers
+into index.html between the STATS:START/STATS:END markers.
 
-Run this AFTER build_publications.py and build_coursework.py, since it
-reads their output.
+Journal and conference counts come straight from the Recognition column of
+the tables in content-raw/ (see pubdata.py); the PhD thesis count and the
+award stats are read from the already-built pages, so run this AFTER
+build_publications.py and build_coursework.py (scripts/build_all.py does).
 """
 import os
 import re
 from bs4 import BeautifulSoup
+
+from pubdata import read_tables, has_recognition
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,18 +18,15 @@ def read(path):
     with open(os.path.join(ROOT, path), encoding="utf-8") as f:
         return f.read()
 
-# ---------- journal articles ----------
+# ---------- journal articles and conference presentations ----------
+# A row counts as a recognition if its Recognition cell is non-empty.
 
-journal_soup = BeautifulSoup(read("publications/journal-articles.html"), "html.parser")
-journal_entries = journal_soup.select("li.pub-entry")
-journal_total = len(journal_entries)
-journal_recognitions = sum(1 for e in journal_entries if e.select_one(".tag-award"))
+journal_rows = [r for _, rows in read_tables("publications-journal-articles.md") for r in rows]
+journal_total = len(journal_rows)
+journal_recognitions = sum(1 for r in journal_rows if has_recognition(r))
 
-# ---------- conference presentations ----------
-
-conf_soup = BeautifulSoup(read("publications/conference-presentations.html"), "html.parser")
-conf_entries = conf_soup.select("li.pub-entry")
-conf_total = len(conf_entries)
+conf_rows = [r for _, rows in read_tables("publications-conference-presentations.md") for r in rows]
+conf_recognitions = sum(1 for r in conf_rows if has_recognition(r))
 
 # ---------- PhD theses ----------
 
@@ -251,7 +251,7 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-sub">{journal_recognitions} Recognitions</span>
         </a>
         <a class="stat" href="/publications/conference-presentations.html">
-          <span class="stat-num">{conf_total}</span>
+          <span class="stat-num">{conf_recognitions}</span>
           <span class="stat-label">Conference Recognitions</span>
         </a>
         <a class="stat" href="/publications/phd-theses.html">
@@ -330,7 +330,7 @@ write_stats_block("people/visitors.html", visitors_stats_html)
 
 print(
     f"Wrote stats to index.html: {journal_total} journal articles "
-    f"({journal_recognitions} recognitions), {conf_total} conference recognitions, "
+    f"({journal_recognitions} recognitions), {conf_recognitions} conference recognitions, "
     f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
     f"{medal_count} University Doctoral Research Medals, "
     f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "

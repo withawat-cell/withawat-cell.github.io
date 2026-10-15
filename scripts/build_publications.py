@@ -3,6 +3,8 @@ import os
 import json
 import html
 
+from pubdata import read_tables, has_recognition
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_V = "20261002y"
 
@@ -65,16 +67,6 @@ def shorten(original):
     return p[:MAX_PILL_LEN].rsplit(" ", 1)[0] + "…"
 
 LINK_RE = re.compile(r'<a href="([^"]+)">([^<]+)</a>')
-SPECIAL_ISSUE_RE = re.compile(r"\bSpecial Issue\b", re.I)
-SPECIAL_COLLECTION_RE = re.compile(r"\bSpecial (Collection|Cluster)\b", re.I)
-SPECIAL_KEEP_AS_CHIP = {
-    "Special collection of standout research in integrated photonics",
-    "Selected by the committee for Special Issue on Asia-Pacific Microwave Conference 2025",
-}
-ALWAYS_PLAIN = {
-    "Supplementary video",
-    "online",
-}
 
 def cap_first(s):
     for i, ch in enumerate(s):
@@ -82,56 +74,37 @@ def cap_first(s):
             return s[:i] + ch.upper() + s[i + 1:]
     return s
 
-def split_notes(notes):
-    """Split a Notes cell into (pills, remainder_html).
-    Each pill is a dict: {short, full (title tooltip or None), href (or None)}.
-    Special Issue/Collection/Cluster mentions are always demoted to plain
-    text (not chips) -- they're a themed sub-grouping, not a recognition, so
-    they read as prose rather than an award-style tag."""
-    if not notes or not notes.strip():
-        return [], ""
-    notes = linkify_known(notes)
-    parts = [p.strip() for p in notes.split(";") if p.strip()]
-    pills, rest = [], []
+def split_cell(cell):
+    """Split a ';'-separated cell into parts, linking bare URLs on the way."""
+    if not cell.strip():
+        return []
+    return [p.strip() for p in linkify_known(cell).split(";") if p.strip()]
 
-    def add_pill(text, href):
-        plain = re.sub(r"<[^>]+>", "", text)
-        # "Special collection of standout research ..." is a recognition, not
-        # a themed special-issue/collection name, so it stays a chip
-        demote = plain.strip() in ALWAYS_PLAIN or (
-            plain.strip() not in SPECIAL_KEEP_AS_CHIP and (
-                SPECIAL_COLLECTION_RE.search(plain) or SPECIAL_ISSUE_RE.search(plain)
-            )
-        )
-        if demote:
-            rest.append(f'<a href="{href}">{text}</a>' if href else text)
-            return
+def recognition_pills(cell):
+    """Turn a Recognition cell into chips: [{short, full (tooltip or None), href (or None)}].
+    Every part of the cell is a chip -- deciding what counts as a recognition
+    is done in the markdown, not here. A part naming several linked outlets
+    ("Covered by X (url), Y (url), and other media") becomes one chip per
+    outlet and the leftover filler words are dropped."""
+    pills = []
+
+    def add(text, href):
         shortened = shorten(text)
-        short = cap_first(shortened)
-        full = text if shortened != text else None
-        pills.append({"short": short, "full": full, "href": href})
+        pills.append({"short": cap_first(shortened), "full": text if shortened != text else None, "href": href})
 
-    for p in parts:
-        p_html = md_inline(p)
-        links = LINK_RE.findall(p_html)
-        plain_len = len(re.sub(r"<[^>]+>", "", p_html))
-        anchor_len = sum(len(t) for _, t in links)
+    for part in split_cell(cell):
+        part_html = md_inline(part)
+        links = LINK_RE.findall(part_html)
         if not links:
-            add_pill(p_html, None)
-        elif len(links) == 1 and anchor_len >= plain_len * 0.7:
-            href, text = links[0]
-            add_pill(text, href)
-        elif len(links) >= 2:
-            # several linked outlets in one clause, e.g.
-            # "Covered by X (url), Y (url), Z (url), and other online media"
-            for href, text in links:
-                add_pill(text, href)
-            # the leftover "Covered by ..., and other online scientific news
-            # media" filler is dropped entirely -- the outlet chips already
-            # say it was covered by press
-        else:
-            rest.append(p_html)
-    return pills, " &middot; ".join(rest)
+            add(part_html, None)
+        for href, text in links:
+            add(text, href)
+    return pills
+
+def notes_html(cell):
+    """Render a Notes cell (special issues, supplementary material, ...) as
+    plain text with links, parts joined by a middle dot."""
+    return " &middot; ".join(md_inline(p) for p in split_cell(cell))
 
 def pills_html(pills):
     if not pills:
@@ -148,19 +121,6 @@ def pills_html(pills):
     return '<span class="tag-row" style="margin-top:6px;">' + "".join(spans) + "</span>"
 
 # ---------- Journal articles ----------
-
-def load_journal_images():
-    path = os.path.join(ROOT, "content-raw", "journal-article-images.txt")
-    imgs = {}
-    with open(path, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            idx, url = line.split("|", 1)
-            if url != "MISSING":
-                imgs[int(idx)] = f"/assets/img/publications/j{idx}.webp"
-    return imgs
 
 TITLE_RE = re.compile(r'"([^"]+)"')
 
@@ -296,11 +256,7 @@ TOPIC_LABELS = [
 ]
 
 def build_journal():
-    src = os.path.join(ROOT, "content-raw", "publications-journal-articles.md")
-    with open(src, encoding="utf-8") as f:
-        text = f.read()
-    year_blocks = re.findall(r"^## (\d{4})\n\n(.*?)(?=\n## |\n---)", text, re.S | re.M)
-    images = load_journal_images()
+    year_blocks = read_tables("publications-journal-articles.md")
     used_bibtex_keys = set()
 
     sections = []
@@ -308,37 +264,27 @@ def build_journal():
     total_count = 0
     recognitions_count = 0
     invited_count = 0
-    for year, block in year_blocks:
-        rows = [l for l in block.strip().split("\n") if l.startswith("|")][2:]
+    for year, rows in year_blocks:
         entries = []
         for row in rows:
-            cells = [c.strip() for c in row.strip().strip("|").split("|")]
-            if len(cells) < 4:
-                continue
-            _, citation, doi, notes = cells[:4]
-            topics = cells[4].strip() if len(cells) > 4 else ""
-            abstract = cells[5].strip().replace("\\|", "|") if len(cells) > 5 else ""
-            doi = doi.strip()
+            citation, doi, topics, abstract = row["citation"], row["doi"], row["topics"], row["abstract"]
             primary_doi = doi.split(" ")[0] if doi.startswith("http") else ""
             citation_html = nbsp_authors(md_inline(citation))
             m = TITLE_RE.search(citation_html)
             if m and primary_doi:
                 title_linked = f'<a href="{html.escape(primary_doi)}">{m.group(1)}</a>'
                 citation_html = citation_html[:m.start()] + '"' + title_linked + '"' + citation_html[m.end():]
-            pills, rest = split_notes(notes)
-            accepted = any(p["short"] == "Accepted" for p in pills)
-            if accepted:
-                pills = [p for p in pills if p["short"] != "Accepted"]
-                citation_html += " (Accepted)"
+            pills = recognition_pills(row["recognition"])
+            rest = notes_html(row["notes"])
+            status_suffix = f" ({row['status']})" if row["status"] else ""
+            citation_html += status_suffix
             total_count += 1
-            if pills:
+            if has_recognition(row):
                 recognitions_count += 1
             if any(p["short"] == "Invited" for p in pills):
                 invited_count += 1
-            plain_citation = citation.replace("*", "")
-            if accepted:
-                plain_citation += " (Accepted)"
-            img = images.get(global_idx)
+            plain_citation = citation.replace("*", "") + status_suffix
+            img = f"/assets/img/publications/{row['image']}" if row["image"] else None
             thumb = f'<img class="pub-thumb" src="{img}?v={CACHE_V}" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
             meta_bits = []
             if rest:
@@ -377,39 +323,15 @@ def build_journal():
 # ---------- Conference presentations ----------
 
 def build_conference():
-    src = os.path.join(ROOT, "content-raw", "publications-conference-presentations.md")
-    with open(src, encoding="utf-8") as f:
-        text = f.read()
-    year_blocks = re.findall(r"^## (\d{4})\n((?:\d+\..*\n?)+)", text, re.M)
     sections = []
-    for year, block in year_blocks:
-        lines = [l.strip() for l in block.strip().split("\n") if l.strip()]
+    for year, rows in read_tables("publications-conference-presentations.md"):
         entries = []
-        for line in lines:
-            m = re.match(r"^\d+\.\s+(.*)$", line)
-            if not m:
-                continue
-            raw = m.group(1)
-            # pull trailing "(...)" status annotation off the end, e.g. "(Invited)"
-            # or "(Keynote; online)" -- allow one level of nested parens so a
-            # linked status like "([Invited](url); online)" still matches
-            status_m = re.search(r"\(((?:[^()]|\([^()]*\))*)\)\s*$", raw)
-            pills, rest_note = [], ""
-            if status_m:
-                inner = status_m.group(1)
-                raw_wo = raw[:status_m.start()].rstrip()
-                sub_pills, sub_rest = split_notes(inner)
-                pills = sub_pills
-                rest_items = [x.strip() for x in sub_rest.split(" &middot; ")] if sub_rest else []
-                online_suffix = ""
-                if "online" in rest_items:
-                    rest_items.remove("online")
-                    online_suffix = " (Online)"
-                rest_note = " &middot; ".join(rest_items)
-            else:
-                raw_wo = raw
-                online_suffix = ""
-            citation_html = nbsp_authors(md_inline(raw_wo)) + online_suffix
+        for row in rows:
+            citation_html = nbsp_authors(md_inline(row["citation"]))
+            if row["status"]:
+                citation_html += f" ({row['status']})"
+            pills = recognition_pills(row["recognition"])
+            rest_note = notes_html(row["notes"])
             meta_html = f'<p class="entry-meta">{rest_note}</p>' if rest_note else ""
             inline_pills = pills_html(pills).replace('<span class="tag-row" style="margin-top:6px;">', '<span class="tag-row tag-row-inline">')
             entries.append(f'''      <li class="pub-entry">

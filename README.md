@@ -31,15 +31,19 @@ scripts/
   fetch_images.py             Downloads + resizes images from a JSON manifest (Pillow)
   build_publications.py       Regenerates publications/*.html. Journal articles and conference
                                presentations come from content-raw/publications-journal-articles.md and
-                               publications-conference-presentations.md (plus journal-notes-links.json and
-                               journal-article-images.txt); the PhD theses table and the Codes cards are
-                               written directly inside the script
+                               publications-conference-presentations.md (plus journal-notes-links.json); the
+                               PhD theses table and the Codes cards are written directly inside the script.
+                               In both tables the Recognition column is what makes a gold chip and what
+                               the stat counters count (read through pubdata.py). Rows are not numbered, so
+                               you can add one anywhere. A journal row's thumbnail is the filename in its
+                               Image column (a file in assets/img/publications/); leave it blank for none
+  pubdata.py                  Shared reader for those two markdown tables (used by the build scripts)
   build_coursework.py         Regenerates people/coursework.html from content-raw/people-coursework.md
   build_stats.py              Recomputes the home page's stat strip (run after the two build
                                scripts above, and after editing people/researchers.html or
                                people/alumni.html) -- writes into index.html between the
                                <!-- STATS:START/END --> markers; requires BeautifulSoup (bs4)
-  build_all.py                Runs the four build scripts below in the required order (use this)
+  build_all.py                Runs the four build scripts in the required order (use this)
   check_links.py              Crawls every page and checks internal href/src paths resolve
   build_legacy_redirects.py   Writes /home/index.html, a redirect stub for the one old
                                Google Sites page path with no equivalently-named file here
@@ -75,7 +79,7 @@ The repo must be **public** for GitHub Pages to work on a free plan, and deploys
 
 ## Updating content
 
-Everything is hand-authored HTML — open the relevant page and edit directly. For the two data-heavy generated pages (publications, coursework students), it's easier to add a row to the corresponding table in `content-raw/*.md` and re-run `python scripts/build_all.py`, which regenerates the HTML from scratch. `content-raw/` holds only the source tables and lookup files those scripts read (`publications-journal-articles.md`, `publications-conference-presentations.md`, `journal-notes-links.json`, `journal-article-images.txt`, `people-coursework.md`). Every other page, including Researchers, Alumni and Visitors, is edited directly in its `.html` file.
+Everything is hand-authored HTML — open the relevant page and edit directly. For the two data-heavy generated pages (publications, coursework students), it's easier to add a row to the corresponding table in `content-raw/*.md` and re-run `python scripts/build_all.py`, which regenerates the HTML from scratch. `content-raw/` holds only the source tables and lookup files those scripts read (`publications-journal-articles.md`, `publications-conference-presentations.md`, `journal-notes-links.json`, `people-coursework.md`). Every other page, including Researchers, Alumni and Visitors, is edited directly in its `.html` file.
 
 The home page's "Lab history" stat strip (journal articles, conference recognitions, PhD theses, IEEE student grants, medals, ARC grants and fellows, countries) is auto-generated too, as are the stat boxes on the PhD theses and Visitors pages. After editing publications content, `people/researchers.html`, or `people/alumni.html`, run `python scripts/build_all.py`. It runs `build_publications.py`, `build_coursework.py`, `build_stats.py` and `build_legacy_redirects.py` in that order and stops if any step fails. The order matters: the first two write placeholder stat blocks that `build_stats.py` then fills in, so if you ever run them individually, finish with `build_stats.py`.
 
