@@ -3,10 +3,10 @@ import os
 import json
 import html
 
-from pubdata import read_tables, has_recognition
+import shell
+from pubdata import TOPIC_LABELS, read_tables, read_flat_table, has_recognition
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_V = "20261002y"
 
 with open(os.path.join(ROOT, "content-raw", "journal-notes-links.json"), encoding="utf-8") as f:
     KNOWN_LINKS = json.load(f)
@@ -245,16 +245,6 @@ def citation_to_bibtex(citation, used_keys):
     body = ",\n".join(f"  {k} = {{{v}}}" for k, v in fields)
     return f"@article{{{key},\n{body}\n}}"
 
-TOPIC_LABELS = [
-    ("antennas", "Antennas & Beamforming"),
-    ("metasurfaces", "Metasurfaces & Polarization Control"),
-    ("integration", "Integrated Platforms & Waveguides"),
-    ("comms", "Communications & 6G"),
-    ("detectors", "Detectors"),
-    ("nde", "Non-Destructive Evaluation & Materials"),
-    ("reviews", "Reviews & Tutorials"),
-]
-
 def build_journal():
     year_blocks = read_tables("publications-journal-articles.md")
     used_bibtex_keys = set()
@@ -285,7 +275,7 @@ def build_journal():
                 invited_count += 1
             plain_citation = citation.replace("*", "") + status_suffix
             img = f"/assets/img/publications/{row['image']}" if row["image"] else None
-            thumb = f'<img class="pub-thumb" src="{img}?v={CACHE_V}" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
+            thumb = f'<img class="pub-thumb" src="{img}?v=x" alt="" loading="lazy">' if img else '<span class="pub-thumb-empty" aria-hidden="true"></span>'
             meta_bits = []
             if rest:
                 meta_bits.append(rest)
@@ -350,67 +340,32 @@ year_filter_options = "\n".join(
     f'          <option value="{y}">{y}</option>' for y in journal_years
 )
 
+theses_rows = []
+for row in read_flat_table("publications-theses.md"):
+    title = html.escape(row["title"], quote=False)
+    if row["file"]:
+        title = f'<a href="/assets/theses/{html.escape(row["file"], quote=True)}">{title}</a>'
+    theses_rows.append(
+        f'          <tr><td>{html.escape(row["year"])}</td><td>{html.escape(row["author"], quote=False)}</td><td>{title}</td></tr>'
+    )
 theses_html = '''      <div class="table-scroll">
       <table class="data theses stack-sm">
         <thead>
           <tr><th>Year</th><th>Author</th><th>Thesis title</th></tr>
         </thead>
         <tbody>
-          <tr><td>2026</td><td>Sakib Quader</td><td><a href="/assets/theses/quader-2026.pdf">Terahertz Metasurfaces for Wave Manipulation, Detection, and Spectral Analysis</a></td></tr>
-          <tr><td>2026</td><td>Linxi Chen</td><td><a href="/assets/theses/linxi-chen-2026.pdf">Enabling Polarisation and Frequency Control in Silicon-based Terahertz Integration</a></td></tr>
-          <tr><td>2026</td><td>Bryce Chung</td><td><a href="/assets/theses/bryce-chung-2026.pdf">3D-Printed Quasi-Optical Systems for Terahertz Non-Destructive Testing</a></td></tr>
-          <tr><td>2025</td><td>Harrison Lees</td><td><a href="/assets/theses/harrison-lees-2025.pdf">All-dielectric Terahertz Waveguides, Devices, and Techniques</a></td></tr>
-          <tr><td>2024</td><td>Stephen Li</td><td><a href="/assets/theses/stephen-li-2024.pdf">Planar Antennas and Lenses for Terahertz Source Integration</a></td></tr>
-          <tr><td>2024</td><td>Panisa Dechwechprasit</td><td><a href="/assets/theses/panisa-dechwechprasit-2024.pdf">Tunable Terahertz Components on Substrateless Silicon Platform</a></td></tr>
-          <tr><td>2023</td><td>Mohamed Shehata</td><td><a href="/assets/theses/mohamed-shehata-2023.pdf">Pulse Shaping for Terahertz Communications</a></td></tr>
-          <tr><td>2022</td><td>Weijie Gao</td><td><a href="/assets/theses/weijie-gao-2022.pdf">Effective-Medium-Clad Dielectric Components Towards Terahertz Integrated Platform</a></td></tr>
-          <tr><td>2021</td><td>Xiaolong You</td><td><a href="/assets/theses/xiaolong-you-2021.pdf">Broadband Terahertz Metasurfaces</a></td></tr>
-          <tr><td>2018</td><td>Wendy S.-L. Lee</td><td><a href="/assets/theses/wendy-lee-2018.pdf">Terahertz Metasurfaces for Wideband Polarisation Control</a></td></tr>
-          <tr><td>2017</td><td>Daniel Headland</td><td><a href="/assets/theses/daniel-headland-2017.pdf">Efficient Terahertz-Range Beam Control Using Flat Optics</a></td></tr>
+''' + "\n".join(theses_rows) + '''
         </tbody>
       </table>
       </div>'''
 
-codes_html = '''      <div class="card-grid">
-        <div class="card">
-          <img src="/assets/img/research/code-comm-chain.webp?v=20260921g" alt="End-to-end wireless communication chain simulator interface" loading="lazy">
-          <h3>End-to-End Wireless Communication Chain Simulator</h3>
-          <p>A MATLAB application for modelling, testing, and demonstrating complete wireless communication chains, built to align with the laboratory's transmission hardware. It supports sinusoidal and complex waveform transmission, with built-in digital compensation modules, including IQ-imbalance correction and coarse time-synchronisation, for evaluating system robustness and isolating hardware-induced impairments. Designed as a standalone interface for rapid experimentation, algorithm development, and hardware-in-the-loop testing.</p>
-          <p class="small">Developed by <a href="https://www.linkedin.com/in/marlon-kha-208141293/">Marlon Kha</a></p>
-          <div class="entry-links"><a href="https://github.com/withawat-cell/comm_chain.git">Repository &rarr;</a></div>
-        </div>
-        <div class="card">
-          <img src="/assets/img/research/code-cst-sim.webp?v=20260921g" alt="CST simulation of a substrateless terahertz waveguide" loading="lazy">
-          <h3>CST Simulation of Substrateless Terahertz Waveguide</h3>
-          <p>A Python automation script for CST Studio Suite (Python 3.12, CST Microwave Studio 2025) that builds, configures, and runs full-wave transient simulations for substrateless (effective-medium-clad) dielectric terahertz waveguides, based on the design principles below.</p>
-          <p class="small"><span class="cite">W.&nbsp;Gao, X.&nbsp;Yu, M.&nbsp;Fujita, T.&nbsp;Nagatsuma, C.&nbsp;Fumeaux, and W.&nbsp;Withayachumnankul, &ldquo;<a href="https://doi.org/10.1364/OE.382181">Effective-medium-cladded dielectric waveguides for terahertz waves</a>,&rdquo; <em>Optics Express</em>, vol.&nbsp;27, no.&nbsp;26, pp.&nbsp;38721&ndash;38734, 2019.</span><span class="cite">W.&nbsp;Gao, W.&nbsp;S.-L.&nbsp;Lee, X.&nbsp;Yu, M.&nbsp;Fujita, T.&nbsp;Nagatsuma, C.&nbsp;Fumeaux, and W.&nbsp;Withayachumnankul, &ldquo;<a href="https://doi.org/10.1109/TTHZ.2020.3023917">Characteristics of effective-medium-clad dielectric waveguides</a>,&rdquo; <em>IEEE Transactions on Terahertz Science and Technology</em>, vol.&nbsp;11, no.&nbsp;1, pp.&nbsp;28&ndash;41, 2021.</span></p>
-          <div class="entry-links"><a href="https://gist.github.com/withawat-cell/5f3192e66faae0e291e63ef4a68d6c75">Gist &rarr;</a></div>
-        </div>
-      </div>'''
+with open(os.path.join(ROOT, "content-raw", "codes-cards.html"), encoding="utf-8") as f:
+    codes_html = re.sub(r"^<!--.*?-->\n", "", f.read(), count=1, flags=re.S).rstrip("\n")
 
 # ---------- shared page shell ----------
 
-SUBPAGES = [
-    ("journal-articles", "Journal Articles"),
-    ("conference-presentations", "Conference Presentations"),
-    ("phd-theses", "PhD Theses"),
-    ("codes", "Codes"),
-]
-
-def nav_html(active_slug):
-    items = []
-    for slug, label in SUBPAGES:
-        current = ' aria-current="page"' if slug == active_slug else ""
-        items.append(f'            <a href="/publications/{slug}.html"{current}>{label}</a>')
-    return f'''        <li class="has-children">
-          <button class="nav-parent" aria-expanded="false">Publications</button>
-          <div class="submenu">
-{chr(10).join(items)}
-          </div>
-        </li>'''
-
 def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra_scripts="", extra_hero=""):
-    return f"""<!DOCTYPE html>
+    return shell.stamp_html(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -430,38 +385,12 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20261002y">
-<link rel="stylesheet" href="/assets/css/style.css?v={CACHE_V}">{extra_head}
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=x">
+<link rel="stylesheet" href="/assets/css/style.css?v=x">{extra_head}
 </head>
 <body>
 
-<header class="site-header">
-  <div class="site-header-inner">
-    <a class="brand plain" href="/index.html">
-      <img class="brand-mark" src="/assets/img/brand/mark-white.webp" alt="THz">
-      <span class="brand-name">Terahertz Engineering Laboratory</span>
-    </a>
-    <nav class="primary-nav" aria-label="Primary">
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/research.html">Research</a></li>
-{nav_html(slug)}
-        <li class="has-children">
-          <button class="nav-parent" aria-expanded="false">People</button>
-          <div class="submenu">
-            <a href="/people/researchers.html">Researchers</a>
-            <a href="/people/alumni.html">Alumni</a>
-            <a href="/people/coursework.html">Coursework Students</a>
-            <a href="/people/visitors.html">Visitors</a>
-          </div>
-        </li>
-        <li><a href="/opportunities.html">Opportunities</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span></button>
-  </div>
-</header>
+<header class="site-header"></header>
 
 <main>
 
@@ -481,19 +410,12 @@ def page(slug, title, description, eyebrow, h1, lead, body, extra_head="", extra
 
 </main>
 
-<footer class="site-footer">
-  <div class="wrap-wide" style="display:block;">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-      <span>&copy; <span data-copyright-year>2026</span> Terahertz Engineering Laboratory, Adelaide University</span>
-      <span><a href="/contact.html">Contact</a> &middot; <a href="https://www.linkedin.com/company/thz-el">LinkedIn</a></span>
-    </div>
-  </div>
-</footer>
+<footer class="site-footer"></footer>
 
-<script src="/assets/js/main.js?v={CACHE_V}"></script>{extra_scripts}
+<script src="/assets/js/main.js?v=x"></script>{extra_scripts}
 </body>
 </html>
-"""
+""", f"publications/{slug}.html")
 
 pub_dir = os.path.join(ROOT, "publications")
 os.makedirs(pub_dir, exist_ok=True)
@@ -533,7 +455,7 @@ out = page(
     "Publications", "Journal articles",
     "Peer-reviewed journal articles from the Terahertz Engineering Laboratory.",
     journal_body,
-    extra_scripts=f'\n<script src="/assets/js/publications-filter.js?v={CACHE_V}"></script>',
+    extra_scripts=f'\n<script src="/assets/js/publications-filter.js?v=x"></script>',
     extra_hero=journal_hero_stats,
 )
 with open(os.path.join(pub_dir, "journal-articles.html"), "w", encoding="utf-8") as f:

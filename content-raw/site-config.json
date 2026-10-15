@@ -1,0 +1,30 @@
+{
+  "_help": "Numbers and lookups that cannot be derived from the page data. Edit here, then run: python scripts/build_all.py",
+
+  "pre_lab_journal_count": 69,
+  "_pre_lab_journal_count": "Journal articles by lab members before the lab's 2018 start; shown as the footnote under the home-page journal stat.",
+
+  "coauthor_countries": [
+    ["jp", "Japan"],
+    ["de", "Germany"],
+    ["cn", "China"],
+    ["es", "Spain"],
+    ["us", "United States"],
+    ["ch", "Switzerland"],
+    ["fr", "France"],
+    ["nl", "Netherlands"],
+    ["th", "Thailand"]
+  ],
+  "_coauthor_countries": "[ISO 3166-1 alpha-2 code, name] for every country with a paper co-author. Add one when a paper brings in a new country; the order is the order of the flags.",
+
+  "country_iso": {
+    "New Zealand": "nz",
+    "China": "cn",
+    "Japan": "jp",
+    "Germany": "de",
+    "Australia": "au",
+    "Thailand": "th",
+    "Taiwan": "tw"
+  },
+  "_country_iso": "Country name (as written last in a visitor's affiliation) -> ISO code, for the flag icon. Add an entry when a visitor from a new country is added."
+}
