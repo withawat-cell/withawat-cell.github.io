@@ -2,14 +2,14 @@ import re
 import os
 import html
 
+import shell
+from peopledata import coursework_rows, split_items
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "content-raw", "people-coursework.md")
 OUT = os.path.join(ROOT, "people", "coursework.html")
 
-with open(SRC, "r", encoding="utf-8") as f:
-    text = f.read()
-
-year_blocks = re.findall(r"^## (\d{4})\n\|(.*?)\n\n", text, re.S | re.M)
+year_blocks = coursework_rows()
 
 def md_inline(s):
     s = s.strip()
@@ -17,43 +17,10 @@ def md_inline(s):
     s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
     return s
 
-# internal cross-reference notes (left over from this project's own research
-# notes) should point at the real page, not at another content-raw filename
-CROSS_REFS = {
-    "publications-codes.md": ("/publications/codes.html", "Codes"),
-    "people-researchers.md": ("/people/researchers.html", "Researchers"),
-    "people-alumni.md": ("/people/alumni.html", "Alumni"),
-}
-
-def fix_cross_refs(s):
-    for filename, (href, label) in CROSS_REFS.items():
-        s = s.replace(f"see {filename}", f'see <a href="{href}">{label}</a>')
-    return s
-
-AWARD_KEYWORDS = ["Scholarship", "Fellowship", "Award", "Medal", "Prize", "Commendation", "Grant", "Exhibit", "First author"]
-
-CROSS_REF_PAREN_RE = re.compile(r"\s*\((also[^()]*?see [\w-]+\.md)\)")
-
-def format_notes(notes):
-    if not notes.strip():
-        return ""
-    # pull "(also ... see some-file.md)" asides out of whatever clause they're
-    # stuck to, so they render as their own plain-text note, not inside a pill
-    asides = CROSS_REF_PAREN_RE.findall(notes)
-    notes = CROSS_REF_PAREN_RE.sub("", notes)
-    clauses = [c.strip() for c in notes.split(";") if c.strip()]
-    out = []
-    for c in clauses:
-        if any(k in c for k in AWARD_KEYWORDS):
-            out.append(f'<span class="tag-note">{md_inline(c)}</span>')
-        else:
-            out.append(md_inline(c))
-    for a in asides:
-        a = re.sub(r"^also\s+", "", a, flags=re.I)
-        a = re.sub(r"^an?\s+", "", a, flags=re.I)
-        a = a[:1].upper() + a[1:]
-        a = re.sub(r"\s*—\s*", ", ", a)
-        out.append(fix_cross_refs(a))
+def format_notes(awards, notes):
+    """Award items become gold chips, Notes items plain text; all separated by bullets."""
+    out = [f'<span class="tag-note">{md_inline(c)}</span>' for c in split_items(awards)]
+    out += [md_inline(c) for c in split_items(notes)]
     return ' <span class="note-sep">&bull;</span> '.join(out)
 
 DOI_RE = re.compile(r"https://doi\.org/\S+?(?=[\s)\]]|$)")
@@ -72,32 +39,25 @@ sections = []
 total = 0
 ieee_award_count = 0
 doi_set = set()
-for year, block in year_blocks:
-    rows = [l for l in ("|" + block).strip().split("\n") if l.startswith("|")]
-    rows = rows[2:]
+for year, rows in year_blocks:
     trs = []
     photos = []
-    for row in rows:
-        cells = [c.strip() for c in row.strip().strip("|").split("|")]
-        if len(cells) < 4:
-            continue
-        name, yrs, area, notes = cells
+    for name, yrs, area, awards, notes in rows:
         total += 1
-        # "First author" clauses are journal-paper mentions (styled the same
+        # "First author" items are journal-paper mentions (styled the same
         # as awards), not actual IEEE awards, so they're excluded here even
         # though the journal's own name happens to contain "IEEE"
-        for clause in notes.split(";"):
-            clause = clause.strip()
-            if "IEEE" in clause and "First author" not in clause and any(k in clause for k in AWARD_KEYWORDS):
+        for item in split_items(awards):
+            if "IEEE" in item and "First author" not in item:
                 ieee_award_count += 1
-        doi_set.update(DOI_RE.findall(notes))
-        prize = "First Prize" in notes or "1st Prize" in notes
+        doi_set.update(DOI_RE.findall(awards + " " + notes))
+        prize = "First Prize" in awards or "1st Prize" in awards
         tr_cls = ' class="prize-row"' if prize else ""
-        trs.append(f"          <tr{tr_cls}><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(notes)}</td></tr>")
+        trs.append(f"          <tr{tr_cls}><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(awards, notes)}</td></tr>")
         photo_slug = slug(name)
         if os.path.exists(os.path.join(PHOTO_DIR, f"{photo_slug}.webp")):
             photos.append(f'''          <div class="coursework-photo-wrap">
-            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=20261002y" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
+            <img class="coursework-photo" src="/assets/img/people/coursework/{photo_slug}.webp?v=x" alt="{html.escape(name)}" title="{html.escape(name)}" loading="lazy">
             <span class="coursework-photo-name">{html.escape(name)}</span>
           </div>''')
     photos_html = ""
@@ -139,46 +99,12 @@ template = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=20261002y">
-<link rel="stylesheet" href="/assets/css/style.css?v=20261002y">
+<link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=x">
+<link rel="stylesheet" href="/assets/css/style.css?v=x">
 </head>
 <body>
 
-<header class="site-header">
-  <div class="site-header-inner">
-    <a class="brand plain" href="/index.html">
-      <img class="brand-mark" src="/assets/img/brand/mark-white.webp" alt="THz">
-      <span class="brand-name">Terahertz Engineering Laboratory</span>
-    </a>
-    <nav class="primary-nav" aria-label="Primary">
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/research.html">Research</a></li>
-        <li class="has-children">
-          <button class="nav-parent" aria-expanded="false">Publications</button>
-          <div class="submenu">
-            <a href="/publications/journal-articles.html">Journal Articles</a>
-            <a href="/publications/conference-presentations.html">Conference Presentations</a>
-            <a href="/publications/phd-theses.html">PhD Theses</a>
-            <a href="/publications/codes.html">Codes</a>
-          </div>
-        </li>
-        <li class="has-children">
-          <button class="nav-parent" aria-expanded="false">People</button>
-          <div class="submenu">
-            <a href="/people/researchers.html">Researchers</a>
-            <a href="/people/alumni.html">Alumni</a>
-            <a href="/people/coursework.html" aria-current="page">Coursework Students</a>
-            <a href="/people/visitors.html">Visitors</a>
-          </div>
-        </li>
-        <li><a href="/opportunities.html">Opportunities</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span></button>
-  </div>
-</header>
+<header class="site-header"></header>
 
 <main>
 
@@ -212,27 +138,21 @@ template = """<!DOCTYPE html>
 
 </main>
 
-<footer class="site-footer">
-  <div class="wrap-wide" style="display:block;">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-      <span>&copy; <span data-copyright-year>2026</span> Terahertz Engineering Laboratory, Adelaide University</span>
-      <span><a href="/contact.html">Contact</a> &middot; <a href="https://www.linkedin.com/company/thz-el">LinkedIn</a></span>
-    </div>
-  </div>
-</footer>
+<footer class="site-footer"></footer>
 
-<script src="/assets/js/main.js?v=20261002y"></script>
+<script src="/assets/js/main.js?v=x"></script>
 </body>
 </html>
 """
 
+page = (
+    template.replace("{body}", body)
+    .replace("{total}", str(total))
+    .replace("{ieee_awards}", str(ieee_award_count))
+    .replace("{first_author_papers}", str(len(doi_set)))
+)
 with open(OUT, "w", encoding="utf-8") as f:
-    f.write(
-        template.replace("{body}", body)
-        .replace("{total}", str(total))
-        .replace("{ieee_awards}", str(ieee_award_count))
-        .replace("{first_author_papers}", str(len(doi_set)))
-    )
+    f.write(shell.stamp_html(page, "people/coursework.html"))
 
 print("Wrote", OUT, "-", len(year_blocks), "year sections,", total, "students,",
       ieee_award_count, "IEEE awards,", len(doi_set), "first-author journal articles")

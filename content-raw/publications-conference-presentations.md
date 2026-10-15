@@ -1,10 +1,8 @@
-# Publications — Selected Conference Presentations (https://thz-el.org/publications/conference-presentations)
+# Publications: Selected conference presentations
 
 **Columns.** *Recognition*: Invited, Keynote, awards and so on, separated by `;` (each part becomes a gold chip and a row counts toward the home-page "Conference Recognitions" stat if this cell is non-empty; link a part with `[Invited](https://...)`). *Status*: text added in brackets after the citation, e.g. `Online`.
 
-Page heading: "Selected Conference Presentations"
-
-Most entries are plain text (no hyperlink). Where a hyperlink was found on the citation title or on a status tag like "(Invited)", it is noted explicitly below.
+One table per year, newest year first: keep each `## YEAR` heading, a blank line, then the header row.
 
 ## 2026
 
@@ -92,7 +90,3 @@ Most entries are plain text (no hyperlink). Where a hyperlink was found on the c
 | W. Withayachumnankul, "Terahertz metasurfaces," *IRMMW-THz*, Nagoya, 2018. | Student workshop |  |
 | W. S.-L. Lee, C. Fumeaux, and W. Withayachumnankul, "Metasurfaces for terahertz polarimetry," *IEEE Asia-Pacific Conference on Antennas and Propagation (APCAP)*, Auckland, 2018. | Invited |  |
 | C. Fumeaux, W. S.-L. Lee, D. Headland, T. Niu, S. Sriram, M. Bhaskaran, and W. Withayachumnankul, "Terahertz reflectarrays for beam manipulation and polarization control," *IEEE International Symposium on Antennas and Propagation (ISAP)*, Boston, 2018. | Invited |  |
-
----
-## Images
-No distinct content photos found on this page beyond the standard site logo and hero/background graphics shared across all pages (same pattern as Home/Research — see home.md for the logo/background URL pattern). This page appears to be text-only (a plain citation list), so no per-citation images were found (unlike the Journal Articles page, which had a large unexplained set of extra images — see the flag in publications-journal-articles.md).

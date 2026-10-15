@@ -1,22 +1,25 @@
-"""Recompute the home page's "Lab history" stat strip and write the numbers
-into index.html between the STATS:START/STATS:END markers.
+"""Recompute the home page's "Lab history" stat strip (plus the stat boxes on the
+PhD theses and Visitors pages) and write the numbers into the pages between
+their STATS:START/STATS:END markers.
 
-Journal and conference counts come straight from the Recognition column of
-the tables in content-raw/ (see pubdata.py); the PhD thesis count and the
-award stats are read from the already-built pages, so run this AFTER
-build_publications.py and build_coursework.py (scripts/build_all.py does).
+Every number comes from the data files in content-raw/ (publications tables,
+people lists, coursework table, theses table) and site-config.json, plus the
+ARC grant codes written in the home page's own "Lab history" paragraph.
+Nothing is read back from the generated pages, so the order only matters in
+that the other build scripts reset the stat placeholders first
+(scripts/build_all.py runs everything in the right order).
 """
+import json
 import os
 import re
-from bs4 import BeautifulSoup
 
-from pubdata import read_tables, has_recognition
+from peopledata import coursework_rows, plain, plain_md, read_people, split_items
+from pubdata import has_recognition, read_flat_table, read_tables
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def read(path):
-    with open(os.path.join(ROOT, path), encoding="utf-8") as f:
-        return f.read()
+with open(os.path.join(ROOT, "content-raw", "site-config.json"), encoding="utf-8") as f:
+    CONFIG = json.load(f)
 
 # ---------- journal articles and conference presentations ----------
 # A row counts as a recognition if its Recognition cell is non-empty.
@@ -30,40 +33,37 @@ conf_recognitions = sum(1 for r in conf_rows if has_recognition(r))
 
 # ---------- PhD theses ----------
 
-theses_soup = BeautifulSoup(read("publications/phd-theses.html"), "html.parser")
-theses_total = len(theses_soup.select("table.data tbody tr"))
+theses_total = len(read_flat_table("publications-theses.md"))
+
+# ---------- people and awards ----------
+
+def people_in(filename):
+    for section in read_people(filename)["sections"]:
+        yield from section["people"]
+
+def all_awards():
+    """Yield (person_name, award_text) for every gold award chip on the Researchers
+    and Alumni pages and in the coursework table."""
+    for filename in ("people-researchers.md", "people-alumni.md"):
+        for person in people_in(filename):
+            for award in person["awards"]:
+                yield person["name"], plain_md(award)
+    for _, rows in coursework_rows():
+        for name, _yrs, _area, awards, _notes in rows:
+            for item in split_items(awards):
+                yield plain_md(name), plain_md(item)
+
+AWARDS = list(all_awards())
+
+def normalize_name(name):
+    return re.sub(r"^(Dr\.|Prof\.)\s+", "", name, flags=re.I).strip().lower()
 
 # ---------- IEEE student grants ----------
-# A tag-note counts if it mentions IEEE together with Fellowship/Scholarship/Grant
+# An award counts if it mentions IEEE together with Fellowship/Scholarship/Grant
 # (this naturally excludes things like "IEEE Fellow" -- the senior lifetime
 # honorific, not a student grant -- and "IEEE ... Young Professional
 # Ambassador"/"Honorary Mention", none of which contain those three words).
 IEEE_GRANT_RE = re.compile(r"\bIEEE\b.*?\b(Fellowship|Scholarship|Grant)\b", re.I)
-
-def person_awards(html):
-    """Yield (person_name, award_text) for every tag-note inside a .person card."""
-    soup = BeautifulSoup(html, "html.parser")
-    for person in soup.select("div.person"):
-        name_el = person.select_one(".person-name")
-        if not name_el:
-            continue
-        name = name_el.get_text(strip=True)
-        for note in person.select(".tag-note"):
-            yield name, note.get_text(strip=True)
-
-def coursework_awards(html):
-    """Yield (student_name, award_text) for every tag-note inside a coursework row."""
-    soup = BeautifulSoup(html, "html.parser")
-    for row in soup.select("table.data tbody tr"):
-        cells = row.select("td")
-        if not cells:
-            continue
-        name = cells[0].get_text(strip=True)
-        for note in row.select(".tag-note"):
-            yield name, note.get_text(strip=True)
-
-def normalize_name(name):
-    return re.sub(r"^(Dr\.|Prof\.)\s+", "", name, flags=re.I).strip().lower()
 
 # Some people appear on more than one page (e.g. a current postgrad who also
 # has a Coursework Students record from their undergrad years), and the same
@@ -71,37 +71,17 @@ def normalize_name(name):
 # "AP-S" vs "Antennas and Propagation Society (APS)"). Dedupe by
 # (person, year) rather than exact award text, since nobody in practice gets
 # two different IEEE student grants in the same calendar year.
-ieee_grants = set()
-for html_path, extractor in [
-    ("people/researchers.html", person_awards),
-    ("people/alumni.html", person_awards),
-    ("people/coursework.html", coursework_awards),
-]:
-    for name, award in extractor(read(html_path)):
-        if IEEE_GRANT_RE.search(award):
-            year_match = re.search(r"\b(19|20)\d{2}\b", award)
-            key = (normalize_name(name), year_match.group(0) if year_match else award)
-            ieee_grants.add(key)
+def award_key(name, award):
+    year_match = re.search(r"\b(19|20)\d{2}\b", award)
+    return (normalize_name(name), year_match.group(0) if year_match else award)
 
-ieee_grant_count = len(ieee_grants)
+ieee_grant_count = len({award_key(n, a) for n, a in AWARDS if IEEE_GRANT_RE.search(a)})
 
 # ---------- University Doctoral Research Medal ----------
 
 MEDAL_RE = re.compile(r"\bUniversity Doctoral Research Medal\b", re.I)
 
-medals = set()
-for html_path, extractor in [
-    ("people/researchers.html", person_awards),
-    ("people/alumni.html", person_awards),
-    ("people/coursework.html", coursework_awards),
-]:
-    for name, award in extractor(read(html_path)):
-        if MEDAL_RE.search(award):
-            year_match = re.search(r"\b(19|20)\d{2}\b", award)
-            key = (normalize_name(name), year_match.group(0) if year_match else award)
-            medals.add(key)
-
-medal_count = len(medals)
+medal_count = len({award_key(n, a) for n, a in AWARDS if MEDAL_RE.search(a)})
 
 # ---------- Commendation for Doctoral Thesis Excellence ----------
 # Dedupe by person alone (not person+year, unlike the awards above): this is
@@ -111,17 +91,7 @@ medal_count = len(medals)
 
 COMMENDATION_RE = re.compile(r"\bCommendation for Doctoral Thesis Excellence\b", re.I)
 
-commendations = set()
-for html_path, extractor in [
-    ("people/researchers.html", person_awards),
-    ("people/alumni.html", person_awards),
-    ("people/coursework.html", coursework_awards),
-]:
-    for name, award in extractor(read(html_path)):
-        if COMMENDATION_RE.search(award):
-            commendations.add(normalize_name(name))
-
-commendation_count = len(commendations)
+commendation_count = len({normalize_name(n) for n, a in AWARDS if COMMENDATION_RE.search(a)})
 
 # ---------- ARC research grants ----------
 # Counted directly from the ARC grant codes (e.g. LE180100003, DP170101922)
@@ -129,39 +99,32 @@ commendation_count = len(commendations)
 
 ARC_GRANT_RE = re.compile(r"\b(?:LE|DP|DE|FT|CE)\d{9}\b")
 
-def read_index():
-    with open(os.path.join(ROOT, "index.html"), encoding="utf-8") as f:
-        return f.read()
-
-lab_history_html = read_index()
+with open(os.path.join(ROOT, "index.html"), encoding="utf-8") as f:
+    lab_history_html = f.read()
 lab_history_match = re.search(r"<h2>Lab history</h2>.*?<!-- STATS:START -->", lab_history_html, re.S)
 arc_grant_count = len(set(ARC_GRANT_RE.findall(lab_history_match.group(0))))
 
 # ---------- ARC fellows ----------
-# "ARC Future Fellow" / "ARC DECRA" mentions anywhere in a person's card --
-# unlike the tag-note-only awards above, this also has to catch Withawat's
-# own "ARC Future Fellow" line, which isn't a .tag-note (it's a senior/
-# permanent designation shown as plain text), so this scans every
-# person-meta paragraph rather than just .tag-note spans.
+# "ARC Future Fellow" / "ARC DECRA" mentioned anywhere on a person's card (their
+# Info and Awards lines), so Withawat's own "ARC Future Fellow" is caught too.
 
 ARC_FELLOW_RE = re.compile(r"\bARC\b.{0,20}?\b(Future Fellow|DECRA)\b", re.I)
 
-def person_full_text(html):
-    """Yield (person_name, all person-meta text) for every .person card."""
-    soup = BeautifulSoup(html, "html.parser")
-    for person in soup.select("div.person"):
-        name_el = person.select_one(".person-name")
-        if not name_el:
-            continue
-        name = name_el.get_text(strip=True)
-        text = " ".join(p.get_text(" ", strip=True) for p in person.select("p.person-meta"))
-        yield name, text
+def card_lines(person):
+    """The text of each meta line on a person's card, in order (Awards lines joined by bullets)."""
+    out = []
+    for kind, value in person["lines"]:
+        if kind == "info":
+            out.append(plain(value))
+        else:
+            out.append(" \u2022 ".join(plain(a.strip()) for a in value.split(";") if a.strip()))
+    return out
 
 arc_fellows = set()
-for html_path in ["people/researchers.html", "people/alumni.html"]:
-    for name, text in person_full_text(read(html_path)):
-        if ARC_FELLOW_RE.search(text):
-            arc_fellows.add(normalize_name(name))
+for filename in ("people-researchers.md", "people-alumni.md"):
+    for person in people_in(filename):
+        if ARC_FELLOW_RE.search(" ".join(card_lines(person))):
+            arc_fellows.add(normalize_name(person["name"]))
 
 arc_fellow_count = len(arc_fellows)
 
@@ -173,17 +136,7 @@ arc_fellow_count = len(arc_fellows)
 # a hand-maintained list: update it on the rare occasion a paper is
 # published with a collaborator country not already listed here.
 # (ISO 3166-1 alpha-2 code, country name) -- flag images from flagcdn.com.
-INTL_COLLAB_COUNTRIES = [
-    ("jp", "Japan"),
-    ("de", "Germany"),
-    ("cn", "China"),
-    ("es", "Spain"),
-    ("us", "United States"),
-    ("ch", "Switzerland"),
-    ("fr", "France"),
-    ("nl", "Netherlands"),
-    ("th", "Thailand"),
-]
+INTL_COLLAB_COUNTRIES = [tuple(c) for c in CONFIG["coauthor_countries"]]
 
 def flags_html(countries):
     return "".join(
@@ -203,25 +156,15 @@ intl_collab_flags = flags_html(INTL_COLLAB_COUNTRIES)
 # only the name -> ISO code mapping (needed for the flag icon) is a small
 # static table, extended whenever a visitor from an uncovered country is
 # added.
-COUNTRY_ISO = {
-    "New Zealand": "nz",
-    "China": "cn",
-    "Japan": "jp",
-    "Germany": "de",
-    "Australia": "au",
-    "Thailand": "th",
-    "Taiwan": "tw",
-}
+COUNTRY_ISO = CONFIG["country_iso"]
 
-def visitor_country_names(html):
-    """Yield each distinct country in first-appearance order, one per
-    visitor -- taken from the last comma-separated part of the first
-    non-"Now:" .person-meta paragraph in each visitor's card."""
-    soup = BeautifulSoup(html, "html.parser")
+def visitor_country_names():
+    """Yield each distinct country in first-appearance order, one per visitor --
+    the last comma-separated part of the first affiliation line (an Info line
+    not starting with "Now") on each visitor's card."""
     seen = set()
-    for person in soup.select("div.person"):
-        metas = [p.get_text(" ", strip=True) for p in person.select("p.person-meta")]
-        affil = next((m for m in metas if not m.startswith("Now")), None)
+    for person in people_in("people-visitors.md"):
+        affil = next((plain(v) for v in person["info"] if not plain(v).startswith("Now")), None)
         if not affil:
             continue
         country = affil.rsplit(",", 1)[-1].strip()
@@ -230,10 +173,10 @@ def visitor_country_names(html):
             yield country
 
 VISITOR_COUNTRIES = []
-for name in visitor_country_names(read("people/visitors.html")):
+for name in visitor_country_names():
     code = COUNTRY_ISO.get(name)
     if not code:
-        raise SystemExit(f"No ISO code mapped for visitor country {name!r} -- add it to COUNTRY_ISO in build_stats.py")
+        raise SystemExit(f"No ISO code mapped for visitor country {name!r} -- add it to country_iso in content-raw/site-config.json")
     VISITOR_COUNTRIES.append((code, name))
 visitor_flags = flags_html(VISITOR_COUNTRIES)
 
@@ -242,7 +185,7 @@ visitor_flags = flags_html(VISITOR_COUNTRIES)
 # Journal articles published by lab members before the lab's own 2018
 # establishment aren't listed on the Journal Articles page, so the stat
 # needs an asterisk pointing to that caveat.
-PRE_LAB_JOURNAL_COUNT = 69
+PRE_LAB_JOURNAL_COUNT = CONFIG["pre_lab_journal_count"]
 
 stats_html = f"""      <div class="stats-row">
         <a class="stat" href="/publications/journal-articles.html">
