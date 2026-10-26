@@ -1,6 +1,9 @@
 {
   "_help": "Numbers and lookups that cannot be derived from the page data. Edit here, then run: python scripts/build_all.py",
 
+  "cloudflare_analytics_token": "f3fdce16bc73435088ff295418f8acb7",
+  "_cloudflare_analytics_token": "Visitor counts: paste the token from Cloudflare > Web Analytics > your site (the long code in data-cf-beacon). Leave empty to switch analytics off. It is public, so it is fine to commit.",
+
   "pre_lab_journal_count": 69,
   "_pre_lab_journal_count": "Journal articles by lab members before the lab's 2018 start; shown as the footnote under the home-page journal stat.",
 

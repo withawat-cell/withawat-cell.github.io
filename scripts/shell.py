@@ -10,6 +10,7 @@ stamp_html() also gives every local css/js/image reference (`/assets/...`) a
 its contents change. Nothing ever needs bumping by hand.
 """
 import hashlib
+import json
 import os
 import re
 
@@ -93,6 +94,15 @@ def footer_html():
 </footer>'''
 
 
+BEACON_RE = re.compile(r"""[ \t]*<script[^>]*src=["']https://static\.cloudflareinsights\.com/beacon\.min\.js["'][^>]*></script>\n?""")
+
+
+def analytics_token():
+    """The Cloudflare Web Analytics token from content-raw/site-config.json ("" = off)."""
+    with open(os.path.join(ROOT, "content-raw", "site-config.json"), encoding="utf-8") as f:
+        return json.load(f).get("cloudflare_analytics_token", "").strip()
+
+
 HEADER_RE = re.compile(r'<header class="site-header">.*?</header>', re.S)
 FOOTER_RE = re.compile(r'<footer class="site-footer">.*?</footer>', re.S)
 
@@ -128,7 +138,16 @@ def stamp_html(html, relpath):
         url = m.group(2) + (f"?v={v}" if v else "")
         return f"{m.group(1)}{url}{m.group(1)}"
 
-    return ASSET_RE.sub(version, html)
+    html = ASSET_RE.sub(version, html)
+
+    # Cloudflare Web Analytics: one cookie-free script before </body> when a token is set
+    html = BEACON_RE.sub("", html)
+    token = analytics_token()
+    if token and "</body>" in html:
+        beacon = ("<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' "
+                  f"data-cf-beacon='{{\"token\": \"{token}\"}}'></script>\n")
+        html = html.replace("</body>", beacon + "</body>", 1)
+    return html
 
 
 def page_files():
