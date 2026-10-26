@@ -55,7 +55,9 @@ for year, rows in pubdata.read_tables("publications-journal-articles.md"):
         m = re.search(r"\b((?:19|20)\d{2})\.?(?:\s*\([^)]*\))?\s*$", r["citation"])
         if not m or m.group(1) != year:
             warn(f"{label} the citation's year doesn't match its '## {year}' section")
-        if not r["doi"].startswith("http"):
+        if not r["doi"]:
+            warn(f"{label} has no DOI / Link yet, so the title isn't a link")
+        elif not r["doi"].startswith("http"):
             err(f"{label} DOI / Link must start with http")
         elif r["doi"] in journal_dois:
             err(f"{label} DOI / Link {r['doi']} appears twice")

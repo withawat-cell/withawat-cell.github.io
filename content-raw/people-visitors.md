@@ -12,7 +12,7 @@ Info and Awards lines show in the order you write them. A "## Heading" starts a 
 section. After editing, run: python scripts/build_all.py
 -->
 
-Grid: compact
+Grid: wide
 
 ## Visiting academics
 Intro: Positions and affiliations shown reflect each visitor's status at the time of their visit, not necessarily their current one. This list excludes brief visits that did not involve any lab activities.
