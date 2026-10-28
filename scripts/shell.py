@@ -94,7 +94,10 @@ def footer_html():
 </footer>'''
 
 
-BEACON_RE = re.compile(r"""[ \t]*<script[^>]*src=["']https://static\.cloudflareinsights\.com/beacon\.min\.js["'][^>]*></script>\n?""")
+# matches any earlier form of the analytics tag so a rebuild always leaves exactly one
+BEACON_RE = re.compile(
+    r"""[ \t]*<script(?:[^>]*src=["']https://static\.cloudflareinsights\.com/beacon\.min\.js["'][^>]*>|>[^<]*static\.cloudflareinsights\.com[^<]*)</script>\n?"""
+)
 
 
 def analytics_token():
@@ -140,12 +143,18 @@ def stamp_html(html, relpath):
 
     html = ASSET_RE.sub(version, html)
 
-    # Cloudflare Web Analytics: one cookie-free script before </body> when a token is set
+    # Cloudflare Web Analytics (cookie-free), when a token is set. It is added only AFTER the
+    # page has finished loading, so a slow or blocked analytics host can never keep the
+    # browser's "loading" indicator spinning.
     html = BEACON_RE.sub("", html)
     token = analytics_token()
     if token and "</body>" in html:
-        beacon = ("<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' "
-                  f"data-cf-beacon='{{\"token\": \"{token}\"}}'></script>\n")
+        config = json.dumps({"token": token})
+        beacon = (
+            "<script>window.addEventListener('load',function(){var s=document.createElement('script');"
+            "s.src='https://static.cloudflareinsights.com/beacon.min.js';s.defer=true;"
+            f"s.setAttribute('data-cf-beacon','{config}');document.body.appendChild(s);}});</script>\n"
+        )
         html = html.replace("</body>", beacon + "</body>", 1)
     return html
 
@@ -161,7 +170,31 @@ def page_files():
     return sorted(out)
 
 
+CSS_URL_RE = re.compile(
+    r"""(url\(["']?)(/assets/[^"')?#\s]+\.(?:webp|png|jpe?g|gif|svg))(?:\?v=[0-9A-Za-z]*)?(["']?\))"""
+)
+
+
+def stamp_css():
+    """Version the images the stylesheet itself refers to (url(...)), so they use the same
+    ?v=<hash> as the pages' preload tags and are downloaded once, not twice."""
+    path = os.path.join(ROOT, "assets", "css", "style.css")
+    with open(path, encoding="utf-8") as f:
+        old = f.read()
+
+    def version(m):
+        v = asset_version(m.group(2))
+        return m.group(1) + m.group(2) + (f"?v={v}" if v else "") + m.group(3)
+
+    new = CSS_URL_RE.sub(version, old)
+    if new != old:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(new)
+    _hashes.pop("/assets/css/style.css", None)  # the stylesheet's own version must reflect this edit
+
+
 def stamp_site():
+    stamp_css()
     changed = 0
     for path in page_files():
         with open(path, encoding="utf-8") as f:
