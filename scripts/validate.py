@@ -6,6 +6,7 @@ Warnings are worth a look but don't fail the build.
 
 External URLs are not fetched here; run scripts/check_links.py for those.
 """
+import json
 import os
 import re
 import sys
@@ -193,6 +194,30 @@ for path in page_paths:
             err(f"{rel}: links to {target}, which doesn't exist")
     if re.search(r"\?v=x\b", text):
         err(f"{rel}: has a placeholder ?v=x (run stamp_pages.py)")
+
+    # accessibility: heading levels never skip (h1 to h3), every image has an alt attribute
+    # (empty is fine for decoration), a skip link leads to <main id="main">
+    levels = [int(n) for n in re.findall(r"<h([1-6])[\s>]", text)]
+    for a, b in zip(levels, levels[1:]):
+        if b > a + 1:
+            err(f"{rel}: heading level jumps from h{a} to h{b}; use the level in between")
+            break
+    if levels.count(1) != 1:
+        err(f"{rel}: expected exactly one h1, found {levels.count(1)}")
+    for tag in re.findall(r"<img\b[^>]*>", text):
+        if not re.search(r"\salt=", tag):
+            err(f"{rel}: an image has no alt attribute: {tag[:90]}")
+        if re.search(r'src="/assets/[^"?]+\.(?:webp|png|jpe?g)', tag) and not re.search(r'\swidth="\d+"\s+height="\d+"', tag):
+            err(f"{rel}: a local image has no width/height (run build_all.py): {tag[:90]}")
+    if 'class="skip-link" href="#main"' not in text or '<main id="main"' not in text:
+        err(f"{rel}: missing the 'Skip to content' link or <main id=\"main\"> (run build_all.py)")
+    if 'property="og:image:width"' not in text and 'property="og:image"' in text:
+        err(f"{rel}: share image has no size tags (run build_all.py)")
+    for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', text, re.S):
+        try:
+            json.loads(block)
+        except ValueError as exc:
+            err(f"{rel}: the structured data (JSON-LD) is not valid JSON: {exc}")
 
 for rel, markers in {
     "index.html": ["STATS:START", "STATS:END", "LOGOS:association:START", "LOGOS:association:END", "LOGOS:patrons:START", "LOGOS:patrons:END"],

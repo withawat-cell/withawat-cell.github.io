@@ -14,6 +14,7 @@ Needs git and Python 3 only. Exit code 1 if any check fails.
 import os
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
@@ -195,6 +196,40 @@ def scenarios(sb, quick):
     check("every page preloads the two main fonts, at exactly the address the stylesheet uses (so each downloads once)",
           all(len(v) == 2 and all(h in css_text for h in v) for v in preloads.values()), str({p: v for p, v in preloads.items() if len(v) != 2}))
 
+    a11y_bad = []
+    for p in pages:
+        t = sb.read(p)
+        levels = [int(n) for n in re.findall(r"<h([1-6])[\s>]", t)]
+        if 'class="skip-link" href="#main"' not in t or '<main id="main"' not in t:
+            a11y_bad.append(f"{p}: no skip link / main target")
+        if levels.count(1) != 1 or any(b > a + 1 for a, b in zip(levels, levels[1:])):
+            a11y_bad.append(f"{p}: heading levels {levels[:8]}")
+        a11y_bad += [f"{p}: image without alt" for tag_ in re.findall(r"<img\b[^>]*>", t) if " alt=" not in tag_]
+    check("accessibility: every page has a skip link to <main>, one h1, no skipped heading levels, and an alt on every image", not a11y_bad, str(a11y_bad[:5]))
+    share_bad = [p for p in pages if 'property="og:image"' in sb.read(p) and not all(k in sb.read(p) for k in ('og:image:width', 'og:image:height', 'og:image:alt', 'twitter:card'))]
+    check("every page's social-share tags include the image size, its description and the card type", not share_bad, str(share_bad))
+    jhtml = sb.read("publications/journal-articles.html")
+    check("journal search: the box, its status line and its no-results message exist, and the script reads ?q=",
+          all(f'id="{i}"' in jhtml for i in ("journal-search", "journal-search-status", "journal-no-results")) and 'params.get("q")' in sb.read("assets/js/publications-filter.js"))
+
+    # image width/height come from the file itself and follow it when the file is replaced
+    def png(w, h):
+        return b"\x89PNG\r\n\x1a\n" + struct.pack(">I", 13) + b"IHDR" + struct.pack(">II", w, h) + b"\x08\x06\x00\x00\x00\x00\x00\x00\x00"
+    img_path = os.path.join(sb.root, "assets", "img", "zz-test.png")
+    page_html = sb.read("contact.html").replace("<title>Contact", "<title>Zz Image Test").replace("</main>", '<img src="/assets/img/zz-test.png" alt="test"></main>', 1)
+    sb.write("zz-img.html", page_html)
+    with open(img_path, "wb") as f:
+        f.write(png(40, 30))
+    sb.build()
+    first = re.search(r'zz-test\.png[^>]*width="(\d+)" height="(\d+)"', sb.read("zz-img.html"))
+    with open(img_path, "wb") as f:
+        f.write(png(50, 20))
+    sb.build()
+    second = re.search(r'zz-test\.png[^>]*width="(\d+)" height="(\d+)"', sb.read("zz-img.html"))
+    check("images: width and height are read from the file, and change when the file is replaced",
+          first and second and first.groups() == ("40", "30") and second.groups() == ("50", "20"), f"{first and first.groups()} {second and second.groups()}")
+    sb.reset()
+
     # ---------------------------------------------------------- staging (what gets published)
     code, out = sb.run("scripts/stage_site.py", os.path.join(sb.root, "_site"))
     staged = os.path.join(sb.root, "_site")
@@ -278,6 +313,8 @@ def scenarios(sb, quick):
     must_fail("a Grid typo", lambda: sb.edit("content-raw/people-visitors.md", "Grid: wide", "Grid: tiny"), "grid must be")
     must_fail("a missing thesis PDF", lambda: set_cell(sb, THESES, "File", "no-such-thesis.pdf"), "does not exist")
     must_fail("a broken internal link on a page", lambda: sb.edit("contact.html", "<h1>Contact</h1>", '<h1>Contact</h1><a href="/nope.html">x</a>'), "doesn't exist")
+    must_fail("a heading level that jumps (h1 to h4)", lambda: sb.edit("contact.html", "<h1>Contact</h1>", "<h1>Contact</h1><h4>x</h4>"), "heading level jumps")
+    must_fail("an image without an alt attribute", lambda: sb.edit("contact.html", "<h1>Contact</h1>", '<h1>Contact</h1><img src="/assets/img/brand/favicon.png">'), "no alt attribute")
     must_fail("a coursework row with the wrong number of cells", lambda: _drop_last_cell(sb, COURSE), "expected 5 cells")
     must_fail("a coursework note linking to a missing page", lambda: set_cell(sb, COURSE, "Notes", "See [x](/nowhere.html)"), "doesn't exist")
     must_fail("a missing research card image", lambda: sb.write("content-raw/research-clusters.md", re.sub(r"- Image: \S+", "- Image: no-such.webp", sb.read("content-raw/research-clusters.md"), count=1)), "does not exist")

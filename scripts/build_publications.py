@@ -302,7 +302,7 @@ def build_journal():
         {abstract_html}
       </li>''')
             global_idx += 1
-        sections.append(f'    <div class="year-block" data-year="{year}">\n      <h3 class="year-heading">{year}</h3>\n      <ul class="pub-list">\n' + "\n".join(entries) + "\n      </ul>\n    </div>")
+        sections.append(f'    <div class="year-block" data-year="{year}">\n      <h2 class="year-heading">{year}</h2>\n      <ul class="pub-list">\n' + "\n".join(entries) + "\n      </ul>\n    </div>")
     years = [y for y, _ in year_blocks]
     return "\n\n".join(sections), years, total_count, recognitions_count, invited_count
 
@@ -326,7 +326,7 @@ def build_conference():
           {meta_html}
         </div>
       </li>''')
-        sections.append(f'    <h3 class="year-heading">{year}</h3>\n    <ul class="pub-list pub-list-text">\n' + "\n".join(entries) + "\n    </ul>")
+        sections.append(f'    <h2 class="year-heading">{year}</h2>\n    <ul class="pub-list pub-list-text">\n' + "\n".join(entries) + "\n    </ul>")
     return "\n\n".join(sections)
 
 journal_html, journal_years, journal_total, journal_recognitions, journal_invited = build_journal()
@@ -432,19 +432,22 @@ journal_hero_stats = f'''
           <span class="stat-label">Invited Papers</span>
         </div>
       </div>'''
-journal_body = f'''      <div class="topic-filter" role="group" aria-label="Filter by topic">
+journal_body = f'''      <div class="topic-filter" role="group" aria-label="Filter articles">
 {topic_filter_buttons}
         <select id="journal-year-filter" class="year-filter" aria-label="Year">
           <option value="all">All years</option>
 {year_filter_options}
         </select>
+        <input type="search" id="journal-search" class="pub-search" placeholder="Search articles" aria-label="Search journal articles by title, author, venue or abstract" autocomplete="off">
+        <span id="journal-search-status" class="search-status" aria-live="polite"></span>
       </div>
+      <p id="journal-no-results" class="no-results" hidden>No articles match. Try fewer words or clear a filter.</p>
       <div class="pub-lists">
 {journal_html}
       </div>'''
 out = page(
     "journal-articles", "Journal Articles",
-    "Journal articles from the Terahertz Engineering Laboratory, Adelaide University.",
+    "Peer-reviewed journal articles from the Terahertz Engineering Laboratory, Adelaide University, on terahertz antennas, metasurfaces, integrated platforms, communications, detectors, and non-destructive evaluation.",
     "Publications", "Journal articles",
     "Peer-reviewed journal articles from the Terahertz Engineering Laboratory.",
     journal_body,
@@ -457,7 +460,7 @@ with open(os.path.join(pub_dir, "journal-articles.html"), "w", encoding="utf-8",
 # Conference presentations
 out = page(
     "conference-presentations", "Conference Presentations",
-    "Conference presentations from the Terahertz Engineering Laboratory, Adelaide University.",
+    "Invited talks, keynotes, and conference presentations by the Terahertz Engineering Laboratory, Adelaide University, on terahertz devices, systems, and applications.",
     "Publications", "Selected conference presentations",
     "Invited talks, keynotes, and presentations at international conferences and workshops.",
     conference_html,
@@ -470,7 +473,7 @@ with open(os.path.join(pub_dir, "conference-presentations.html"), "w", encoding=
 theses_hero_stats = "\n      <!-- STATS:START -->\n" + build_stats.theses_stats_html + "\n      <!-- STATS:END -->"
 out = page(
     "phd-theses", "PhD Theses",
-    "PhD theses produced at the Terahertz Engineering Laboratory, Adelaide University.",
+    "PhD theses completed at the Terahertz Engineering Laboratory, Adelaide University, with full-text PDFs for download.",
     "Publications", "PhD theses",
     "Doctoral theses completed at the Terahertz Engineering Laboratory.",
     theses_html,
@@ -482,7 +485,7 @@ with open(os.path.join(pub_dir, "phd-theses.html"), "w", encoding="utf-8", newli
 # Codes
 out = page(
     "codes", "Codes",
-    "Research software from the Terahertz Engineering Laboratory, Adelaide University.",
+    "Research software from the Terahertz Engineering Laboratory, Adelaide University: a wireless communication chain simulator and CST simulation files for substrateless terahertz waveguides.",
     "Publications", "Codes",
     "Research software developed at the Terahertz Engineering Laboratory.",
     codes_html,

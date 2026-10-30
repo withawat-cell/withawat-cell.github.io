@@ -55,6 +55,45 @@
       closeAllSubmenus(willOpen ? li : null);
       li.classList.toggle("open", willOpen);
       btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      // opened from the keyboard (Enter / Space): move into the list
+      if (willOpen && e.detail === 0) focusItem(li, 0);
+    });
+  });
+
+  // Keyboard use of the menus: Down/Up open a title's list and move through it, Home/End jump to
+  // the ends, Escape closes the list and returns to its title, and tabbing away closes it.
+  function menuLinks(li) {
+    return Array.prototype.slice.call(li.querySelectorAll(".submenu a"));
+  }
+
+  function focusItem(li, index) {
+    var links = menuLinks(li);
+    if (links.length) links[(index + links.length) % links.length].focus();
+  }
+
+  document.querySelectorAll("li.has-children").forEach(function (li) {
+    var btn = li.querySelector("button.nav-parent");
+    btn.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      closeAllSubmenus(li);
+      setOpen(li, true);
+      focusItem(li, e.key === "ArrowDown" ? 0 : -1);
+    });
+    li.querySelector(".submenu").addEventListener("keydown", function (e) {
+      var links = menuLinks(li);
+      var at = links.indexOf(document.activeElement);
+      if (e.key === "ArrowDown") focusItem(li, at + 1);
+      else if (e.key === "ArrowUp") focusItem(li, at - 1);
+      else if (e.key === "Home") focusItem(li, 0);
+      else if (e.key === "End") focusItem(li, -1);
+      else if (e.key === "Escape") { setOpen(li, false); btn.focus(); }
+      else return;
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    li.addEventListener("focusout", function (e) {
+      if (e.relatedTarget && !li.contains(e.relatedTarget)) setOpen(li, false);
     });
   });
 

@@ -61,7 +61,7 @@ for year, rows in year_blocks:
       <div class="coursework-photos">
 {chr(10).join(photos)}
       </div>'''
-    sections.append(f'''      <h3 class="year-heading">{year}</h3>
+    sections.append(f'''      <h2 class="year-heading">{year}</h2>
       <div class="table-scroll">
       <table class="data cols-4 stack-sm">
         <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>

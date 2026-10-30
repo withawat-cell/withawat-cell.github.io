@@ -138,6 +138,94 @@ def asset_version(path):
     return _hashes[path]
 
 
+def image_size(path):
+    """(width, height) of a local webp/png/jpeg from its file header, or None. Reading the header
+    keeps the build free of image libraries."""
+    full = os.path.join(ROOT, path.lstrip("/").replace("/", os.sep))
+    try:
+        with open(full, "rb") as f:
+            head = f.read(64 * 1024)
+    except OSError:
+        return None
+    le = lambda b: int.from_bytes(b, "little")
+    if head[:4] == b"RIFF" and head[8:12] == b"WEBP":
+        kind = head[12:16]
+        if kind == b"VP8X":
+            return le(head[24:27]) + 1, le(head[27:30]) + 1
+        if kind == b"VP8L":
+            b = head[21:25]
+            return 1 + (b[0] | (b[1] & 0x3F) << 8), 1 + ((b[1] >> 6) | b[2] << 2 | (b[3] & 0xF) << 10)
+        if kind == b"VP8 ":
+            return le(head[26:28]) & 0x3FFF, le(head[28:30]) & 0x3FFF
+    if head[:8] == b"\x89PNG\r\n\x1a\n":
+        return int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
+    if head[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(head):
+            if head[i] != 0xFF:
+                i += 1
+                continue
+            marker = head[i + 1]
+            if marker in (0xC0, 0xC1, 0xC2):
+                return int.from_bytes(head[i + 7:i + 9], "big"), int.from_bytes(head[i + 5:i + 7], "big")
+            i += 2 + int.from_bytes(head[i + 2:i + 4], "big")
+    return None
+
+
+IMG_TAG_RE = re.compile(r"<img\b[^>]*>")
+IMG_SRC_RE = re.compile(r'\ssrc="(/assets/[^"?#]+)')
+IMG_SIZE_ATTR_RE = re.compile(r'\s(?:width|height)="[^"]*"')
+
+
+def size_images(html):
+    """Give every local <img> the width/height of its file, so the browser reserves its space
+    before it loads and the page doesn't jump. Rewritten on every build, so never stale."""
+    def one(m):
+        tag = m.group(0)
+        src = IMG_SRC_RE.search(tag)
+        size = image_size(src.group(1)) if src else None
+        if not size:
+            return tag
+        tag = IMG_SIZE_ATTR_RE.sub("", tag)
+        return tag[:-1].rstrip() + f' width="{size[0]}" height="{size[1]}">'
+    return IMG_TAG_RE.sub(one, html)
+
+
+SKIP_LINK_RE = re.compile(r'[ \t]*<a class="skip-link"[^>]*>[^<]*</a>\n?')
+MAIN_RE = re.compile(r"<main(?:\s[^>]*)?>")
+
+
+def add_skip_link(html):
+    """A 'Skip to content' link as the first focusable thing on the page, jumping past the menu
+    for keyboard and screen-reader users. <main> is its target."""
+    html = SKIP_LINK_RE.sub("", html)
+    if MAIN_RE.search(html) and "<body>" in html:
+        html = MAIN_RE.sub('<main id="main" tabindex="-1">', html, count=1)
+        html = html.replace("<body>", '<body>\n<a class="skip-link" href="#main">Skip to content</a>', 1)
+    return html
+
+
+SHARE_IMAGE_ALT = "Members of the Terahertz Engineering Laboratory"
+SHARE_IMAGE_RE = re.compile(
+    r'(<meta property="og:image" content="https://thz-el\.org(/assets/[^"?#]+)">\n)'
+    r'(?:[ \t]*<meta property="og:image:(?:width|height|alt)"[^>]*>\n)*'
+)
+
+
+def add_share_image_details(html):
+    """Say how big the social-share image is and what it shows, so link previews lay out
+    correctly and are described for screen readers."""
+    def one(m):
+        size = image_size(m.group(2))
+        if not size:
+            return m.group(1)
+        return (m.group(1)
+                + f'<meta property="og:image:width" content="{size[0]}">\n'
+                + f'<meta property="og:image:height" content="{size[1]}">\n'
+                + f'<meta property="og:image:alt" content="{SHARE_IMAGE_ALT}">\n')
+    return SHARE_IMAGE_RE.sub(one, html)
+
+
 def stamp_html(html, relpath):
     """Fill the shared header/footer and refresh asset versions in one page.
     relpath is the page's path relative to the site root, e.g. "people/alumni.html"."""
@@ -157,6 +245,9 @@ def stamp_html(html, relpath):
     preload = "".join(f'<link rel="preload" href="{p}" as="font" type="font/woff2" crossorigin>\n' for p in PRELOAD_FONTS)
     html = STYLESHEET_LINK_RE.sub(lambda m: preload + m.group(0), html, count=1)
     html = ASSET_RE.sub(version, html)
+    html = size_images(html)
+    html = add_skip_link(html)
+    html = add_share_image_details(html)
 
     # Cloudflare Web Analytics (cookie-free), when a token is set. It is added only AFTER the
     # page has finished loading, so a slow or blocked analytics host can never keep the
