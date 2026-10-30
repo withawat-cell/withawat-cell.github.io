@@ -834,6 +834,29 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 }
 .gallery-grid { margin-top: 20px; }
+/* research cluster cards: one per row, photo left and text right, so the text runs in a wide column */
+.card-grid.card-grid-rows { grid-template-columns: 1fr; gap: 20px; }
+.card-grid.card-grid-rows .card {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  column-gap: 28px;
+  align-items: start;
+}
+.card-grid.card-grid-rows .card img {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  height: 100%;
+  min-height: 160px;
+  max-height: 220px;
+  margin: 0;
+}
+.card-grid.card-grid-rows .card > :not(img) { grid-column: 2; }
+.card-grid.card-grid-rows .card .tag-row { margin-top: 10px; padding-top: 0; }
+@media (max-width: 760px) {
+  .card-grid.card-grid-rows .card { display: flex; }
+  .card-grid.card-grid-rows .card img { height: 160px; max-height: none; margin-bottom: 14px; }
+  .card-grid.card-grid-rows .card .tag-row { padding-top: 14px; }
+}
 /* phone number and map link sit at the bottom of the card, so they line up
    across cards whose addresses have different numbers of lines */
 .contact-grid .card .address + .small { margin-top: auto; }
