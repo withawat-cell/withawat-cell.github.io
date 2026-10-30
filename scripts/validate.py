@@ -27,20 +27,35 @@ def warn(msg):
     warnings.append(msg)
 
 
+_listing = {}
+
+
+def exact_exists(rel_parts, want_file=False):
+    """Does this path exist with EXACTLY this upper/lower case? Windows ignores case but the
+    live site (Linux) does not, so a reference like Photo.webp to photo.webp must be an error."""
+    path = ROOT
+    for part in rel_parts:
+        if path not in _listing:
+            _listing[path] = set(os.listdir(path)) if os.path.isdir(path) else set()
+        if part not in _listing[path]:
+            return False
+        path = os.path.join(path, part)
+    return os.path.isfile(path) if want_file else os.path.exists(path)
+
+
 def exists(rel):
-    return os.path.exists(os.path.join(ROOT, rel.lstrip("/").replace("/", os.sep)))
+    return exact_exists([p for p in rel.strip("/").split("/") if p])
 
 
 def site_has(url_path):
     """True if a root-relative URL path resolves the way GitHub Pages serves it."""
-    p = url_path.lstrip("/")
-    if p == "":
+    parts = [p for p in url_path.strip("/").split("/") if p]
+    if not parts:
         return True
-    full = os.path.join(ROOT, p.replace("/", os.sep))
     return (
-        os.path.isfile(full)
-        or os.path.isfile(os.path.join(full, "index.html"))
-        or os.path.isfile(full + ".html")
+        exact_exists(parts, want_file=True)
+        or exact_exists(parts + ["index.html"], want_file=True)
+        or exact_exists(parts[:-1] + [parts[-1] + ".html"], want_file=True)
     )
 
 
@@ -133,6 +148,17 @@ for group, rows in pubdata.read_logo_groups().items():
             err(f"home-logos.md: {r['name']}: logo assets/img/logos/{r['logo']} does not exist")
         if not r["link"].startswith("http"):
             err(f"home-logos.md: {r['name']}: Link must start with http")
+
+# ---------------------------------------------------------------- image sizes
+IMAGE_WARN_KB = 150
+for dirpath, _dirs, files in os.walk(os.path.join(ROOT, "assets", "img")):
+    for name in files:
+        if name.lower().endswith((".webp", ".png", ".jpg", ".jpeg", ".gif")):
+            full = os.path.join(dirpath, name)
+            kb = os.path.getsize(full) / 1024
+            if kb > IMAGE_WARN_KB:
+                warn(f"{os.path.relpath(full, ROOT).replace(os.sep, '/')} is {kb:.0f} KB; "
+                     f"consider shrinking it (scripts/add_image.py --width ... --quality ...)")
 
 # ---------------------------------------------------------------- site config
 import json

@@ -36,7 +36,7 @@ for legacy_path, target in MAPPING:
     out_dir = os.path.join(ROOT, legacy_path)
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "index.html")
-    with open(out_path, "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(TEMPLATE.format(target=target))
 
 print(f"Wrote {len(MAPPING)} legacy redirect stubs")

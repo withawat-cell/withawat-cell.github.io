@@ -3,6 +3,7 @@ name: Deploy Pages
 on:
   push:
     branches: [main]
+  pull_request:          # on a pull request only the checks run; nothing is deployed
   workflow_dispatch:
 
 permissions:
@@ -15,25 +16,57 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
+    name: Check and stage the site
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout (with LFS)
         uses: actions/checkout@v4
         with:
           lfs: true
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Rebuild the site from the data files (this also validates them)
+        run: python scripts/build_all.py
+
+      - name: Fail if the committed pages were out of date
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            git --no-pager diff --stat
+            echo "::error::The committed pages differ from a fresh build. Run 'python scripts/build_all.py' locally and commit the result."
+            exit 1
+          fi
+
+      - name: Self-test the build
+        run: python scripts/selftest.py
+
+      - name: Stage only the files visitors need
+        run: python scripts/stage_site.py _site
+
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: _site
 
+  deploy:
+    name: Deploy
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

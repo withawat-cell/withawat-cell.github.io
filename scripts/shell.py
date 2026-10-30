@@ -85,8 +85,8 @@ def header_html(current):
 def footer_html():
     links = " &middot; ".join(f'<a href="{h}">{l}</a>' for l, h in FOOTER_LINKS)
     return f'''<footer class="site-footer">
-  <div class="wrap-wide" style="display:block;">
-    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+  <div class="wrap-wide">
+    <div class="footer-row">
       <span>&copy; <span data-copyright-year>2026</span> {FOOTER_COPYRIGHT}</span>
       <span>{links}</span>
     </div>
@@ -121,7 +121,10 @@ def asset_version(path):
         full = os.path.join(ROOT, path.lstrip("/").replace("/", os.sep))
         if os.path.exists(full):
             with open(full, "rb") as f:
-                _hashes[path] = hashlib.sha1(f.read()).hexdigest()[:8]
+                data = f.read()
+            if full.lower().endswith((".css", ".js", ".svg")):
+                data = data.replace(b"\r\n", b"\n")  # same hash on Windows (CRLF) and Linux (LF)
+            _hashes[path] = hashlib.sha1(data).hexdigest()[:8]
         else:
             _hashes[path] = None  # missing file: leave the URL alone (validate.py reports it)
     return _hashes[path]
@@ -163,7 +166,11 @@ def page_files():
     """Every hand-authored or generated .html page (not the redirect stub)."""
     out = []
     for dirpath, dirs, files in os.walk(ROOT):
-        dirs[:] = [d for d in dirs if d not in (".git", "assets", "home", "content-raw", "scripts")]
+        # only the real site folders: not assets, the redirect stub, data/scripts, or hidden/staging
+        # folders (.git, .venv, .github, _site, ...)
+        dirs[:] = [d for d in dirs
+                   if d not in ("assets", "home", "content-raw", "scripts", "tests", "node_modules")
+                   and not d.startswith((".", "_"))]
         for name in files:
             if name.endswith(".html"):
                 out.append(os.path.join(dirpath, name))
@@ -188,7 +195,7 @@ def stamp_css():
 
     new = CSS_URL_RE.sub(version, old)
     if new != old:
-        with open(path, "w", encoding="utf-8") as f:
+        with open(path, "w", encoding="utf-8", newline="\n") as f:
             f.write(new)
     _hashes.pop("/assets/css/style.css", None)  # the stylesheet's own version must reflect this edit
 
@@ -201,7 +208,7 @@ def stamp_site():
             old = f.read()
         new = stamp_html(old, os.path.relpath(path, ROOT))
         if new != old:
-            with open(path, "w", encoding="utf-8") as f:
+            with open(path, "w", encoding="utf-8", newline="\n") as f:
                 f.write(new)
             changed += 1
     return changed

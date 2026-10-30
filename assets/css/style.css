@@ -68,6 +68,9 @@ p { margin: 0 0 1em; }
 p:last-child { margin-bottom: 0; }
 
 .small { font-size: 0.875rem; color: var(--text-dim); }
+.stat-footnote { margin-top: 10px; }
+.section-intro { margin-bottom: 24px; }
+.pub-lists { margin-top: 24px; }
 .nowrap { white-space: nowrap; }
 
 /* ---------- layout ---------- */
@@ -465,7 +468,6 @@ a.stat:hover .stat-num { color: var(--link); }
   flex-direction: column;
   min-height: 440px;
 }
-.people-grid-compact .person { min-height: 300px; }
 .person-photo {
   width: 100%;
   aspect-ratio: 5 / 6;
@@ -591,6 +593,7 @@ tr.prize-row > td:first-child { box-shadow: inset 2px 0 0 var(--gold); padding-l
 .team-photo-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
 @media (max-width: 600px) { .team-photo-row { grid-template-columns: 1fr; } }
 .photo-row img, .team-photo-row figure { flex: 1 1 260px; min-width: 0; }
+.photo-row img.photo-lead { flex: 0 1 480px; }
 .team-photo-row figure { margin: 0; }
 .photo-row img, .team-photo-row img { aspect-ratio: 3 / 2; object-fit: cover; border: 1px solid var(--line); }
 .team-photo-row img { width: 100%; }
@@ -671,10 +674,12 @@ a.lightbox-link:hover img, a.lightbox-link:focus-visible img { filter: brightnes
 .logo-row a:hover img {
   filter: drop-shadow(0 0 6px var(--accent)) drop-shadow(0 0 16px var(--accent));
 }
+.logo-row-patrons { margin-top: 28px; }
 
 /* tags / pillboxes */
 .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .tag-row-inline { display: inline-flex; vertical-align: middle; margin: 0; gap: 6px; }
+.tag-row-pills { margin-top: 6px; }
 .tag {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -720,7 +725,7 @@ a.lightbox-link:hover img, a.lightbox-link:focus-visible img { filter: brightnes
 .tag-note a:hover { color: var(--link); border-bottom-style: solid; border-bottom-color: var(--link); }
 .note-sep { color: var(--text-faint); margin: 0 8px; }
 
-.topic-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+.topic-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .topic-filter-btn, .year-filter {
   font-family: var(--sans);
   font-size: 0.78rem;
@@ -760,6 +765,7 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
 .card-grid-compact.contact-grid {
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 }
+.gallery-grid { margin-top: 20px; }
 /* phone number and map link sit at the bottom of the card, so they line up
    across cards whose addresses have different numbers of lines */
 .contact-grid .card .address + .small { margin-top: auto; }
@@ -820,19 +826,15 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   color: var(--text-faint);
   font-size: 0.85rem;
 }
-.site-footer .wrap-wide {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
+.site-footer .wrap-wide { display: block; }
+.footer-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .site-footer a { color: var(--text-dim); position: relative; }
 .site-footer a:hover { color: var(--link); }
 .site-footer span { text-wrap: balance; }
 .hero-eyebrow a { position: relative; }
 .acknowledgement {
   max-width: 42.9rem;
-  margin: 0;
+  margin: 28px 0 0;
   color: var(--text-faint);
   font-size: 0.85rem;
 }
@@ -894,8 +896,7 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   .lightbox-overlay { padding: 64px 8px 24px; }
 
   /* person cards become compact horizontal cards: small photo left, text right */
-  .person,
-  .people-grid-compact .person {
+  .person {
     display: grid;
     grid-template-columns: 96px 1fr;
     column-gap: 14px;

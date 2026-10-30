@@ -28,7 +28,7 @@ for html_path, md_name in PAGES:
     new_text, n = REGION_RE.subn(lambda m: new_region, text, count=1)
     if n != 1:
         raise SystemExit(f"{html_path}: <!-- PEOPLE:START --> ... <!-- PEOPLE:END --> markers not found")
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(new_text)
     count = sum(len(s["people"]) for s in page["sections"])
     print(f"Wrote {html_path} - {len(page['sections'])} sections, {count} people")
