@@ -38,7 +38,7 @@ def clusters_html(sections):
         blocks.append(
             '      <div class="cluster-group">\n'
             f'        <h2>{esc(sec["heading"])}</h2>\n'
-            '        <div class="card-grid card-grid-compact">\n'
+            '        <div class="card-grid card-grid-compact card-grid-rows">\n'
             + "\n".join(cluster_card(c) for c in sec["cards"])
             + "\n        </div>\n      </div>"
         )
