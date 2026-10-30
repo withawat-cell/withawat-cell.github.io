@@ -91,9 +91,6 @@ template = """<!DOCTYPE html>
 <meta property="og:image" content="https://thz-el.org/assets/img/group-photo-1.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="/assets/img/brand/header-bg.webp?v=x">
 <link rel="stylesheet" href="/assets/css/style.css?v=x">
 </head>

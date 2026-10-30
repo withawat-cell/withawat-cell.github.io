@@ -111,8 +111,16 @@ FOOTER_RE = re.compile(r'<footer class="site-footer">.*?</footer>', re.S)
 
 # any local css/js/image URL in a quoted attribute, with or without an old ?v=
 ASSET_RE = re.compile(
-    r'(["\'])(/assets/[^"\'?#\s]+\.(?:css|js|webp|png|jpe?g|gif|svg|ico))(?:\?v=[0-9A-Za-z]*)?\1'
+    r'(["\'])(/assets/[^"\'?#\s]+\.(?:css|js|webp|png|jpe?g|gif|svg|ico|woff2))(?:\?v=[0-9A-Za-z]*)?\1'
 )
+
+# Fonts are self-hosted (see scripts/fetch_fonts.py). Every page preloads the two files all text
+# uses, so text appears without waiting for the stylesheet to discover them. Any leftover Google
+# Fonts links are removed, and the preload lines are rewritten on every build.
+PRELOAD_FONTS = ["/assets/fonts/inter-latin.woff2", "/assets/fonts/ibm-plex-mono-400-latin.woff2"]
+GOOGLE_FONT_LINK_RE = re.compile(r'[ \t]*<link[^>]*(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>\n?')
+FONT_PRELOAD_RE = re.compile(r'[ \t]*<link rel="preload" href="/assets/fonts/[^>]*>\n?')
+STYLESHEET_LINK_RE = re.compile(r'<link rel="stylesheet" href="/assets/css/style\.css[^"]*">')
 _hashes = {}
 
 
@@ -144,6 +152,10 @@ def stamp_html(html, relpath):
         url = m.group(2) + (f"?v={v}" if v else "")
         return f"{m.group(1)}{url}{m.group(1)}"
 
+    html = GOOGLE_FONT_LINK_RE.sub("", html)
+    html = FONT_PRELOAD_RE.sub("", html)
+    preload = "".join(f'<link rel="preload" href="{p}" as="font" type="font/woff2" crossorigin>\n' for p in PRELOAD_FONTS)
+    html = STYLESHEET_LINK_RE.sub(lambda m: preload + m.group(0), html, count=1)
     html = ASSET_RE.sub(version, html)
 
     # Cloudflare Web Analytics (cookie-free), when a token is set. It is added only AFTER the
@@ -153,10 +165,12 @@ def stamp_html(html, relpath):
     token = analytics_token()
     if token and "</body>" in html:
         config = json.dumps({"token": token})
+        # Only on the live site: local previews and test runs must not send fake visits to the dashboard.
         beacon = (
-            "<script>window.addEventListener('load',function(){var s=document.createElement('script');"
+            "<script>if(/(^|\\.)thz-el\\.org$/.test(location.hostname)){"
+            "window.addEventListener('load',function(){var s=document.createElement('script');"
             "s.src='https://static.cloudflareinsights.com/beacon.min.js';s.defer=true;"
-            f"s.setAttribute('data-cf-beacon','{config}');document.body.appendChild(s);}});</script>\n"
+            f"s.setAttribute('data-cf-beacon','{config}');document.body.appendChild(s);}});}}</script>\n"
         )
         html = html.replace("</body>", beacon + "</body>", 1)
     return html
@@ -178,7 +192,7 @@ def page_files():
 
 
 CSS_URL_RE = re.compile(
-    r"""(url\(["']?)(/assets/[^"')?#\s]+\.(?:webp|png|jpe?g|gif|svg))(?:\?v=[0-9A-Za-z]*)?(["']?\))"""
+    r"""(url\(["']?)(/assets/[^"')?#\s]+\.(?:webp|png|jpe?g|gif|svg|woff2))(?:\?v=[0-9A-Za-z]*)?(["']?\))"""
 )
 
 
