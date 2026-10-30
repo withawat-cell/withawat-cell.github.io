@@ -56,7 +56,7 @@ One table per year, newest year first: keep each `## YEAR` heading, a blank line
 | P. Dechwechprasit, C. Fumeaux, W. Withayachumnankul, "Resonant cavities based on substrateless dielectric waveguide platform for terahertz integrated systems," *IEEE Region 10 Conference (TENCON)*, Hong Kong, 2022. | Invited | Online |
 | H. Lees, D. Headland, and W. Withayachumnankul, "Integrated, broadband, arbitrary-ratio power division based on air-silicon effective mediums," *IRMMW-THz*, Delft, 2022. | Keynote |  |
 | H. Lees, D. Headland, and W. Withayachumnankul, "Substrateless terahertz integrated platform: Low-cross-talk waveguide crossing," *International Symposium on Future Trends of Terahertz Semiconductor Technologies (TST)*, Kyoto, 2022. | [Invited](https://www.kyoto-thz-tst2022.com/) | Online |
-| W. Withayachumnankul, "Systematically designed broadband terahertz metasurfaces," *5th IEEE Workshop on Recent Advances in Photonics*, Mumbai, 2022. | [Invited](https://ieee-wrap.org/program/) | Online |
+| W. Withayachumnankul, "Systematically designed broadband terahertz metasurfaces," *5th IEEE Workshop on Recent Advances in Photonics*, Mumbai, 2022. | Invited | Online |
 
 ## 2021
 

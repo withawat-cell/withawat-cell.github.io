@@ -29,6 +29,8 @@ python scripts/build_all.py --serve    # ...and then preview at http://localhost
 
 `build_all.py` runs these steps in order and stops at the first failure: `build_publications.py`, `build_coursework.py`, `build_people.py`, `build_research.py`, `build_home.py`, `build_stats.py`, `build_legacy_redirects.py`, `build_sitemap.py`, `stamp_pages.py`, `validate.py`. Each generator produces complete pages on its own (including the stat boxes), so the order is not fragile; it just keeps the stamping and checking last.
 
+Every build also gives each local image its `width` and `height` (read from the file, so they follow when you replace it), adds the "Skip to content" link and the share-image size tags, and the validator keeps headings in order and every image described. None of this needs editing by hand.
+
 Cache-busting is automatic: `stamp_pages.py` adds `?v=<hash of the file>` to every local CSS, JS and image reference, including the images the stylesheet itself uses, so browsers re-download an asset exactly when it changes. There is nothing to bump by hand.
 
 The home page's "Lab history" stat strip and the stat boxes on the PhD theses and Visitors pages are generated from the same data (publication Recognition columns, people awards, coursework awards, theses, visitors), so they update on every build.
@@ -37,7 +39,7 @@ The home page's "Lab history" stat strip and the stat boxes on the PhD theses an
 
 | Check | What it catches | Where it runs |
 |---|---|---|
-| `scripts/validate.py` | a table row with the wrong number of cells, an unknown column or topic, a thumbnail, person photo, logo or thesis PDF that doesn't exist (**with exact upper/lower case**, since the live site is case-sensitive), a duplicate DOI, a link to a missing page, images over 150 KB (warning) | every `build_all.py` |
+| `scripts/validate.py` | a table row with the wrong number of cells, an unknown column or topic, a thumbnail, person photo, logo or thesis PDF that doesn't exist (**with exact upper/lower case**, since the live site is case-sensitive), a duplicate DOI, a link to a missing page, a heading level that jumps (h1 to h3), an image with no `alt`, a missing skip link, images over 150 KB (warning) | every `build_all.py` |
 | `scripts/selftest.py` | the build itself: it builds a scratch copy, applies deliberate mistakes and normal edits, and checks they are rejected or flow through to the pages and stats (`--quick` for a short run) | CI on every push (about 2 minutes) |
 | CI "out of date" check | committed pages that differ from a fresh build, for example a data edit that wasn't rebuilt | CI on every push |
 | `scripts/check_links.py` | broken internal links, checked through the running preview server | by hand |
@@ -51,7 +53,7 @@ research.html                Research clusters + gallery of experiments (cards g
 opportunities.html
 contact.html
 publications/                Generated from content-raw (do not edit by hand)
-  journal-articles.html       Topic + year filters (state kept in the URL), collapsible abstracts
+  journal-articles.html       Search box, topic + year filters (state kept in the URL), collapsible abstracts
   conference-presentations.html
   phd-theses.html
   codes.html
@@ -63,7 +65,7 @@ people/
 assets/
   css/style.css               Design system (dark, minimal, academic)
   js/main.js                  Nav toggle/dropdown, footer year, photo lightbox, copy buttons, abstract toggles
-  js/publications-filter.js   Journal articles topic/year filter (mirrored into ?topic=...&year=...)
+  js/publications-filter.js   Journal articles search box + topic/year filter (mirrored into ?q=...&topic=...&year=...)
   fonts/                      Inter and IBM Plex Mono (woff2, self-hosted; see fonts/README.txt for the licence)
   img/                        All images, already resized/compressed for the web (img/flags/ = the small flag icons)
   theses/                     PhD thesis PDFs (in Git LFS), linked from phd-theses and alumni
@@ -105,7 +107,7 @@ PDF theses in `assets/theses/` are stored in [Git LFS](https://git-lfs.github.co
 
 The build needs Python 3 only (no packages). `requirements.txt` lists Pillow for the optional image tools.
 
-**Speed:** the site loads nothing from other servers. Fonts and flags are self-hosted, images are small WebP files loaded lazily, the stylesheet and script are tiny single files, and the two fonts every page needs are preloaded. When you add a country (to `coauthor_countries` or `country_iso` in `site-config.json`), run `python scripts/fetch_flags.py` once to download its flag icons; `validate.py` reminds you if they are missing. The Cloudflare analytics script is the only outside resource, loads after the page, and runs only on thz-el.org (never on a local preview).
+**Speed:** the site loads nothing from other servers. Fonts and flags are self-hosted, images are small WebP files loaded lazily, the stylesheet and script are tiny single files, the two fonts every page needs are preloaded, and every image carries its size so the page does not jump while it loads. When you add a country (to `coauthor_countries` or `country_iso` in `site-config.json`), run `python scripts/fetch_flags.py` once to download its flag icons; `validate.py` reminds you if they are missing. The Cloudflare analytics script is the only outside resource, loads after the page, and runs only on thz-el.org (never on a local preview).
 
 ## Local preview
 

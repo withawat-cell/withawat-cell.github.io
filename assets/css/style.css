@@ -105,7 +105,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 
 a {
   color: var(--text);
@@ -118,6 +118,26 @@ a, nav.primary-nav button.nav-parent, .topic-filter-btn, .copy-btn, .abstract-to
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+/* "Skip to content": off-screen until a keyboard user tabs to it */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  z-index: 1000;
+  padding: 10px 16px;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--accent);
+  font-size: 0.9rem;
+  transform: translateY(-300%);
+}
+.skip-link:focus { transform: none; }
+main:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
 
 h1, h2, h3, h4 {
   font-weight: 600;
@@ -384,7 +404,8 @@ a.stat:hover .stat-num { color: var(--link); }
   border: 1px solid var(--line);
   padding: 24px;
 }
-.card h3 { margin-bottom: 0.4em; }
+/* card titles are h3 under a cluster heading (Research) and h2 on pages with no other sub-headings */
+.card h3, section.block .card h2 { font-size: 1.1rem; margin-bottom: 0.4em; }
 .card .small { margin-top: 0; }
 
 /* ---------- lists (publications, people) ---------- */
@@ -458,7 +479,7 @@ a.stat:hover .stat-num { color: var(--link); }
 }
 .pub-abstract[hidden] { display: none; }
 
-.year-heading {
+section.block .year-heading {
   font-family: var(--mono);
   color: var(--accent);
   font-size: 1.3rem;
@@ -467,7 +488,7 @@ a.stat:hover .stat-num { color: var(--link); }
   padding-bottom: 10px;
   border-bottom: 2px solid var(--accent-dim);
 }
-.year-heading:first-child { margin-top: 0; }
+section.block .year-heading:first-child { margin-top: 0; }
 
 /* year-heading sits first inside its own .year-block wrapper (for the year
    filter), so :first-child above always zeroes its margin -- space between
@@ -794,7 +815,7 @@ a.lightbox-link:hover img, a.lightbox-link:focus-visible img { filter: brightnes
 .note-sep { color: var(--text-faint); margin: 0 8px; }
 
 .topic-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.topic-filter-btn, .year-filter {
+.topic-filter-btn, .year-filter, .pub-search {
   font-family: var(--sans);
   font-size: 0.78rem;
   color: var(--text-dim);
@@ -809,7 +830,12 @@ a.lightbox-link:hover img, a.lightbox-link:focus-visible img { filter: brightnes
 .year-filter { padding: 0 10px; }
 .year-filter option { color: var(--text); background: var(--bg-raised); }
 .year-filter option:checked { background: var(--accent-dim); color: var(--text); }
-.year-filter:hover, .topic-filter-btn:hover { border-color: var(--text-faint); }
+.year-filter:hover, .topic-filter-btn:hover, .pub-search:hover { border-color: var(--text-faint); }
+/* the search box is the last chip in the row: same height, border and type size */
+.pub-search { padding: 0 14px; width: 210px; cursor: text; color: var(--text); -webkit-appearance: none; appearance: none; }
+.pub-search::placeholder { color: var(--text-dim); opacity: 1; }
+.search-status { font-size: 0.78rem; color: var(--text-faint); margin-left: 4px; }
+.no-results { color: var(--text-dim); margin: 28px 0 0; }
 .topic-filter-btn:hover { color: var(--text); }
 .topic-filter-btn[aria-pressed="true"], .year-filter.active {
   color: var(--bg);
