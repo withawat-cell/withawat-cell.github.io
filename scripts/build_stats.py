@@ -136,12 +136,13 @@ arc_fellow_count = len(arc_fellows)
 # (adds a network dependency that could break the build). So this one is
 # a hand-maintained list: update it on the rare occasion a paper is
 # published with a collaborator country not already listed here.
-# (ISO 3166-1 alpha-2 code, country name) -- flag images from flagcdn.com.
+# (ISO 3166-1 alpha-2 code, country name) -- flag images are kept in assets/img/flags/
+# (scripts/fetch_flags.py downloads them).
 INTL_COLLAB_COUNTRIES = [tuple(c) for c in CONFIG["coauthor_countries"]]
 
 def flags_html(countries):
     return "".join(
-        f'<img src="https://flagcdn.com/16x12/{code}.png" srcset="https://flagcdn.com/32x24/{code}.png 2x" '
+        f'<img src="/assets/img/flags/{code}.png" srcset="/assets/img/flags/{code}@2x.png 2x" '
         f'width="16" height="12" alt="{name}" title="{name}" loading="lazy">'
         for code, name in countries
     )

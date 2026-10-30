@@ -64,7 +64,8 @@ assets/
   css/style.css               Design system (dark, minimal, academic)
   js/main.js                  Nav toggle/dropdown, footer year, photo lightbox, copy buttons, abstract toggles
   js/publications-filter.js   Journal articles topic/year filter (mirrored into ?topic=...&year=...)
-  img/                        All images, already resized/compressed for the web
+  fonts/                      Inter and IBM Plex Mono (woff2, self-hosted; see fonts/README.txt for the licence)
+  img/                        All images, already resized/compressed for the web (img/flags/ = the small flag icons)
   theses/                     PhD thesis PDFs (in Git LFS), linked from phd-theses and alumni
 content-raw/                 The data the build reads (see the table above)
   publications-journal-articles.md, publications-conference-presentations.md,
@@ -91,6 +92,8 @@ scripts/
   check_external.py           External link check
   add_image.py                Resize and convert a local image to WebP (Pillow)
   fetch_images.py             Downloads + resizes images from a JSON manifest (Pillow)
+  fetch_fonts.py              Downloads the fonts into assets/fonts/ and writes their @font-face rules into style.css
+  fetch_flags.py              Downloads the flag icons for the countries in site-config.json into assets/img/flags/
 .github/workflows/
   deploy-pages.yml            On every push: rebuild, check, self-test, then publish only the site files
   check-links.yml             Weekly external link check
@@ -101,6 +104,8 @@ The whole repository, including the scripts and the `content-raw` data, is your 
 PDF theses in `assets/theses/` are stored in [Git LFS](https://git-lfs.github.com/) (some are 40-80MB). Run `git lfs install` once per machine before cloning, or `git lfs pull` afterwards, otherwise those files check out as small text pointers instead of the actual PDFs. LFS keeps every version of a file that was ever committed, which is why `.git/lfs` on your computer can be much larger than the current PDFs; `git lfs prune` frees the old local copies (they remain on GitHub).
 
 The build needs Python 3 only (no packages). `requirements.txt` lists Pillow for the optional image tools.
+
+**Speed:** the site loads nothing from other servers. Fonts and flags are self-hosted, images are small WebP files loaded lazily, the stylesheet and script are tiny single files, and the two fonts every page needs are preloaded. When you add a country (to `coauthor_countries` or `country_iso` in `site-config.json`), run `python scripts/fetch_flags.py` once to download its flag icons; `validate.py` reminds you if they are missing. The Cloudflare analytics script is the only outside resource, loads after the page, and runs only on thz-el.org (never on a local preview).
 
 ## Local preview
 

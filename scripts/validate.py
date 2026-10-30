@@ -167,6 +167,11 @@ with open(os.path.join(ROOT, "content-raw", "site-config.json"), encoding="utf-8
 for code, name in config["coauthor_countries"]:
     if not re.fullmatch(r"[a-z]{2}", code):
         err(f"site-config.json: bad country code {code!r} for {name}")
+for code in sorted({c for c, _n in config["coauthor_countries"]} | set(config["country_iso"].values())):
+    for fname in (f"{code}.png", f"{code}@2x.png"):
+        if not exists("assets/img/flags/" + fname):
+            err(f"flag assets/img/flags/{fname} is missing (run: python scripts/fetch_flags.py)")
+
 
 # ---------------------------------------------------------------- built pages
 LINK_ATTR_RE = re.compile(r'(?:href|src)="(/[^"#?]*)')

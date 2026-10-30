@@ -22,9 +22,35 @@
     });
   }
 
+  // With a mouse on a wide screen, hovering a menu title opens its submenu (touch and keyboard
+  // still use click / Enter). A short delay on leaving lets the pointer cross the gap.
+  var hoverMenus = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 61.3125em)");
+
+  function setOpen(li, open) {
+    li.classList.toggle("open", open);
+    var btn = li.querySelector("button.nav-parent");
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  document.querySelectorAll("li.has-children").forEach(function (li) {
+    var timer = null;
+    li.addEventListener("mouseenter", function () {
+      if (!hoverMenus.matches) return;
+      clearTimeout(timer);
+      closeAllSubmenus(li);
+      setOpen(li, true);
+    });
+    li.addEventListener("mouseleave", function () {
+      if (!hoverMenus.matches) return;
+      timer = setTimeout(function () { setOpen(li, false); }, 150);
+    });
+  });
+
   document.querySelectorAll("button.nav-parent").forEach(function (btn) {
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", function (e) {
       var li = btn.closest("li.has-children");
+      // a mouse click on a title the pointer is already hovering must not close it again
+      if (hoverMenus.matches && e.detail > 0 && li.classList.contains("open")) return;
       var willOpen = !li.classList.contains("open");
       closeAllSubmenus(willOpen ? li : null);
       li.classList.toggle("open", willOpen);

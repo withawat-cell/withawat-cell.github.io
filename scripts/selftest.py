@@ -188,6 +188,12 @@ def scenarios(sb, quick):
         footers.add(ftr)
     check(f"all {len(pages)} pages share one header and one footer, each marking its own page once", len(headers) == 1 and len(footers) == 1 and current_ok)
     check("no page keeps an inline style", all("style=\"" not in sb.read(p) for p in pages))
+    outside = [p for p in pages if re.search(r"fonts\.googleapis|fonts\.gstatic|flagcdn", sb.read(p))]
+    check("no page loads anything from Google Fonts or flagcdn (fonts and flags are self-hosted)", not outside, str(outside))
+    css_text = sb.read("assets/css/style.css")
+    preloads = {p: re.findall(r'rel="preload" href="(/assets/fonts/[^"]+)"', sb.read(p)) for p in pages}
+    check("every page preloads the two main fonts, at exactly the address the stylesheet uses (so each downloads once)",
+          all(len(v) == 2 and all(h in css_text for h in v) for v in preloads.values()), str({p: v for p, v in preloads.items() if len(v) != 2}))
 
     # ---------------------------------------------------------- staging (what gets published)
     code, out = sb.run("scripts/stage_site.py", os.path.join(sb.root, "_site"))
@@ -217,6 +223,7 @@ def scenarios(sb, quick):
     counts = [sb.read(p).count(tag) for p in pages]
     check("analytics: a token adds the after-load tag exactly once per page, also after rebuilding", all(c == 1 for c in counts) and "abc123" in sb.read("index.html") and "addEventListener('load'" in sb.read("index.html"), str(counts))
     check("analytics: the redirect stub never gets it", tag not in sb.read("home/index.html"))
+    check("analytics: it only runs on thz-el.org, never on a local preview", all("thz-el\\.org$/.test(location.hostname)" in sb.read(p) for p in pages))
     sb.edit(cfg, '"cloudflare_analytics_token": "abc123"', '"cloudflare_analytics_token": ""')
     sb.build()
     check("analytics: an empty token removes it everywhere", all(tag not in sb.read(p) for p in pages))
@@ -275,6 +282,7 @@ def scenarios(sb, quick):
     must_fail("a coursework note linking to a missing page", lambda: set_cell(sb, COURSE, "Notes", "See [x](/nowhere.html)"), "doesn't exist")
     must_fail("a missing research card image", lambda: sb.write("content-raw/research-clusters.md", re.sub(r"- Image: \S+", "- Image: no-such.webp", sb.read("content-raw/research-clusters.md"), count=1)), "does not exist")
     must_fail("a missing home logo file", lambda: set_cell(sb, "content-raw/home-logos.md", "Logo", "no-such.svg"), "does not exist")
+    must_fail("a missing flag image", lambda: os.remove(os.path.join(sb.root, "assets", "img", "flags", "jp.png")), "is missing")
     must_fail("a file name with the wrong upper/lower case (fine on Windows, broken on the live Linux site)", lambda: _upper_logo(sb), "does not exist")
     must_fail("an unknown research field", lambda: sb.write("content-raw/research-clusters.md", sb.read("content-raw/research-clusters.md").replace("- Alt:", "- Alt text:", 1)), "unknown field")
 
