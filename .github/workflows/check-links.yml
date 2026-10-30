@@ -1,0 +1,51 @@
+name: Check external links
+
+# Every Monday: look for links on the site that no longer exist (404/410, or the
+# address is gone) and open a GitHub issue listing them. Sites that block automated
+# checks, such as LinkedIn, are reported as "unverified" and never count as dead.
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Check the links
+        id: check
+        continue-on-error: true
+        run: python scripts/check_external.py --report link-report.md
+
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-report
+          path: link-report.md
+          if-no-files-found: ignore
+
+      - name: Open or update an issue when links are dead
+        if: steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Dead external links on the website"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file link-report.md
+          else
+            gh issue create --title "$title" --body-file link-report.md
+          fi

@@ -35,6 +35,6 @@ for name, rows in groups.items():
     text, n = pattern.subn(lambda m: new, text, count=1)
     if n != 1:
         raise SystemExit(f"index.html: <!-- LOGOS:{name}:START --> ... <!-- LOGOS:{name}:END --> markers not found")
-with open(PAGE, "w", encoding="utf-8") as f:
+with open(PAGE, "w", encoding="utf-8", newline="\n") as f:
     f.write(text)
 print(f"Wrote index.html logos - {len(groups['association'])} associations, {len(groups['patrons'])} patrons")

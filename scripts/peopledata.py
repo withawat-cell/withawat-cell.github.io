@@ -151,7 +151,7 @@ def sections_html(page):
     for sec in page["sections"]:
         parts = ['  <section class="block">', '    <div class="wrap-wide">']
         if sec["intro"]:
-            parts.append(f'      <p class="small" style="margin-bottom:24px;">{inline_html(sec["intro"])}</p>')
+            parts.append(f'      <p class="small section-intro">{inline_html(sec["intro"])}</p>')
         if sec["heading"]:
             parts.append(f'      <h2>{html.escape(sec["heading"], quote=False)}</h2>')
         parts.append(f'      <div class="people-grid people-grid-{page["grid"]}">')

@@ -24,6 +24,7 @@ STEPS = [
     "build_home.py",
     "build_stats.py",
     "build_legacy_redirects.py",
+    "build_sitemap.py",
     "stamp_pages.py",
     "validate.py",
 ]

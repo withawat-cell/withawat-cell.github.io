@@ -4,18 +4,13 @@ import html
 
 import shell
 from peopledata import coursework_rows, split_items
+from textutil import md_inline
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "content-raw", "people-coursework.md")
 OUT = os.path.join(ROOT, "people", "coursework.html")
 
 year_blocks = coursework_rows()
-
-def md_inline(s):
-    s = s.strip()
-    s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
-    s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
-    return s
 
 def format_notes(awards, notes):
     """Award items become gold chips, Notes items plain text; all separated by bullets."""
@@ -151,7 +146,7 @@ page = (
     .replace("{ieee_awards}", str(ieee_award_count))
     .replace("{first_author_papers}", str(len(doi_set)))
 )
-with open(OUT, "w", encoding="utf-8") as f:
+with open(OUT, "w", encoding="utf-8", newline="\n") as f:
     f.write(shell.stamp_html(page, "people/coursework.html"))
 
 print("Wrote", OUT, "-", len(year_blocks), "year sections,", total, "students,",

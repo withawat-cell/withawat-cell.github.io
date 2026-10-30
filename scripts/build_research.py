@@ -73,7 +73,7 @@ with open(PAGE, encoding="utf-8") as f:
     text = f.read()
 text = replace_region(text, "CLUSTERS", clusters_html(clusters), "      ")
 text = replace_region(text, "GALLERY", "\n".join(gallery_card(c) for sec in gallery for c in sec["cards"]), "        ")
-with open(PAGE, "w", encoding="utf-8") as f:
+with open(PAGE, "w", encoding="utf-8", newline="\n") as f:
     f.write(text)
 
 n_cards = sum(len(s["cards"]) for s in clusters)

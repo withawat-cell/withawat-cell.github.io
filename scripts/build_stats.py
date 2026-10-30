@@ -7,7 +7,8 @@ people lists, coursework table, theses table) and site-config.json, plus the
 ARC grant codes written in the home page's own "Lab history" paragraph.
 Nothing is read back from the generated pages, so the order only matters in
 that the other build scripts reset the stat placeholders first
-(scripts/build_all.py runs everything in the right order).
+(scripts/build_all.py runs everything). Importing this module only computes
+the numbers; run it directly to write them into the pages.
 """
 import json
 import os
@@ -223,7 +224,7 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-flags">{intl_collab_flags}</span>
         </a>
       </div>
-      <p class="small" style="margin-top:10px;">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
+      <p class="small stat-footnote">*Excludes {PRE_LAB_JOURNAL_COUNT} journal articles published prior to the lab's establishment in 2018.</p>"""
 
 def write_stats_block(rel_path, block_html):
     """Replace the content between STATS:START/STATS:END markers in a
@@ -241,10 +242,9 @@ def write_stats_block(rel_path, block_html):
     )
     if n != 1:
         raise SystemExit(f"STATS:START/STATS:END markers not found (or found more than once) in {rel_path}")
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(new_html)
 
-write_stats_block("index.html", stats_html)
 
 # ---------- write into publications/phd-theses.html ----------
 
@@ -258,7 +258,6 @@ theses_stats_html = f"""      <div class="stats-row">
           <span class="stat-label">University Doctoral Research Medals</span>
         </a>
       </div>"""
-write_stats_block("publications/phd-theses.html", theses_stats_html)
 
 # ---------- write into people/visitors.html ----------
 
@@ -269,18 +268,25 @@ visitors_stats_html = f"""      <div class="stats-row">
           <span class="stat-flags">{visitor_flags}</span>
         </div>
       </div>"""
-write_stats_block("people/visitors.html", visitors_stats_html)
 
-print(
-    f"Wrote stats to index.html: {journal_total} journal articles "
-    f"({journal_recognitions} recognitions), {conf_recognitions} conference recognitions, "
-    f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
-    f"{medal_count} University Doctoral Research Medals, "
-    f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "
-    f"{len(INTL_COLLAB_COUNTRIES)} international collaborator countries"
-)
-print(
-    f"Wrote stats to publications/phd-theses.html: {commendation_count} commendations, "
-    f"{medal_count} medals"
-)
-print(f"Wrote stats to people/visitors.html: {len(VISITOR_COUNTRIES)} visitor countries")
+def main():
+    write_stats_block("index.html", stats_html)
+    write_stats_block("publications/phd-theses.html", theses_stats_html)
+    write_stats_block("people/visitors.html", visitors_stats_html)
+    print(
+        f"Wrote stats to index.html: {journal_total} journal articles "
+        f"({journal_recognitions} recognitions), {conf_recognitions} conference recognitions, "
+        f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
+        f"{medal_count} University Doctoral Research Medals, "
+        f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "
+        f"{len(INTL_COLLAB_COUNTRIES)} international collaborator countries"
+    )
+    print(
+        f"Wrote stats to publications/phd-theses.html: {commendation_count} commendations, "
+        f"{medal_count} medals"
+    )
+    print(f"Wrote stats to people/visitors.html: {len(VISITOR_COUNTRIES)} visitor countries")
+
+
+if __name__ == "__main__":
+    main()

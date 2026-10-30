@@ -1,0 +1,3 @@
+# Only needed for the optional image tools (scripts/add_image.py and scripts/fetch_images.py).
+# The site build, validation, self-test and link checkers use the Python standard library only.
+Pillow>=10

@@ -3,8 +3,10 @@ import os
 import json
 import html
 
+import build_stats
 import shell
 from pubdata import TOPIC_LABELS, read_tables, read_flat_table, has_recognition
+from textutil import md_inline
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -46,12 +48,6 @@ def linkify_known(notes):
     # text) becomes a plain link using the URL itself as the link text
     notes = re.sub(r"(?<!\]\()(https?://[^\s;,()]+)", r"[\1](\1)", notes)
     return notes
-
-def md_inline(s):
-    s = s.strip()
-    s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
-    s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
-    return s
 
 TRIM_PREFIXES = ["One of the "]
 MAX_PILL_LEN = 200
@@ -118,7 +114,7 @@ def pills_html(pills):
         else:
             inner = label
         spans.append(f'<span class="tag tag-award"{title_attr}>{inner}</span>')
-    return '<span class="tag-row" style="margin-top:6px;">' + "".join(spans) + "</span>"
+    return '<span class="tag-row tag-row-pills">' + "".join(spans) + "</span>"
 
 # ---------- Journal articles ----------
 
@@ -323,7 +319,7 @@ def build_conference():
             pills = recognition_pills(row["recognition"])
             rest_note = notes_html(row["notes"])
             meta_html = f'<p class="entry-meta">{rest_note}</p>' if rest_note else ""
-            inline_pills = pills_html(pills).replace('<span class="tag-row" style="margin-top:6px;">', '<span class="tag-row tag-row-inline">')
+            inline_pills = pills_html(pills).replace('<span class="tag-row tag-row-pills">', '<span class="tag-row tag-row-inline">')
             entries.append(f'''      <li class="pub-entry">
         <div class="entry-body">
           <p class="entry-title">{citation_html} {inline_pills}</p>
@@ -439,14 +435,14 @@ journal_hero_stats = f'''
           <span class="stat-label">Invited Papers</span>
         </div>
       </div>'''
-journal_body = f'''      <div class="topic-filter" role="group" aria-label="Filter by topic" style="align-items:center;">
+journal_body = f'''      <div class="topic-filter" role="group" aria-label="Filter by topic">
 {topic_filter_buttons}
         <select id="journal-year-filter" class="year-filter" aria-label="Year">
           <option value="all">All years</option>
 {year_filter_options}
         </select>
       </div>
-      <div style="margin-top:24px;">
+      <div class="pub-lists">
 {journal_html}
       </div>'''
 out = page(
@@ -458,7 +454,7 @@ out = page(
     extra_scripts=f'\n<script src="/assets/js/publications-filter.js?v=x"></script>',
     extra_hero=journal_hero_stats,
 )
-with open(os.path.join(pub_dir, "journal-articles.html"), "w", encoding="utf-8") as f:
+with open(os.path.join(pub_dir, "journal-articles.html"), "w", encoding="utf-8", newline="\n") as f:
     f.write(out)
 
 # Conference presentations
@@ -469,26 +465,12 @@ out = page(
     "Invited talks, keynotes, and presentations at international conferences and workshops.",
     conference_html,
 )
-with open(os.path.join(pub_dir, "conference-presentations.html"), "w", encoding="utf-8") as f:
+with open(os.path.join(pub_dir, "conference-presentations.html"), "w", encoding="utf-8", newline="\n") as f:
     f.write(out)
 
 # PhD theses
-# Commendation/Medal counts are computed from the People pages by
-# build_stats.py (the site's single source of truth for award counts) and
-# written between the markers below -- this is just a placeholder shell.
-theses_hero_stats = '''
-      <!-- STATS:START -->
-      <div class="stats-row">
-        <div class="stat">
-          <span class="stat-num">0</span>
-          <span class="stat-label">Commendations for Doctoral Thesis Excellence</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num">0</span>
-          <span class="stat-label">University Doctoral Research Medals</span>
-        </div>
-      </div>
-      <!-- STATS:END -->'''
+# Commendation/Medal counts come from build_stats.py (computed from the people data).
+theses_hero_stats = "\n      <!-- STATS:START -->\n" + build_stats.theses_stats_html + "\n      <!-- STATS:END -->"
 out = page(
     "phd-theses", "PhD Theses",
     "PhD theses produced at the Terahertz Engineering Laboratory, Adelaide University.",
@@ -497,7 +479,7 @@ out = page(
     theses_html,
     extra_hero=theses_hero_stats,
 )
-with open(os.path.join(pub_dir, "phd-theses.html"), "w", encoding="utf-8") as f:
+with open(os.path.join(pub_dir, "phd-theses.html"), "w", encoding="utf-8", newline="\n") as f:
     f.write(out)
 
 # Codes
@@ -508,7 +490,7 @@ out = page(
     "Research software developed at the Terahertz Engineering Laboratory.",
     codes_html,
 )
-with open(os.path.join(pub_dir, "codes.html"), "w", encoding="utf-8") as f:
+with open(os.path.join(pub_dir, "codes.html"), "w", encoding="utf-8", newline="\n") as f:
     f.write(out)
 
 print(f"Wrote publications/journal-articles.html ({journal_total} articles, {journal_recognitions} recognitions, {journal_invited} invited), conference-presentations.html, phd-theses.html, codes.html")
