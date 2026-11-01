@@ -73,7 +73,7 @@ Grid: wide
 - Email: bryce.chung@adelaide.edu.au
 - LinkedIn: https://au.linkedin.com/in/bryceachung
 
-## Postgraduate researchers
+## PhD candidates
 
 ### Mariam Abdullah
 - Photo: mariam-abdullah.webp
@@ -154,6 +154,16 @@ Grid: wide
 - Email: taegyun.noh@adelaide.edu.au
 - LinkedIn: https://www.linkedin.com/in/taegyun-noh-9558a3258/
 
+### Luca Sander-Bowness
+- Photo: luca-sb.webp
+- Role: PhD student, 2026–
+- Info: Supervisors: Withawat, [Sakib Quader](https://researchers.adelaide.edu.au/profile/sakib.quader)
+- Info: Research area: Terahertz cameras
+- Email: luca.sander-bowness@adelaide.edu.au
+- LinkedIn: https://www.linkedin.com/in/luca-sander-bowness/
+
+## Master's students
+
 ### Tin Chu Ng
 - Photo: tinchu-ng.webp
 - Role: MPhil student, 2026–
@@ -169,10 +179,8 @@ Grid: wide
 - Info: Research area: Radar
 - Email: benjamin.e.brown@adelaide.edu.au
 
-### Luca Sander-Bowness
-- Photo: luca-sb.webp
-- Role: PhD student, 2026–
-- Info: Supervisors: Withawat, [Sakib Quader](https://researchers.adelaide.edu.au/profile/sakib.quader)
-- Info: Research area: Terahertz cameras
-- Email: luca.sander-bowness@adelaide.edu.au
-- LinkedIn: https://www.linkedin.com/in/luca-sander-bowness/
+### Tanakorn Rojnirunchai
+- Photo: tanakorn-rojnirunchai.webp
+- Role: Master of Research, 2026–
+- Info: Supervisors: Withawat, [Daniel Headland](https://researchers.adelaide.edu.au/profile/daniel.headland)
+- Info: Research area: Antenna measurement
