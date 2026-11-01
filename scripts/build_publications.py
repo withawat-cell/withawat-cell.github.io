@@ -485,7 +485,7 @@ with open(os.path.join(pub_dir, "phd-theses.html"), "w", encoding="utf-8", newli
 # Codes
 out = page(
     "codes", "Codes",
-    "Research software from the Terahertz Engineering Laboratory, Adelaide University: a wireless communication chain simulator and CST simulation files for substrateless terahertz waveguides.",
+    "Research software from the Terahertz Engineering Laboratory, Adelaide University: a wireless communication chain simulator, CST simulation scripts for substrateless terahertz waveguides, and a modal-index notebook for perforated silicon slabs.",
     "Publications", "Codes",
     "Research software developed at the Terahertz Engineering Laboratory.",
     codes_html,

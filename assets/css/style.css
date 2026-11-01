@@ -911,6 +911,8 @@ section.block .cluster-group > h2 { margin-bottom: 20px; }
   height: auto;
   aspect-ratio: 16 / 9;
 }
+/* a figure that must not be cropped keeps its own proportions */
+.card-grid:not(.card-grid-compact) .card img.img-natural { aspect-ratio: auto; }
 /* each reference in a card is its own hanging-indent block */
 .cite { display: block; margin-top: 0.7em; padding-left: 1.2em; text-indent: -1.2em; }
 .cite:first-child { margin-top: 0; }
