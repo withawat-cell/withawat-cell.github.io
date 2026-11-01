@@ -20,7 +20,7 @@ Grid: wide
 - Photo: withawat.webp
 - Profile: https://researchers.adelaide.edu.au/profile/withawat.withayachumnankul
 - Role: Group Leader
-- Awards: IEEE Fellow; Optica Fellow; ARC Future Fellow
+- Awards: 2026 IEEE Fellow; 2024 Optica Fellow; 2025 ARC Future Fellow
 - Info: Track Editor, [IEEE Trans. Terahertz Science and Technology](https://mtt.org/publications/terahertz-science-technology/) (2021–)
 - Email: withawat@adelaide.edu.au
 - Scholar: https://scholar.google.com/citations?user=DPxhjeUAAAAJ&hl=en
