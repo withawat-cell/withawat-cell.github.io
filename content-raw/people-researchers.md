@@ -162,7 +162,7 @@ Grid: wide
 - Email: luca.sander-bowness@adelaide.edu.au
 - LinkedIn: https://www.linkedin.com/in/luca-sander-bowness/
 
-## Master's students
+## Master's by research students
 
 ### Tin Chu Ng
 - Photo: tinchu-ng.webp
