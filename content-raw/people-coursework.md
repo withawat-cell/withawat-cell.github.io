@@ -5,21 +5,21 @@ One table per year, newest first. Columns: Name | Year(s) | Area | Awards | Note
 ## 2026
 | Name | Year(s) | Area | Awards | Notes |
 |---|---|---|---|---|
-| Menh Le | 2026– | Components |  |  |
-| Scott Gillespie | 2026– | Components |  |  |
-| Edward Spanner | 2026– | Radar |  |  |
-| Peter Jackson | 2026– | Radar |  |  |
-| Ashleigh Preiss | 2026– | Radar | IEEE Microwave Theory and Technology Society Undergraduate/Pre-graduate Scholarship – 2026 |  |
+| Menh Le | 2026 | Components |  |  |
+| Scott Gillespie | 2026 | Components |  |  |
+| Edward Spanner | 2026 | Radar | 2026 Defence and Security Institute Ingenuity Prize |  |
+| Peter Jackson | 2026 | Radar | 2026 Defence and Security Institute Ingenuity Prize |  |
+| Ashleigh Preiss | 2026 | Radar | IEEE Microwave Theory and Technology Society Undergraduate/Pre-graduate Scholarship – 2026; 2026 Defence and Security Institute Ingenuity Prize |  |
 | Dimmy Martincic | 2026 | Electronics |  |  |
 | Chongkai Huang | 2026– | Biomedical |  |  |
 
 ## 2025
 | Name | Year(s) | Area | Awards | Notes |
 |---|---|---|---|---|
-| Oliver Moors | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |  |
-| Joshua Vidale | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |  |
-| Jonathan Miteff | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |  |
-| Jacob Maegraith | 2025 | Imaging | First Prize in Electrical and Electronic Engineering |  |
+| Oliver Moors | 2025 | Imaging | 2025 Ingenuity First Prize in Electrical and Electronic Engineering |  |
+| Joshua Vidale | 2025 | Imaging | 2025 Ingenuity First Prize in Electrical and Electronic Engineering |  |
+| Jonathan Miteff | 2025 | Imaging | 2025 Ingenuity First Prize in Electrical and Electronic Engineering |  |
+| Jacob Maegraith | 2025 | Imaging | 2025 Ingenuity First Prize in Electrical and Electronic Engineering |  |
 | Sam Heathershaw | 2025 | Imaging |  |  |
 | Penglin Xiong | 2025 | Devices |  |  |
 | Zhijian Zhang | 2025 | Devices |  |  |
@@ -28,7 +28,7 @@ One table per year, newest first. Columns: Name | Year(s) | Area | Awards | Note
 | Ryan Rutherford | 2025 | Imaging |  |  |
 | Vy Huynh | 2025 | Sensing |  |  |
 | Mariam Abd-Alghany | 2025 | Sensing |  |  |
-| Ingrid Sansanee Asenstorfer | 2025– | NDE, radar | [IEEE Antennas and Propagation Society Eugene F. Knott Memorial Pre-Doctoral Research Grant](https://ieeeaps.org/awards/ap-s-student-awards/ap-s-doctoral-and-pre-doctoral-research-grant-recipients) |  |
+| Ingrid Sansanee Asenstorfer | 2025–2026 | NDE, radar | [IEEE Antennas and Propagation Society Eugene F. Knott Memorial Pre-Doctoral Research Grant](https://ieeeaps.org/awards/ap-s-student-awards/ap-s-doctoral-and-pre-doctoral-research-grant-recipients); 2026 Defence and Security Institute Ingenuity Prize |  |
 | Charles Newbold | 2025 | Optimisation |  |  |
 
 ## 2024

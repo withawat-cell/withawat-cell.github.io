@@ -33,6 +33,7 @@ def slug(name):
 sections = []
 total = 0
 ieee_award_count = 0
+ingenuity_prizes = set()
 doi_set = set()
 for year, rows in year_blocks:
     trs = []
@@ -45,8 +46,14 @@ for year, rows in year_blocks:
         for item in split_items(awards):
             if "IEEE" in item and "First author" not in item:
                 ieee_award_count += 1
+        # one Ingenuity prize is often shared by a team, so count each distinct
+        # prize (the year is part of the award text) once, not once per winner
+        ingenuity_prizes.update(
+            re.sub(r"\s+", " ", item).strip().lower()
+            for item in split_items(awards) if "ingenuity" in item.lower()
+        )
         doi_set.update(DOI_RE.findall(awards + " " + notes))
-        prize = "First Prize" in awards or "1st Prize" in awards
+        prize = "First Prize" in awards or "1st Prize" in awards or "Ingenuity Prize" in awards
         tr_cls = ' class="prize-row"' if prize else ""
         trs.append(f"          <tr{tr_cls}><td>{md_inline(name)}</td><td>{html.escape(yrs)}</td><td>{html.escape(area)}</td><td class=\"small\">{format_notes(awards, notes)}</td></tr>")
         photo_slug = slug(name)
@@ -115,6 +122,10 @@ template = """<!DOCTYPE html>
           <span class="stat-label">IEEE AP/MTT Grants</span>
         </div>
         <div class="stat">
+          <span class="stat-num">{ingenuity_prizes}</span>
+          <span class="stat-label">Ingenuity Prizes</span>
+        </div>
+        <div class="stat">
           <span class="stat-num">{first_author_papers}</span>
           <span class="stat-label">First-Author<br>Journal Articles</span>
         </div>
@@ -141,10 +152,11 @@ page = (
     template.replace("{body}", body)
     .replace("{total}", str(total))
     .replace("{ieee_awards}", str(ieee_award_count))
+    .replace("{ingenuity_prizes}", str(len(ingenuity_prizes)))
     .replace("{first_author_papers}", str(len(doi_set)))
 )
 with open(OUT, "w", encoding="utf-8", newline="\n") as f:
     f.write(shell.stamp_html(page, "people/coursework.html"))
 
 print("Wrote", OUT, "-", len(year_blocks), "year sections,", total, "students,",
-      ieee_award_count, "IEEE awards,", len(doi_set), "first-author journal articles")
+      ieee_award_count, "IEEE awards,", len(ingenuity_prizes), "Ingenuity prizes,", len(doi_set), "first-author journal articles")
