@@ -327,7 +327,7 @@ def scenarios(sb, quick):
     sb.reset()
     code, out = sb.build()
     base = sb.read("index.html")
-    n_j, n_jr, n_c, n_t = stat(base, "Journal Articles"), int(re.search(r"(\d+) Recognitions", base).group(1)), stat(base, "Conference Recognitions"), stat(base, "PhD Theses")
+    n_j, n_jr, n_c, n_t = stat(base, "Journal Articles"), int(re.search(r"(\d+) Recognitions", base).group(1)), stat(base, "Conference Recognitions"), stat(base, "PhD Graduates")
     n_fellows, n_ieee, n_medal = stat(base, "ARC Fellows"), stat(base, "IEEE AP"), stat(base, "University Doctoral Research Medals")
     year = re.search(r"^## (\d{4})$", sb.read(JOURNAL), re.M).group(1)
     insert_row(sb, JOURNAL, {"Citation": f'T. Test and W. Withayachumnankul, "A brand new paper," *Test Journal*, {year}.', "DOI / Link": "https://doi.org/10.0000/selftest.1",
@@ -339,7 +339,7 @@ def scenarios(sb, quick):
     idx, jr = sb.read("index.html"), sb.read("publications/journal-articles.html")
     check("hand-added journal, conference and thesis rows build and validate", code == 0, out)
     check("stats follow: journal +1, its recognitions +1, conference +1, theses +1",
-          (stat(idx, "Journal Articles"), int(re.search(r"(\d+) Recognitions", idx).group(1)), stat(idx, "Conference Recognitions"), stat(idx, "PhD Theses")) == (n_j + 1, n_jr + 1, n_c + 1, n_t + 1))
+          (stat(idx, "Journal Articles"), int(re.search(r"(\d+) Recognitions", idx).group(1)), stat(idx, "Conference Recognitions"), stat(idx, "PhD Graduates")) == (n_j + 1, n_jr + 1, n_c + 1, n_t + 1))
     check("the new rows show up: Special Issue as a plain note, (Online) after the conference citation, no thumbnail needed",
           "A brand new paper" in jr and "Special Issue on Testing" in jr and "A new talk" in sb.read("publications/conference-presentations.html") and "(Online)" in sb.read("publications/conference-presentations.html") and "A Test Thesis" in sb.read("publications/phd-theses.html"))
     sb.reset()

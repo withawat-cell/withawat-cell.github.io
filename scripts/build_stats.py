@@ -201,7 +201,7 @@ stats_html = f"""      <div class="stats-row">
         </a>
         <a class="stat" href="/publications/phd-theses.html">
           <span class="stat-num">{theses_total}</span>
-          <span class="stat-label">PhD Theses</span>
+          <span class="stat-label">PhD Graduates</span>
         </a>
         <div class="stat">
           <span class="stat-num">{ieee_grant_count}</span>
