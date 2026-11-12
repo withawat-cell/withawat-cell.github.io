@@ -199,7 +199,7 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-num">{conf_recognitions}</span>
           <span class="stat-label">Conference Recognitions</span>
         </a>
-        <a class="stat" href="/publications/phd-theses.html">
+        <a class="stat" href="/people/alumni.html">
           <span class="stat-num">{theses_total}</span>
           <span class="stat-label">PhD Graduates</span>
         </a>
