@@ -133,7 +133,7 @@ def card_html(p):
             rows.append(f'          <p class="person-meta">{inline_html(value)}</p>')
         else:
             notes = [f'<span class="tag-note">{inline_html(a.strip())}</span>' for a in value.split(";") if a.strip()]
-            rows.append('          <p class="person-meta awards-line">' + ' <span class="note-sep">&bull;</span> '.join(notes) + "</p>")
+            rows.append('          <p class="person-meta">' + ' <span class="note-sep">&bull;</span> '.join(notes) + "</p>")
     links = []
     for key in ("email", "scholar", "linkedin"):
         if p.get(key):
