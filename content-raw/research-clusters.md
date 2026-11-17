@@ -7,7 +7,7 @@ Research clusters on the Research page. "## Heading" is a cluster; "### Title" i
 After editing, run: python scripts/build_all.py
 -->
 
-## Terahertz Components
+## Terahertz components
 
 ### Metasurfaces for full control of free-space waves
 - Image: metasurfaces.webp
@@ -18,7 +18,7 @@ After editing, run: python scripts/build_all.py
 ### High-efficiency broadband terahertz antennas & lenses
 - Image: antennas.webp
 - Alt: Broadband terahertz antenna and lens hardware
-- Text: We design beamforming devices to meet demanding requirements in bandwidth, efficiency, directivity, compactness, and fabrication complexity. A key consideration is broadband operation, capitalising on the vast bandwidth available at terahertz frequencies, while mitigating the increasing ohmic losses that limit radiation efficiency. Our research focuses on unconventional antenna and lens designs that enable practical terahertz wireless and imaging applications.
+- Text: We design beamforming devices to meet demanding requirements in bandwidth, efficiency, directivity, compactness, and fabrication complexity. A key consideration is broadband operation, capitalising on the wide bandwidth available at terahertz frequencies, while mitigating the increasing ohmic losses that limit radiation efficiency. Our research focuses on unconventional antenna and lens designs that enable practical terahertz wireless and imaging applications.
 - Tags: all-dielectric antennas; leaky-wave antennas; broadband; high gain; effective medium; GRIN optics; 3D printing; beam steering; free-form optics
 
 ### Substrateless integrated platform for terahertz frontends
@@ -27,14 +27,14 @@ After editing, run: python scripts/build_all.py
 - Text: Terahertz technology is shifting from free-space optics towards integration, but high losses in metallic and dielectric materials rule out a direct adoption of conventional integrated-circuit technologies. We originated a substrateless platform of high-resistivity silicon based on effective medium theory, reaching arbitrary permittivity values with structural simplicity, near-zero dissipation, and fractional bandwidth exceeding 40%.
 - Tags: terahertz integration; dielectric waveguides; photonic crystals; effective medium; multiplexers; filters; modulators
 
-## Terahertz Systems
+## Terahertz systems
 
 ### Quadrature homodyne detection
 - Image: homodyne.webp
 - Alt: Quadrature homodyne detection system
 - Text: Our terahertz sensing architectures provide robustness, high-sensitivity, and real-time response. Quadrature homodyne detection is central to this approach, suppressing phase noise while recovering both amplitude and phase responses of the target. This capability enables sensitive terahertz measurements ranging from nanoscale vibration to non-contact probing of active semiconductor devices.
 
-## Terahertz Applications
+## Terahertz applications
 
 ### 6G communications and beyond
 - Image: 6g.webp
