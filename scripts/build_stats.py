@@ -10,6 +10,7 @@ that the other build scripts reset the stat placeholders first
 (scripts/build_all.py runs everything). Importing this module only computes
 the numbers; run it directly to write them into the pages.
 """
+import html
 import json
 import os
 import re
@@ -31,6 +32,14 @@ journal_recognitions = sum(1 for r in journal_rows if has_recognition(r))
 
 conf_rows = [r for _, rows in read_tables("publications-conference-presentations.md") for r in rows]
 conf_recognitions = sum(1 for r in conf_rows if has_recognition(r))
+
+# Talks given by invitation: a Recognition cell naming Invited, Keynote or
+# (semi-)plenary. Link targets are ignored, so only the visible words count,
+# and a row with several of them still counts once.
+INVITED_RE = re.compile(r"\b(invited|keynote|plenary)\b", re.I)
+conf_invited_keynote = sum(
+    1 for r in conf_rows if INVITED_RE.search(re.sub(r"\]\([^)]*\)", "]", r["recognition"]))
+)
 
 # ---------- PhD theses ----------
 
@@ -196,8 +205,8 @@ stats_html = f"""      <div class="stats-row">
           <span class="stat-sub">{journal_recognitions} Recognitions</span>
         </a>
         <a class="stat" href="/publications/conference-presentations.html">
-          <span class="stat-num">{conf_recognitions}</span>
-          <span class="stat-label">Conference Recognitions</span>
+          <span class="stat-num">{conf_invited_keynote}</span>
+          <span class="stat-label">Invited &amp; Keynote Talks</span>
         </a>
         <a class="stat" href="/people/alumni.html">
           <span class="stat-num">{theses_total}</span>
@@ -260,6 +269,29 @@ theses_stats_html = f"""      <div class="stats-row">
         </a>
       </div>"""
 
+# ---------- write into people/researchers.html ----------
+
+# One chip per section of the Researchers page (Academic staff, PhD candidates,
+# Master's by research students ...), labelled with the section heading.
+def chip_label(heading):
+    return " ".join(w if w == "by" else w[:1].upper() + w[1:] for w in heading.split())
+
+researchers_counts = [
+    (chip_label(sec["heading"]), len(sec["people"]))
+    for sec in read_people("people-researchers.md")["sections"]
+    if sec["heading"] and sec["people"]
+]
+researchers_total = sum(n for _, n in researchers_counts)
+
+researchers_chips = "\n".join(
+    f'        <div class="stat">\n'
+    f'          <span class="stat-num">{n}</span>\n'
+    f'          <span class="stat-label">{html.escape(label, quote=False)}</span>\n'
+    f'        </div>'
+    for label, n in researchers_counts
+)
+researchers_stats_html = f'      <div class="stats-row">\n{researchers_chips}\n      </div>'
+
 # ---------- write into people/visitors.html ----------
 
 visitors_stats_html = f"""      <div class="stats-row">
@@ -274,9 +306,11 @@ def main():
     write_stats_block("index.html", stats_html)
     write_stats_block("publications/phd-theses.html", theses_stats_html)
     write_stats_block("people/visitors.html", visitors_stats_html)
+    write_stats_block("people/researchers.html", researchers_stats_html)
     print(
         f"Wrote stats to index.html: {journal_total} journal articles "
-        f"({journal_recognitions} recognitions), {conf_recognitions} conference recognitions, "
+        f"({journal_recognitions} recognitions), {conf_invited_keynote} invited/keynote talks "
+        f"(of {conf_recognitions} conference recognitions), "
         f"{theses_total} PhD theses, {ieee_grant_count} IEEE student grants, "
         f"{medal_count} University Doctoral Research Medals, "
         f"{arc_grant_count} ARC research grants, {arc_fellow_count} ARC fellows, "
@@ -287,6 +321,7 @@ def main():
         f"{medal_count} medals"
     )
     print(f"Wrote stats to people/visitors.html: {len(VISITOR_COUNTRIES)} visitor countries")
+    print(f"Wrote stats to people/researchers.html: {researchers_total} members ({', '.join(f'{n} {l}' for l, n in researchers_counts)})")
 
 
 if __name__ == "__main__":
