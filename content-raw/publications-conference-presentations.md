@@ -1,6 +1,6 @@
 # Publications: Selected conference presentations
 
-**Columns.** *Recognition*: Invited, Keynote, awards and so on, separated by `;` (each part becomes a gold chip and a row counts toward the home-page "Conference Recognitions" stat if this cell is non-empty; link a part with `[Invited](https://...)`). *Status*: text added in brackets after the citation, e.g. `Online`.
+**Columns.** *Recognition*: Invited, Keynote, awards and so on, separated by `;` (each part becomes a gold chip and a row counts toward the home-page "Invited & Keynote Talks" stat if this cell names Invited, Keynote or plenary; link a part with `[Invited](https://...)`). *Status*: text added in brackets after the citation, e.g. `Online`.
 
 One table per year, newest year first: keep each `## YEAR` heading, a blank line, then the header row.
 

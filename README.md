@@ -33,7 +33,7 @@ Every build also gives each local image its `width` and `height` (read from the 
 
 Cache-busting is automatic: `stamp_pages.py` adds `?v=<hash of the file>` to every local CSS, JS and image reference, including the images the stylesheet itself uses, so browsers re-download an asset exactly when it changes. There is nothing to bump by hand.
 
-The home page's "Lab history" stat strip and the stat boxes on the PhD theses and Visitors pages are generated from the same data (publication Recognition columns, people awards, coursework awards, theses, visitors), so they update on every build.
+The home page's "Lab history" stat strip and the stat boxes on the PhD theses, Researchers and Visitors pages are generated from the same data (publication Recognition columns, people awards, coursework awards, theses, visitors), so they update on every build.
 
 ## Checks and safety nets
 
