@@ -8,6 +8,7 @@ One table per year, newest year first: keep each `## YEAR` heading, a blank line
 
 | Citation | Recognition | Status |
 |---|---|---|
+| K. Iqbal, C. Y. Tam, T. Haggren, H. H. Tan, D. Headland, and W. Withayachumnankul, "Optically controlled InGaAs thin-film terahertz-wave modulator," *International Conference on Nanomaterials and Atomaterials Science and Applications (ICNASA)*, Melbourne, 2026. | [Invited](https://icnasac.com/) |  |
 | E. E. Yildiz, T. Kubiczek, H. Lees, L. Häring, J. C. Balzer, and W. Withayachumnankul, "Computational 3D terahertz imaging: Eliminating optics and coherence requirements," *13th International Symposium on Terahertz-Related Devices and Technologies (TeraTech)*, Tokyo, 2026. | Invited |  |
 | L. Chen, D. Headland, Y. Kawamoto, T. Nagatsuma, W. Gao, C. Fumeaux, and W. Withayachumnankul, "Terahertz Dielectric Filter with Tunable Passband," *Asia-Pacific Microwave Conference (APMC)*, 2026. | Invited |  |
 | T. Noh, B. Chung, W. Withayachumnankul, and D. Headland, "Terahertz 3D-printed mechanical azimuth beamsteering using a contoured dielectric disk as a variable-deflection prism," *2026 International Symposium on Antennas and Propagation (ISAP)*, Chengdu, 2026. | Invited |  |
