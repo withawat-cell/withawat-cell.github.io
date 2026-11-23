@@ -21,7 +21,7 @@ One table per year, newest year first: keep each `## YEAR` heading, a blank line
 
 | Citation | Recognition | Status |
 |---|---|---|
-| M. Abdullah, M. Larsson, M. S. Li, and W. Withayachumnankul, "Multi-source direction of arrival estimation in terahertz communications using convolutional neural networks," *50th International Conference on Infrared, Millimeter, and Terahertz Waves (IRMMW-THz)*, Espoo, Finland, 2025. | Keynote |  |
+| M. Abdullah, M. Larsson, M. S. Li, and W. Withayachumnankul, "Multi-source direction of arrival estimation in terahertz communications using convolutional neural networks," *50th International Conference on Infrared, Millimeter, and Terahertz Waves (IRMMW-THz)*, Espoo, 2025. | Keynote |  |
 | W. Gao, W. Withayachumnankul, and M. Fujita, "Terahertz integration enabled by effective medium," *16th International Conference on Information Optics and Photonics (CIOP)*, Xi'an, 2025. | Keynote |  |
 | W. Withayachumnankul, "Substrateless platform: A promising route to terahertz integration," *IEEE MTT-S International Microwave Symposium*, San Francisco, 2025. | Invited |  |
 

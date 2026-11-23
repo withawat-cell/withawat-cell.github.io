@@ -12,6 +12,8 @@ One table per year, newest first. Columns: Name | Year(s) | Area | Awards | Note
 | Ashleigh Preiss | 2026 | Radar | IEEE Microwave Theory and Technology Society Undergraduate/Pre-graduate Scholarship – 2026; 2026 Defence and Security Institute Ingenuity Prize |  |
 | Dimmy Martincic | 2026 | Electronics |  |  |
 | Chongkai Huang | 2026– | Biomedical |  |  |
+| Yilin Zhao | 2026 | Imaging |  |  |
+| Xuehang Zhou | 2026 | Imaging | Summer Research Scholarship |  |
 
 ## 2025
 | Name | Year(s) | Area | Awards | Notes |
