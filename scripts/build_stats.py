@@ -294,7 +294,13 @@ researchers_stats_html = f'      <div class="stats-row">\n{researchers_chips}\n 
 
 # ---------- write into people/visitors.html ----------
 
+visitors_total = sum(1 for _ in people_in("people-visitors.md"))
+
 visitors_stats_html = f"""      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">{visitors_total}</span>
+          <span class="stat-label">Visitors</span>
+        </div>
         <div class="stat">
           <span class="stat-num">{len(VISITOR_COUNTRIES)}</span>
           <span class="stat-label">Visitor Countries</span>
@@ -320,7 +326,7 @@ def main():
         f"Wrote stats to publications/phd-theses.html: {commendation_count} commendations, "
         f"{medal_count} medals"
     )
-    print(f"Wrote stats to people/visitors.html: {len(VISITOR_COUNTRIES)} visitor countries")
+    print(f"Wrote stats to people/visitors.html: {visitors_total} visitors from {len(VISITOR_COUNTRIES)} countries")
     print(f"Wrote stats to people/researchers.html: {researchers_total} members ({', '.join(f'{n} {l}' for l, n in researchers_counts)})")
 
 
