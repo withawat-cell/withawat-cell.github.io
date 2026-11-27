@@ -8,6 +8,7 @@ One table per year, newest year first: keep each `## YEAR` heading, a blank line
 
 | Citation | Recognition | Status |
 |---|---|---|
+| N. Amnuayphol, H. Lees, B. Chung, M. Baumert, and W. Withayachumnankul, "Self-homodyne terahertz systems for vital sign detection," *BrainLink X-Lab Day: Advanced Terahertz Technologies for Biomedical and Pharmaceutical Applications*, Incheon, 2026. | Keynote |  |
 | K. Iqbal, C. Y. Tam, T. Haggren, H. H. Tan, D. Headland, and W. Withayachumnankul, "Optically controlled InGaAs thin-film terahertz-wave modulator," *International Conference on Nanomaterials and Atomaterials Science and Applications (ICNASA)*, Melbourne, 2026. | [Invited](https://icnasac.com/) |  |
 | E. E. Yildiz, T. Kubiczek, H. Lees, L. Häring, J. C. Balzer, and W. Withayachumnankul, "Computational 3D terahertz imaging: Eliminating optics and coherence requirements," *13th International Symposium on Terahertz-Related Devices and Technologies (TeraTech)*, Tokyo, 2026. | Invited |  |
 | L. Chen, D. Headland, Y. Kawamoto, T. Nagatsuma, W. Gao, C. Fumeaux, and W. Withayachumnankul, "Terahertz Dielectric Filter with Tunable Passband," *Asia-Pacific Microwave Conference (APMC)*, Fukuoka, 2026. | Invited |  |
